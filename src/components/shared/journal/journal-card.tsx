@@ -7,16 +7,18 @@ import {
 } from "@/components/ui/card.tsx";
 
 export function JournalCard({
-  title,
-  content,
-  date,
+    title,
+    content,
+    date,
+    onSelect
 }: {
   title: string;
   content: string;
   date: string;
+  onSelect: () => void;
 }) {
   return (
-    <Card className="mb-4">
+    <Card onClick={onSelect} className="mb-4">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{date}</CardDescription>

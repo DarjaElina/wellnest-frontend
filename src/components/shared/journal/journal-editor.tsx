@@ -7,6 +7,8 @@ import { createJournalEntry } from "@/services/journal-entry.ts";
 import { Plus } from "lucide-react";
 import { DateTimePicker } from "@/components/shared/date-time-picker.tsx";
 import * as React from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 export function JournalEditor() {
   const editor = useEditor({
@@ -20,6 +22,10 @@ export function JournalEditor() {
     },
   });
   const newEntryMutation = useMutation({ mutationFn: createJournalEntry });
+
+  const journalEntry = useSelector((state: RootState) => state.journal.currentEntry)
+
+  console.log(journalEntry)
 
   const addJournalEntry = async (
     event: React.MouseEvent<HTMLButtonElement>,
