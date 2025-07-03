@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getJournalEntries } from "@/services/journal-entry.ts";
+import {JournalEditor} from "@/components/shared/journal/journal-editor.tsx";
+import {JournalList} from "@/components/shared/journal/journal-list.tsx";
 export default function Journal() {
   const query = useQuery({
     queryKey: ["journalEntries"],
@@ -14,10 +16,18 @@ export default function Journal() {
         return <div>Something went wrong.</div>;
     }
 
+    console.log(query.data);
+
   return (
-    <div className="max-w-5xl mx-auto mt-10 px-4">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Journal</h2>
-        <p>Dear journal, I love web development but sometimes its just killing me. </p>
-    </div>
+      <div className="max-w-7xl mx-auto px-4 mt-10 h-screen flex gap-6">
+          <div className="w-1/3 overflow-y-auto border-r pr-4">
+              <JournalList />
+          </div>
+
+          <div className="flex-1 overflow-y-auto">
+              <JournalEditor />
+          </div>
+      </div>
+
   );
 }

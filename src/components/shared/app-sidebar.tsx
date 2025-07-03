@@ -1,4 +1,4 @@
-import { Stethoscope, Dumbbell, Apple, Tablets, BookHeart } from "lucide-react";
+import { Stethoscope, Dumbbell, Apple, Tablets, BookHeart, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ModeToggle } from "@/components/shared/mode-toggle.tsx";
 
@@ -35,9 +35,14 @@ const items = [
     icon: Dumbbell,
   },
   {
-    title: "Food Habit Tracker", // fixed typo here
+    title: "Food Habit Tracker",
     url: "food",
     icon: Apple,
+  },
+  {
+    title: "Home",
+    url: "",
+    icon: Home,
   },
 ];
 
