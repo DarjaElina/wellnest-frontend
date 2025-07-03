@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 const WelcomePage = lazy(() => import("@/pages/welcome-page.tsx"));
 const Dashboard = lazy(() => import("@/pages/dashboard.tsx"));
 const SymptomLog = lazy(() => import("@/pages/symptom-log.tsx"));
+const Journal = lazy(() => import("@/pages/journal.tsx"))
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
 
         <Route path="dashboard" element={<Dashboard />}>
           <Route index element={<div>Select a feature from above.</div>} />
+            <Route path="journal" element={<Journal />}/>
           <Route path="symptom-log" element={<SymptomLog />} />
         </Route>
       </Routes>
