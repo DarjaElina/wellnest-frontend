@@ -1,4 +1,4 @@
-import {JournalCard} from "@/components/shared/journal-card.tsx";
+import {JournalCard} from "@/components/shared/journal/journal-card.tsx";
 
 const data = [
     {

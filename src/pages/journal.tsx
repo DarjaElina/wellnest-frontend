@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getJournalEntries } from "@/services/journal-entry.ts";
-import {JournalEditor} from "@/components/shared/journal-editor.tsx";
-import {JournalList} from "@/components/shared/journal-list.tsx";
+import {JournalEditor} from "@/components/shared/journal/journal-editor.tsx";
+import {JournalList} from "@/components/shared/journal/journal-list.tsx";
 export default function Journal() {
   const query = useQuery({
     queryKey: ["journalEntries"],

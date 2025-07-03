@@ -4,7 +4,7 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card.tsx"
 
 export function JournalCard({ title, content, date }: { title: string; content: string, date: string }) {
     return (

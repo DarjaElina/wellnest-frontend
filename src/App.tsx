@@ -5,6 +5,7 @@ const WelcomePage = lazy(() => import("@/pages/welcome-page.tsx"));
 const Dashboard = lazy(() => import("@/pages/dashboard.tsx"));
 const SymptomLog = lazy(() => import("@/pages/symptom-log.tsx"));
 const Journal = lazy(() => import("@/pages/journal.tsx"))
+const Home = lazy(() => import("@/pages/home.tsx"))
 
 export default function App() {
   return (
@@ -13,9 +14,9 @@ export default function App() {
         <Route index element={<WelcomePage />} />
 
         <Route path="dashboard" element={<Dashboard />}>
-          <Route index element={<div>Select a feature from above.</div>} />
+            <Route index element={<Home />}/>
             <Route path="journal" element={<Journal />}/>
-          <Route path="symptom-log" element={<SymptomLog />} />
+            <Route path="symptom-log" element={<SymptomLog />} />
         </Route>
       </Routes>
     </Suspense>

@@ -1,11 +1,17 @@
-import { useEditor, EditorContent } from '@tiptap/react'
+import {useEditor, EditorContent} from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Button } from '@/components/ui/button.tsx'
+import {JournalEditorToolbar} from "@/components/shared/journal/journal-editor-toolbar.tsx";
 
 export function JournalEditor() {
     const editor = useEditor({
         extensions: [StarterKit],
         content: '<p>Start writing your thoughts here...</p>',
+        editorProps: {
+            attributes: {
+                class: 'prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none',
+            },
+        },
     })
 
     const handleSave = () => {
@@ -19,8 +25,9 @@ export function JournalEditor() {
                 <Button onClick={handleSave}>Save</Button>
             </div>
 
-            <div className="prose prose-neutral max-w-none border rounded p-4">
-                <EditorContent editor={editor} />
+            <JournalEditorToolbar/>
+            <div className="border rounded-md shadow-sm p-6">
+                <EditorContent editor={editor} className="min-h-[60vh]" />
             </div>
         </div>
     )
