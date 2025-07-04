@@ -13,13 +13,15 @@ import type { RootState } from "@/store";
 export function JournalEditor() {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: "<p></p>",
+    content: `
+     <h2></h2>
+     <p></p>
+    `,
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
+        class: 'prose prose-sm sm:prose-base lg:prose-lg l:prose-l m-5 focus:outline-none',
       },
-    },
+    }
   });
   const newEntryMutation = useMutation({ mutationFn: createJournalEntry });
 
@@ -55,7 +57,7 @@ export function JournalEditor() {
       </div>
 
       <JournalEditorToolbar />
-      <div className="border rounded-md shadow-sm p-6">
+      <div className="border rounded-md shadow-sm p-3">
         <EditorContent editor={editor} className="min-h-[60vh]" />
       </div>
     </div>
