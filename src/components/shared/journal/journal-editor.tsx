@@ -9,10 +9,22 @@ import { DateTimePicker } from "@/components/shared/date-time-picker.tsx";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { setHours, setMinutes, setSeconds, format } from "date-fns";
 
 export function JournalEditor() {
   const journalEntry = useSelector((state: RootState) => state.journal.currentEntry)
+  const [entryDate, setEntryDate] = useState(new Date())
+  const [entryTime, setEntryTime] = useState(format(new Date(), "HH:mm"))
+
+  function mergeDateAndTime(date: Date, timeString: string): Date {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    const withHours = setHours(date, hours);
+    const withMinutes = setMinutes(withHours, minutes);
+    const finalDateTime = setSeconds(withMinutes, 0);
+    return finalDateTime;
+  }
+  
   const editor = useEditor({
     extensions: [StarterKit],
     content: `
@@ -33,28 +45,43 @@ export function JournalEditor() {
     }
   }, [journalEntry, editor])
 
-  const addJournalEntry = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  useEffect(() => {
+    if (journalEntry?.entryDate) {
+      const dateObj = new Date(journalEntry.entryDate)
+      setEntryDate(dateObj)
+      setEntryTime(format(dateObj, "HH:mm"))
+    }
+  }, [journalEntry])
+
+  const addJournalEntry = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+  
+    const combinedDateTime = mergeDateAndTime(entryDate, entryTime);
+  
     const journalEntry = {
-      title: "Example Title",
       content: editor?.getHTML(),
       tags: ["Programming", "Java", "Healthy Lifestyle"],
-      entryDate: "2020-05-01 00:00:00",
+      entryDate: format(combinedDateTime, "yyyy-MM-dd HH:mm:ss"),
       isFavorite: true,
     };
+  
     try {
       newEntryMutation.mutate(journalEntry);
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   return (
     <div className="p-6 max-w-3xl mx-auto bg-white rounded-xl shadow-md space-y-4">
       <div className="flex justify-between items-center">
-        <DateTimePicker />
+      <DateTimePicker
+        entryDate={entryDate}
+        setEntryDate={setEntryDate}
+        entryTime={entryTime}
+        setEntryTime={setEntryTime}
+      />
         <Button onClick={addJournalEntry}>
           <Plus size={20} />
         </Button>
