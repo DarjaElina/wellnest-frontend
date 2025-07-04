@@ -9,8 +9,10 @@ import { DateTimePicker } from "@/components/shared/date-time-picker.tsx";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
+import { useEffect } from "react";
 
 export function JournalEditor() {
+  const journalEntry = useSelector((state: RootState) => state.journal.currentEntry)
   const editor = useEditor({
     extensions: [StarterKit],
     content: `
@@ -25,9 +27,11 @@ export function JournalEditor() {
   });
   const newEntryMutation = useMutation({ mutationFn: createJournalEntry });
 
-  const journalEntry = useSelector((state: RootState) => state.journal.currentEntry)
-
-  console.log(journalEntry)
+  useEffect(() => {
+    if (journalEntry && editor) {
+      editor.commands.setContent(journalEntry.content)
+    }
+  }, [journalEntry, editor])
 
   const addJournalEntry = async (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -35,7 +39,7 @@ export function JournalEditor() {
     event.preventDefault();
     const journalEntry = {
       title: "Example Title",
-      content: "Example Content",
+      content: editor?.getHTML(),
       tags: ["Programming", "Java", "Healthy Lifestyle"],
       entryDate: "2020-05-01 00:00:00",
       isFavorite: true,
