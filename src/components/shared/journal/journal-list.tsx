@@ -25,7 +25,6 @@ export function JournalList() {
           <li key={journal.id}>
             <JournalCard
               onSelect={() => dispatch(setCurrentEntry(journal))}
-              title={journal.title}
               content={journal.content}
               date={journal.entryDate}
             />
