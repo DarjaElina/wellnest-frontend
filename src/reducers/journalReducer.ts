@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
+import type { JournalEntry } from '@/types/journal.types'
 
-const initialState = {
+interface StateProp {
+  currentEntry: JournalEntry | null
+}
+
+const initialState: StateProp = {
   currentEntry: null
 }
 

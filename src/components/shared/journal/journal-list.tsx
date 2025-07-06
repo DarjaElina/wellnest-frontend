@@ -1,15 +1,13 @@
-import { JournalCard } from "@/components/shared/journal/journal-card.tsx";
-import { setCurrentEntry } from "@/reducers/journalReducer";
-import { getJournalEntries } from "@/services/journal-entry";
 import { useQuery } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
+import JournalCard from "./journal-card";
+import { Button } from "@/components/ui/button";
+import { getJournals } from "@/services/journal";
 
-export function JournalList() {
+export default function JournalList() {
   const query = useQuery({
-    queryKey: ["journalEntries"],
-    queryFn: getJournalEntries,
+    queryKey: ["journals"],
+    queryFn: getJournals,
   });
-  const dispatch = useDispatch();
 
   if (query.isLoading) {
     return <div>loading data...</div>;
@@ -18,16 +16,23 @@ export function JournalList() {
   if (query.isError) {
     return <div>Something went wrong.</div>;
   }
+
+  if (query.data && query.data.length === 0) {
+   return (
+    <>
+      <p>No journals available</p>
+     <Button>Create your first jounral</Button>
+    </>
+
+   )
+  }
+
   return (
     <div>
       <ul>
         {query.data.map((journal) => (
           <li key={journal.id}>
-            <JournalCard
-              onSelect={() => dispatch(setCurrentEntry(journal))}
-              content={journal.content}
-              date={journal.entryDate}
-            />
+            <JournalCard name={journal.name} color={journal.color}/>
           </li>
         ))}
       </ul>

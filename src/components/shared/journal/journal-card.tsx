@@ -5,28 +5,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import DOMPurify from 'dompurify'
-import {getJournalPreviewTitle} from '@/util/journal'
 
-export function JournalCard({
-    content,
-    date,
-    onSelect
-}: {
-  content: string;
-  date: string;
-  onSelect: () => void;
-}) {
-  const sanitizedHTML = DOMPurify.sanitize(content)
-  console.log(content)
-  const {parsedHeading, parsedParagraph} = getJournalPreviewTitle(sanitizedHTML)
+export default function JournalCard({ name, color }) {
   return (
-    <Card onClick={onSelect} className="mb-4 cursor-pointer">
+    <Card className="mb-4 cursor-pointer">
       <CardHeader>
-        <CardTitle dangerouslySetInnerHTML={{__html: parsedHeading}}></CardTitle>
-        <CardDescription>{date}</CardDescription>
+        <CardTitle>{name}</CardTitle>
+        <CardDescription>{color}</CardDescription>
       </CardHeader>
-      <CardContent dangerouslySetInnerHTML={{__html: parsedParagraph}}>
+      <CardContent>
       </CardContent>
     </Card>
   );

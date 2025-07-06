@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 
-export function JournalEditorToolbar() {
+export function JournalEntryEditorToolbar() {
   return (
     <>
       <div className="flex justify-between items-center px-4 py-2 border-b bg-white shadow-sm mb-4">
