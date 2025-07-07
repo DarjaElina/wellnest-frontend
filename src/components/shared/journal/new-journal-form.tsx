@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +38,8 @@ export function NewJournalForm() {
       color: "",
     },
   });
-  const queryClient =  useQueryClient() 
+  const queryClient =  useQueryClient()
+  const navigate = useNavigate();
 
   const newJournalMutation = useMutation({
     mutationFn: createJournal,
@@ -47,9 +49,11 @@ export function NewJournalForm() {
     }
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      newJournalMutation.mutate(values)
+      const journal = await newJournalMutation.mutateAsync(values)
+      console.log(journal)
+      navigate(`journals/${journal.id}`)
     } catch (error) {
       console.log(error)
     }

@@ -82,7 +82,7 @@ export function AppSidebar() {
                       query.data.map((journal) => (
                         <SidebarMenuSubItem key={journal.id}>
                           <Link
-                            to={`/journal/${journal.id}`}
+                            to={`./journals/${journal.id}`}
                             className="hover:underline"
                           >
                             {journal.name}
@@ -100,7 +100,7 @@ export function AppSidebar() {
                         <DialogTrigger asChild>
                           <Button
                             variant="ghost"
-                            className="h-8 w-full justify-start text-sm px-2"
+                            className="h-8 w-full justify-start text-sm px-2 cursor-pointer"
                           >
                             <Plus className="h-4 w-4 mr-2" />
                             New Journal

@@ -1,30 +1,46 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Button } from "@/components/ui/button.tsx";
 import { JournalEntryEditorToolbar } from "@/components/shared/journal-entry/journal-entry-editor-toolbar";
-import { useMutation } from "@tanstack/react-query";
-import { createJournalEntry } from "@/services/journal-entry.ts";
-import { Plus } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DateTimePicker } from "@/components/shared/date-time-picker.tsx";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import { useEffect, useState } from "react";
-import { setHours, setMinutes, setSeconds, format } from "date-fns";
-import debounce from 'lodash.debounce'
+import { useEffect, useState, useRef } from "react";
+import { setHours, setMinutes, setSeconds, format, formatISO9075 } from "date-fns";
+import debounce from 'lodash.debounce';
 import { type JournalEntry } from "@/types/journal.types";
-import { formatISO9075 } from "date-fns";
+import { updateJournalEntry } from "@/services/journal-entry";
+import { useParams, Navigate } from "react-router-dom";
 
 export function JournalEntryEditor() {
-  const journalEntry = useSelector((state: RootState) => state.journal.currentEntry)
-  const [entryDate, setEntryDate] = useState(new Date())
-  const [entryTime, setEntryTime] = useState(format(new Date(), "HH:mm"))
-  const [newEntry, setNewEntry] = useState<JournalEntry | null>({
+  const journalEntry = useSelector((state: RootState) => state.journal.currentEntry);
+
+  const [entry, setEntry] = useState<JournalEntry>({
     content: '',
-    entryDate: mergeDateAndTime(entryDate, entryTime),
+    entryDate: formatISO9075(new Date()),
     isFavorite: false,
-    tags: []
-  })
-  
+    tags: [],
+    id: ""
+  });
+
+  const queryClient = useQueryClient();
+  const {journalId, entryId} = useParams();
+
+ 
+
+  const updatedEntryMutation = useMutation({
+    mutationFn: (updatedEntry: JournalEntry) => updateJournalEntry(updatedEntry, journalId, entryId),
+    onSuccess: (data) => {
+      queryClient.setQueryData(['journalEntries', { id: data.id }], data);
+    },
+  });
+
+  const debouncedUpdate = useRef(
+    debounce((updatedEntry: JournalEntry) => {
+      updatedEntryMutation.mutate(updatedEntry);
+    }, 3000)
+  ).current;
+
   function mergeDateAndTime(date: Date, timeString: string): string {
     const [hours, minutes] = timeString.split(":").map(Number);
     const withHours = setHours(date, hours);
@@ -32,67 +48,66 @@ export function JournalEntryEditor() {
     const finalDateTime = setSeconds(withMinutes, 0);
     return formatISO9075(finalDateTime);
   }
-  
+
   const editor = useEditor({
     extensions: [StarterKit],
-    content: `
-     <h2></h2>
-     <p></p>
-    `,
+    content: `<h2></h2><p></p>`,
     editorProps: {
       attributes: {
         class: 'prose prose-sm sm:prose-base lg:prose-lg l:prose-l m-5 focus:outline-none',
       },
     },
     onUpdate({ editor }) {
-      const html = editor.getHTML()
-      if (!journalEntry) {
-        saveContent(html)
-      }
+      const html = editor.getHTML();
+
+      setEntry((prev) => {
+        const updated = { ...prev, content: html };
+        debouncedUpdate(updated);
+        return updated;
+      });
     },
   });
-  const newEntryMutation = useMutation({ mutationFn: createJournalEntry });
 
   useEffect(() => {
     if (journalEntry) {
-      setNewEntry({
-        content: journalEntry.content,
-        entryDate: journalEntry.entryDate,
-        isFavorite: journalEntry.isFavorite,
-        tags: journalEntry.tags
-      })
+      setEntry(journalEntry);
 
-      const dateObj = new Date(journalEntry.entryDate)
-      setEntryDate(dateObj)
-      setEntryTime(format(dateObj, "HH:mm"))
-
+      const dateObj = new Date(journalEntry.entryDate);
       if (editor) {
-        editor.commands.setContent(journalEntry.content)
+        editor.commands.setContent(journalEntry.content);
       }
     }
-  }, [journalEntry, editor])
-
-
-  const saveContent = debounce((content: string) => {
-    newEntryMutation.mutate({ ...newEntry, content })
-  }, 3000) 
-  
+  }, [journalEntry, editor]);
 
   return (
     <div className="p-6 max-w-3xl mx-auto bg-white rounded-xl shadow-md space-y-4">
       <div className="flex justify-between items-center">
-      <DateTimePicker
-        entryDate={entryDate}
-        setEntryDate={setEntryDate}
-        entryTime={entryTime}
-        setEntryTime={setEntryTime}
-      />
-        <Button onClick={() => console.log("adding new entry! hehe")}>
-          <Plus size={20} />
-        </Button>
+        <DateTimePicker
+          entryDate={new Date(entry.entryDate)}
+          setEntryDate={(newDate) => {
+            const oldTime = format(new Date(entry.entryDate), "HH:mm");
+            const merged = mergeDateAndTime(newDate, oldTime);
+            setEntry((prev) => {
+              const updated = { ...prev, entryDate: merged };
+              debouncedUpdate(updated);
+              return updated;
+            });
+          }}
+          entryTime={format(new Date(entry.entryDate), "HH:mm")}
+          setEntryTime={(newTime) => {
+            const oldDate = new Date(entry.entryDate);
+            const merged = mergeDateAndTime(oldDate, newTime);
+            setEntry((prev) => {
+              const updated = { ...prev, entryDate: merged };
+              debouncedUpdate(updated);
+              return updated;
+            });
+          }}
+        />
       </div>
 
       <JournalEntryEditorToolbar />
+
       <div className="border rounded-md shadow-sm p-3">
         <EditorContent editor={editor} className="min-h-[60vh]" />
       </div>
