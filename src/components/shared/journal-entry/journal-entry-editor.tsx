@@ -17,7 +17,7 @@ import { Cloud, Check } from 'lucide-react';
 
 export function JournalEntryEditor() {
   const journalEntry = useSelector((state: RootState) => state.journal.currentEntry);
-  const [isEditing, setIsEditing] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'saved'>('idle');
 
   const [entry, setEntry] = useState<JournalEntry>({
     content: '',
@@ -30,6 +30,19 @@ export function JournalEntryEditor() {
   const queryClient = useQueryClient();
   const {journalId, entryId} = useParams();
 
+  const mutateAndTrack = (updatedEntry: JournalEntry) => {
+    setSyncStatus('syncing');
+    updatedEntryMutation.mutate(updatedEntry, {
+      onSuccess: (updatedEntry) => {
+        setSyncStatus('saved');
+        setTimeout(() => setSyncStatus('idle'), 2000);
+        const journalEntries = queryClient.getQueryData(['journalEntries', journalId])
+        const updatedEntries = journalEntries.map(entry => entry.id === updatedEntry.id ? updatedEntry : entry)
+        queryClient.setQueryData(['journalEntries', journalId], updatedEntries)
+      },
+    });
+  };
+
  
 
   const updatedEntryMutation = useMutation({
@@ -41,8 +54,7 @@ export function JournalEntryEditor() {
 
   const debouncedUpdate = useRef(
     debounce((updatedEntry: JournalEntry) => {
-      updatedEntryMutation.mutate(updatedEntry);
-      setIsEditing(false);
+      mutateAndTrack(updatedEntry);
     }, 3000)
   ).current;
 
@@ -64,21 +76,40 @@ export function JournalEntryEditor() {
     },
     onUpdate({ editor }) {
       const html = editor.getHTML();
-
+    
       setEntry((prev) => {
         const updated = { ...prev, content: html };
         debouncedUpdate(updated);
         return updated;
       });
-      setIsEditing(true);
-    },
+    
+      setSyncStatus('syncing');
+    }
   });
+
+  const updateEntryDate = (newDate) => {
+    const oldTime = format(new Date(entry.entryDate), "HH:mm");
+    const merged = mergeDateAndTime(newDate, oldTime);
+    setEntry((prev) => {
+      const updated = { ...prev, entryDate: merged };
+      mutateAndTrack(updated);
+      return updated;
+    });
+  };
+
+  const updateEntryTime = (newTime) => {
+    const oldDate = new Date(entry.entryDate);
+    const merged = mergeDateAndTime(oldDate, newTime);
+    setEntry((prev) => {
+      const updated = { ...prev, entryDate: merged };
+      mutateAndTrack(updated);
+      return updated;
+    });
+  };
 
   useEffect(() => {
     if (journalEntry) {
       setEntry(journalEntry);
-
-      const dateObj = new Date(journalEntry.entryDate);
       if (editor) {
         editor.commands.setContent(journalEntry.content);
       }
@@ -90,67 +121,50 @@ export function JournalEntryEditor() {
       <div className="flex justify-between items-center">
         <DateTimePicker
           entryDate={new Date(entry.entryDate)}
-          setEntryDate={(newDate) => {
-            const oldTime = format(new Date(entry.entryDate), "HH:mm");
-            const merged = mergeDateAndTime(newDate, oldTime);
-            setEntry((prev) => {
-              const updated = { ...prev, entryDate: merged };
-              debouncedUpdate(updated);
-              return updated;
-            });
-          }}
+          setEntryDate={(newDate) => updateEntryDate(newDate)}
           entryTime={format(new Date(entry.entryDate), "HH:mm")}
-          setEntryTime={(newTime) => {
-            const oldDate = new Date(entry.entryDate);
-            const merged = mergeDateAndTime(oldDate, newTime);
-            setEntry((prev) => {
-              const updated = { ...prev, entryDate: merged };
-              debouncedUpdate(updated);
-              return updated;
-            });
-          }}
+          setEntryTime={(newTime) => updateEntryTime(newTime)}
         />
-
-        <AnimatePresence mode="wait">
-          {isEditing && (
-            <motion.div
-              key="syncing"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-              className="flex items-center gap-2 text-gray-500"
-            >
+          <AnimatePresence mode="wait">
+            {syncStatus === 'syncing' && (
               <motion.div
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ repeat: Infinity, duration: 1.2 }}
+                key="syncing"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-2 text-gray-500"
               >
-                <Cloud className="w-5 h-5" />
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.2 }}
+                >
+                  <Cloud className="w-5 h-5" />
+                </motion.div>
+                <span className="text-sm">Syncing...</span>
               </motion.div>
-              <span className="text-sm">Saving...</span>
-            </motion.div>
-          )}
+            )}
 
-          {(!isEditing && updatedEntryMutation.isSuccess) && (
-            <motion.div
-              key="saved"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-              className="flex items-center gap-2 text-green-600"
-            >
+            {syncStatus === 'saved' && (
               <motion.div
-                initial={{ scale: 0, rotate: -90 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                key="saved"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-2 text-green-600"
               >
-                <Check className="w-5 h-5" />
+                <motion.div
+                  initial={{ scale: 0, rotate: -90 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                >
+                  <Check className="w-5 h-5" />
+                </motion.div>
+                <span className="text-sm">Saved!</span>
               </motion.div>
-              <span className="text-sm">Saved!</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </AnimatePresence>
 
       </div>
 
