@@ -10,10 +10,14 @@ import { setHours, setMinutes, setSeconds, format, formatISO9075 } from "date-fn
 import debounce from 'lodash.debounce';
 import { type JournalEntry } from "@/types/journal.types";
 import { updateJournalEntry } from "@/services/journal-entry";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Cloud, Check } from 'lucide-react';
+
 
 export function JournalEntryEditor() {
   const journalEntry = useSelector((state: RootState) => state.journal.currentEntry);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [entry, setEntry] = useState<JournalEntry>({
     content: '',
@@ -38,6 +42,7 @@ export function JournalEntryEditor() {
   const debouncedUpdate = useRef(
     debounce((updatedEntry: JournalEntry) => {
       updatedEntryMutation.mutate(updatedEntry);
+      setIsEditing(false);
     }, 3000)
   ).current;
 
@@ -65,6 +70,7 @@ export function JournalEntryEditor() {
         debouncedUpdate(updated);
         return updated;
       });
+      setIsEditing(true);
     },
   });
 
@@ -104,7 +110,51 @@ export function JournalEntryEditor() {
             });
           }}
         />
+
+        <AnimatePresence mode="wait">
+          {isEditing && (
+            <motion.div
+              key="syncing"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center gap-2 text-gray-500"
+            >
+              <motion.div
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 1.2 }}
+              >
+                <Cloud className="w-5 h-5" />
+              </motion.div>
+              <span className="text-sm">Saving...</span>
+            </motion.div>
+          )}
+
+          {(!isEditing && updatedEntryMutation.isSuccess) && (
+            <motion.div
+              key="saved"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center gap-2 text-green-600"
+            >
+              <motion.div
+                initial={{ scale: 0, rotate: -90 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
+                <Check className="w-5 h-5" />
+              </motion.div>
+              <span className="text-sm">Saved!</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
       </div>
+
+     
 
       <JournalEntryEditorToolbar />
 
