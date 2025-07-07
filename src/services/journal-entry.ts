@@ -1,11 +1,30 @@
 import api from "./index";
+import type {
+  JournalEntry,
+  JournalEntryCreateInput,
+} from "@/types/journalEntry.types.ts";
 
-export async function getJournalEntries() {
-  const response = await api.get("/journal-entries");
+export async function getJournalEntriesByJournal(journalId: string) {
+  const response = await api.get(`/journals/${journalId}/entries`);
   return response.data;
 }
 
-export async function createJournalEntry(data: any) {
-  const response = await api.post("/journal-entries", data);
+export async function createJournalEntry(
+  entry: JournalEntryCreateInput,
+  journalId: string,
+): Promise<JournalEntry> {
+  const response = await api.post(`/journals/${journalId}/entries`, entry);
+  return response.data;
+}
+
+export async function updateJournalEntry(
+  updatedEntry: JournalEntry,
+  journalId: string,
+  entryId: string,
+) {
+  const response = await api.put(
+    `/journals/${journalId}/entries/${entryId}`,
+    updatedEntry,
+  );
   return response.data;
 }

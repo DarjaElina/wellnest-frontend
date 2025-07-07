@@ -1,18 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
+import type { JournalEntry } from "@/types/journalEntry.types";
 
-const initialState = {
-  currentEntry: null
+interface StateProp {
+  currentEntry: JournalEntry | null;
 }
 
+const initialState: StateProp = {
+  currentEntry: null,
+};
+
 const journalSlice = createSlice({
-  name: 'journal',
+  name: "journal",
   initialState,
   reducers: {
     setCurrentEntry(state, action) {
-      state.currentEntry = action.payload
-    }
-  }
-})
+      state.currentEntry = action.payload;
+    },
+  },
+});
 
-export const { setCurrentEntry } = journalSlice.actions
-export default journalSlice.reducer
+export const { setCurrentEntry } = journalSlice.actions;
+export default journalSlice.reducer;
