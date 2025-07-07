@@ -25,11 +25,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import {
   Collapsible,
@@ -39,6 +35,8 @@ import {
 import { Button } from "../ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getJournals } from "@/services/journal";
+import { useState } from "react";
+import type { Journal } from "@/types/journal.types";
 
 const items = [
   { title: "Symptom Log", url: "symptom-log", icon: Stethoscope },
@@ -53,7 +51,7 @@ export function AppSidebar() {
     queryKey: ["journals"],
     queryFn: getJournals,
   });
-  
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <Sidebar>
@@ -79,7 +77,7 @@ export function AppSidebar() {
                     {query.isLoading && <p>Loading journals</p>}
                     {query.isError && <p>Error loading journals</p>}
                     {query.data && query.data.length > 0 ? (
-                      query.data.map((journal) => (
+                      query.data.map((journal: Journal) => (
                         <SidebarMenuSubItem key={journal.id}>
                           <Link
                             to={`./journals/${journal.id}`}
@@ -96,7 +94,7 @@ export function AppSidebar() {
                     )}
 
                     <SidebarMenuSubItem>
-                      <Dialog>
+                      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                         <DialogTrigger asChild>
                           <Button
                             variant="ghost"
@@ -107,7 +105,9 @@ export function AppSidebar() {
                           </Button>
                         </DialogTrigger>
                         <DialogContent>
-                          <NewJournalForm />
+                          <NewJournalForm
+                            closeDialog={() => setDialogOpen(false)}
+                          />
                         </DialogContent>
                       </Dialog>
                     </SidebarMenuSubItem>

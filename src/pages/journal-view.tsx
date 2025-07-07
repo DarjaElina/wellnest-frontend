@@ -1,25 +1,47 @@
-import { useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import { getJournalById } from "@/services/journal";
+import { useOutletContext } from "react-router-dom";
+import { BookOpenText, CalendarDays, ListOrdered } from "lucide-react";
+import { getColorClass } from "@/lib/utils";
+import type { Journal } from "@/types/journal.types";
 
 export default function JournalView() {
-  const { journalId } = useParams();
-
-  const { data: journal, isLoading, isError } = useQuery({
-    queryKey: ["journal", journalId],
-    queryFn: () => getJournalById(journalId!),
-    enabled: !!journalId,
-  });
-
-  if (isLoading) return <p>Loading journal info...</p>;
-  if (isError || !journal) return <p>Failed to load journal info.</p>;
+  const { journal } = useOutletContext<{ journal: Journal }>();
 
   return (
-    <div className="p-6 space-y-4">
-      <h2 className="text-2xl font-semibold">{journal.name}</h2>
-      <p className="text-muted-foreground">Color: {journal.color}</p>
-      <p>Last updated: {new Date(journal.updatedAt).toLocaleString()}</p>
-      <p>Total entries: {journal.journalEntries.length ?? "0"}</p>
+    <div className="max-w-3xl mx-auto">
+      <div
+        className={`rounded-xl shadow-md overflow-hidden mb-6 ${getColorClass(journal.color, "bg")}`}
+      >
+        <div className="flex items-center gap-3 px-6 py-4 text-white">
+          <BookOpenText className="w-6 h-6" />
+          <h2 className="text-xl font-semibold">{journal.name}</h2>
+        </div>
+      </div>
+
+      <div className="space-y-3 bg-card border border-border rounded-xl shadow-sm p-6">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <CalendarDays
+            className={`w-4 h-4 ${getColorClass(journal.color, "text")}`}
+          />
+          <span>
+            Last updated:{" "}
+            <span className="font-medium">
+              {new Date(journal.updatedAt).toLocaleString()}
+            </span>
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <ListOrdered
+            className={`w-4 h-4 ${getColorClass(journal.color, "text")}`}
+          />
+          <span>
+            Total entries:{" "}
+            <span className="font-medium">
+              {journal.journalEntries?.length ?? "0"}
+            </span>
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

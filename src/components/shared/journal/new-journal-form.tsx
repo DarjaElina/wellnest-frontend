@@ -1,13 +1,14 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router";
+import ColorPicker from "../color-picker";
+import { journalCreateSchema } from "@/types/journal.types.ts";
+import type { JournalCreateInput } from "@/types/journal.types.ts";
 
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,49 +24,44 @@ import {
 } from "@/components/ui/dialog";
 import { createJournal } from "@/services/journal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Journal } from "@/types/journal.types";
+import type { JournalColor } from "@/lib/color";
 
-
-const formSchema = z.object({
-  name: z.string().min(1, "Journal name is required"),
-  color: z.string().optional(),
-});
-
-export function NewJournalForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
+  const form = useForm<JournalCreateInput>({
+    resolver: zodResolver(journalCreateSchema),
     defaultValues: {
-      name: "",
-      color: "",
+      name: "New Journal",
+      color: "rose",
     },
   });
-  const queryClient =  useQueryClient()
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const newJournalMutation = useMutation({
     mutationFn: createJournal,
     onSuccess: (newJournal) => {
-      const journals = queryClient.getQueryData(['journals'])
-      queryClient.setQueryData(['journals'], journals.concat(newJournal))
-    }
-  })
+      const journals: Journal[] = queryClient.getQueryData(["journals"]) ?? [];
+      queryClient.setQueryData(["journals"], journals.concat(newJournal));
+    },
+  });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: JournalCreateInput) => {
     try {
-      const journal = await newJournalMutation.mutateAsync(values)
-      console.log(journal)
-      navigate(`journals/${journal.id}`)
+      const journal = await newJournalMutation.mutateAsync(values);
+      closeDialog?.();
+      navigate(`journals/${journal.id}`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <DialogHeader>
           <DialogTitle>Create New Journal</DialogTitle>
-          <DialogDescription className="sr-only">
-          </DialogDescription>
+          <DialogDescription className="sr-only"></DialogDescription>
         </DialogHeader>
 
         <FormField
@@ -73,25 +69,33 @@ export function NewJournalForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Journal Name</FormLabel>
+              <FormLabel className="mb-2">Journal Name</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. Daily Notes" {...field} />
+                <Input
+                  {...field}
+                  className="selection:bg-transparent selection:text-foreground autofill:shadow-[inset_0_0_0px_1000px_white] dark:autofill:shadow-[inset_0_0_0px_1000px_#0f172a]"
+                />
               </FormControl>
-              <FormDescription>This will appear in your sidebar.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* Color Picker here */}
+        <h3 className="font-medium">Journal Color</h3>
+        <ColorPicker
+          value={form.watch("color") ?? "rose"}
+          onChange={(val) => form.setValue("color", val as JournalColor)}
+        />
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button className="cursor-pointer" variant="outline">
+              Cancel
+            </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button type="submit">Create</Button>
-          </DialogClose>
+          <Button className="cursor-pointer" type="submit">
+            Create
+          </Button>
         </DialogFooter>
       </form>
     </Form>
