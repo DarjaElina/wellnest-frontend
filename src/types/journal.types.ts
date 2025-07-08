@@ -4,7 +4,7 @@ import { JOURNAL_COLORS } from "@/lib/color";
 const journalColorSchema = z.enum(JOURNAL_COLORS);
 
 export const journalCreateSchema = z.object({
-  name: z.string().optional(),
+  name: z.string().min(1, {message: "Journal name is required"}),
   color: journalColorSchema,
 });
 
