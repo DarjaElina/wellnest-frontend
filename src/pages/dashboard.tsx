@@ -6,7 +6,7 @@ export default function Dashboard() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarTrigger />
+      <SidebarTrigger className="cursor-pointer mx-3"/>
       <Outlet />
     </SidebarProvider>
   );

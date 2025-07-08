@@ -1,5 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { AppLoader } from "./components/ui/app-loader";
+
 
 const WelcomePage = lazy(() => import("@/pages/welcome-page.tsx"));
 const Dashboard = lazy(() => import("@/pages/dashboard.tsx"));
@@ -11,9 +13,7 @@ const JournalEditorView = lazy(() => import("@/pages/journal-editor-view"));
 
 export default function App() {
   return (
-    <Suspense
-      fallback={<div className="p-6 text-muted-foreground">Loading...</div>}
-    >
+    <Suspense fallback={<AppLoader />}>
       <Routes>
         <Route index element={<WelcomePage />} />
 
