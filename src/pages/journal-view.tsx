@@ -11,9 +11,9 @@ export default function JournalView() {
       <div
         className={`rounded-xl shadow-md overflow-hidden mb-6 ${getColorClass(journal.color, "bg")}`}
       >
-        <div className="flex items-center gap-3 px-6 py-4 text-white">
-          <BookOpenText className="w-6 h-6" />
-          <h2 className="text-xl font-semibold">{journal.name}</h2>
+        <div className="flex items-center gap-3 px-6 py-4">
+          <BookOpenText className="w-6 h-6 text-neutral-100" />
+          <h2 className="text-xl font-semibold text-neutral-100">{journal.name}</h2>
         </div>
       </div>
 

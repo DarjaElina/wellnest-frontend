@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 export function RecentSummary() {
   return (
     <section className="space-y-4">
-      <h2 className="text-2xl font-semibold text-foreground">Recent Activity</h2>
+      <h2 className="text-2xl font-semibold text-foreground">
+        Recent Activity
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-muted/40 p-5 rounded-xl shadow-md hover:shadow-lg transition-all">
@@ -11,11 +13,12 @@ export function RecentSummary() {
             Last Journal Entry
           </h3>
           <p className="text-base mt-3 line-clamp-2">
-            “I’ve been feeling more calm this week after meditating every day...”
+            “I’ve been feeling more calm this week after meditating every
+            day...”
           </p>
           <Link
             to="/journal"
-            className="text-sm text-teal-600 hover:underline mt-3 inline-block font-medium"
+            className="text-sm text-brand-primary hover:underline mt-3 inline-block font-medium"
           >
             View full entry →
           </Link>
@@ -29,6 +32,5 @@ export function RecentSummary() {
         </div>
       </div>
     </section>
-  )
+  );
 }
-

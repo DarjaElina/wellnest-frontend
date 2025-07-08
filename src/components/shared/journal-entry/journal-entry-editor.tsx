@@ -19,15 +19,9 @@ import { updateJournalEntry } from "@/services/journal-entry";
 import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cloud, Check } from "lucide-react";
-import { getColorClass } from "@/lib/utils";
 import type { RouteParams } from "@/types/shared.types";
-import type { JournalColor } from "@/lib/color";
 
-export function JournalEntryEditor({
-  journalColor,
-}: {
-  journalColor: JournalColor;
-}) {
+export function JournalEntryEditor() {
   const journalEntry = useSelector(
     (state: RootState) => state.journal.currentEntry,
   );
@@ -172,7 +166,7 @@ export function JournalEntryEditor({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
-              className="flex items-center gap-2 text-emerald-600"
+              className="flex items-center gap-2 text-brand-primary"
             >
               <motion.div
                 initial={{ scale: 0, rotate: -90 }}

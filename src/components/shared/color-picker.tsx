@@ -1,7 +1,7 @@
 const colorOptions = [
   { name: "Rose", value: "rose", className: "bg-rose-500" },
   { name: "Sky", value: "sky", className: "bg-sky-500" },
-  { name: "Emerald", value: "emerald", className: "bg-emerald-500" },
+  { name: "Teal", value: "teal", className: "bg-teal-500" },
   { name: "Amber", value: "amber", className: "bg-amber-500" },
   { name: "Violet", value: "violet", className: "bg-violet-500" },
   { name: "Indigo", value: "indigo", className: "bg-indigo-500" },
@@ -11,7 +11,7 @@ const colorOptions = [
 const ringColorMap: Record<string, string> = {
   rose: "ring-rose-300",
   amber: "ring-amber-300",
-  emerald: "ring-emerald-300",
+  teal: "ring-teal-300",
   sky: "ring-sky-300",
   violet: "ring-violet-300",
   indigo: "ring-indigo-300",

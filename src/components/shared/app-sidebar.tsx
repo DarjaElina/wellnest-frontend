@@ -27,7 +27,6 @@ import {
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-
 import {
   Collapsible,
   CollapsibleContent,
@@ -55,21 +54,20 @@ export function AppSidebar() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <Sidebar className="bg-background text-foreground border-r border-border shadow-sm">
-      <SidebarContent className="flex flex-col h-full rounded-r-2xl p-4">
+    <Sidebar className="bg-sidebar text-foreground border-r border-border shadow-sm">
+      <SidebarContent className=" flex flex-col h-full rounded-r-2xl p-4">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg font-bold tracking-tight text-teal-600">
+          <SidebarGroupLabel className="text-lg font-bold tracking-tight text-brand-primary">
             Wellnest
           </SidebarGroupLabel>
 
           <SidebarGroupContent className="mt-4">
             <SidebarMenu className="space-y-1">
-
               <Collapsible defaultOpen className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="hover:bg-muted/40 transition-all rounded-lg px-3 py-2">
-                      <BookHeart className="mr-2 h-4 w-4 text-teal-500" />
+                      <BookHeart className="mr-2 h-4 w-4 text-brand-primary" />
                       <span>Journals</span>
                       <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
@@ -105,7 +103,6 @@ export function AppSidebar() {
                       </SidebarMenuSubItem>
                     )}
 
-                    {/* New Journal Button */}
                     <SidebarMenuSubItem>
                       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                         <DialogTrigger asChild>
@@ -113,8 +110,8 @@ export function AppSidebar() {
                             variant="ghost"
                             className="h-8 w-full justify-start text-sm px-2 cursor-pointer hover:bg-muted/30 transition"
                           >
-                            <Plus className="h-4 w-4 mr-2 text-teal-500" />
-                            New Journal
+                            <Plus className="h-4 w-4 mr-2 text-brand-primary" />
+                            Create Journal
                           </Button>
                         </DialogTrigger>
                         <DialogContent>
@@ -135,7 +132,7 @@ export function AppSidebar() {
                     className="hover:bg-muted/40 transition-all rounded-lg px-3 py-2"
                   >
                     <Link to={item.url}>
-                      <item.icon className="mr-2 h-4 w-4 text-teal-500" />
+                      <item.icon className="mr-2 h-4 w-4 text-brand-primary" />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -152,4 +149,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-

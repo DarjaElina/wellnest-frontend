@@ -2,7 +2,7 @@ import { RecentSummary } from "@/components/shared/recent-summary.tsx";
 import { MoodTrackerGraph } from "@/components/shared/mood-tracker-graph.tsx";
 export default function HomePage() {
   return (
-    <div className="px-6 py-10 max-w-5xl mx-auto space-y-6">
+    <div className="px-6 py-10 max-w-5xl space-y-6 ">
       <div>
         <h1 className="text-3xl font-bold tracking-tight mb-1">
           Hello, User! 💚
@@ -15,5 +15,5 @@ export default function HomePage() {
       <RecentSummary />
       <MoodTrackerGraph />
     </div>
-  )
+  );
 }
