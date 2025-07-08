@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 
 export function JournalEntryEditorToolbar() {
-
   return (
     <div className="flex justify-between items-center px-4 py-3 rounded-md bg-card border shadow-sm mb-4">
       <div className="flex gap-2">
@@ -27,7 +26,12 @@ export function JournalEntryEditorToolbar() {
           { label: "Italic", icon: Italic },
           { label: "List", icon: List },
         ].map(({ label, icon: Icon }) => (
-          <Button key={label} size="sm" variant="outline" className="cursor-pointer">
+          <Button
+            key={label}
+            size="sm"
+            variant="outline"
+            className="cursor-pointer"
+          >
             <Icon className="w-4 h-4 mr-1" />
             {label}
           </Button>

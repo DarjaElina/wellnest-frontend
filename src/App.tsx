@@ -11,7 +11,9 @@ const JournalEditorView = lazy(() => import("@/pages/journal-editor-view"));
 
 export default function App() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense
+      fallback={<div className="p-6 text-muted-foreground">Loading...</div>}
+    >
       <Routes>
         <Route index element={<WelcomePage />} />
 

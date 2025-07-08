@@ -60,7 +60,6 @@ export function AppSidebar() {
           <SidebarGroupLabel>MedTrack</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Journals Section */}
               <Collapsible defaultOpen className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
