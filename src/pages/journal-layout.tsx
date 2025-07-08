@@ -65,9 +65,7 @@ export default function JournalLayout() {
             "bg",
           )}`}
         >
-          <div
-            className="w-4 h-4 rounded-full border border-white dark:border-muted"
-          />
+          <div className="w-4 h-4 rounded-full border border-white dark:border-muted" />
           <h2 className="text-lg font-semibold text-white truncate">
             {journal.name}
           </h2>
