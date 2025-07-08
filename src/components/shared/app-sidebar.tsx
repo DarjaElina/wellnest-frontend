@@ -27,6 +27,7 @@ import {
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -54,17 +55,21 @@ export function AppSidebar() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <Sidebar>
-      <SidebarContent>
+    <Sidebar className="bg-background text-foreground border-r border-border shadow-sm">
+      <SidebarContent className="flex flex-col h-full rounded-r-2xl p-4">
         <SidebarGroup>
-          <SidebarGroupLabel>MedTrack</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
+          <SidebarGroupLabel className="text-lg font-bold tracking-tight text-teal-600">
+            Wellnest
+          </SidebarGroupLabel>
+
+          <SidebarGroupContent className="mt-4">
+            <SidebarMenu className="space-y-1">
+
               <Collapsible defaultOpen className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton>
-                      <BookHeart className="mr-2 h-4 w-4" />
+                    <SidebarMenuButton className="hover:bg-muted/40 transition-all rounded-lg px-3 py-2">
+                      <BookHeart className="mr-2 h-4 w-4 text-teal-500" />
                       <span>Journals</span>
                       <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
@@ -72,15 +77,23 @@ export function AppSidebar() {
                 </SidebarMenuItem>
 
                 <CollapsibleContent>
-                  <SidebarMenuSub>
-                    {query.isLoading && <p>Loading journals</p>}
-                    {query.isError && <p>Error loading journals</p>}
+                  <SidebarMenuSub className="ml-2 space-y-1">
+                    {query.isLoading && (
+                      <SidebarMenuSubItem className="text-muted-foreground text-sm italic">
+                        Loading journals…
+                      </SidebarMenuSubItem>
+                    )}
+                    {query.isError && (
+                      <SidebarMenuSubItem className="text-destructive text-sm">
+                        Error loading journals
+                      </SidebarMenuSubItem>
+                    )}
                     {query.data && query.data.length > 0 ? (
                       query.data.map((journal: Journal) => (
                         <SidebarMenuSubItem key={journal.id}>
                           <Link
                             to={`./journals/${journal.id}`}
-                            className="hover:underline"
+                            className="block px-3 py-1.5 rounded-md hover:bg-muted/30 transition"
                           >
                             {journal.name}
                           </Link>
@@ -92,14 +105,15 @@ export function AppSidebar() {
                       </SidebarMenuSubItem>
                     )}
 
+                    {/* New Journal Button */}
                     <SidebarMenuSubItem>
                       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                         <DialogTrigger asChild>
                           <Button
                             variant="ghost"
-                            className="h-8 w-full justify-start text-sm px-2 cursor-pointer"
+                            className="h-8 w-full justify-start text-sm px-2 cursor-pointer hover:bg-muted/30 transition"
                           >
-                            <Plus className="h-4 w-4 mr-2" />
+                            <Plus className="h-4 w-4 mr-2 text-teal-500" />
                             New Journal
                           </Button>
                         </DialogTrigger>
@@ -114,12 +128,14 @@ export function AppSidebar() {
                 </CollapsibleContent>
               </Collapsible>
 
-              {/* Other items */}
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    asChild
+                    className="hover:bg-muted/40 transition-all rounded-lg px-3 py-2"
+                  >
                     <Link to={item.url}>
-                      <item.icon className="mr-2 h-4 w-4" />
+                      <item.icon className="mr-2 h-4 w-4 text-teal-500" />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -129,10 +145,11 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="p-4 mt-auto">
+        <div className="mt-auto pt-4 border-t border-border">
           <ModeToggle />
         </div>
       </SidebarContent>
     </Sidebar>
   );
 }
+
