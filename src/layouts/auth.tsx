@@ -1,5 +1,5 @@
 import { ModeToggle } from "@/components/shared/mode-toggle";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 
 export default function AuthLayout() {
   return (
@@ -8,7 +8,10 @@ export default function AuthLayout() {
         <h1 className="text-xl font-semibold tracking-tight text-brand-primary italic">
           Wellnest
         </h1>
-        <ModeToggle />
+        <div>
+          <Link to="/" className="text-brand-primary font-bold mr-5 text-xl">Home</Link>
+          <ModeToggle />
+        </div>
       </header>
 
       <main>
