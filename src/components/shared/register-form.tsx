@@ -1,6 +1,8 @@
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import { signUp } from "@/services/auth"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,17 +17,22 @@ import {
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Link } from "react-router-dom"
 
-const registerSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
-  }),
-  confirmPassword: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
-  }),
-})
+const registerSchema = z
+  .object({
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z.string().email({ message: "Please enter a valid email address." }),
+    password: z.string().min(6, {
+      message: "Password must be at least 6 characters.",
+    }),
+    confirmPassword: z.string().min(6, {
+      message: "Password must be at least 6 characters.",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormValues = z.infer<typeof registerSchema>
 
@@ -37,12 +44,33 @@ export default function RegisterForm() {
       lastName: "",
       email: "",
       password: "",
+      confirmPassword: ""
     },
   })
 
-  function onSubmit(data: RegisterFormValues) {
-    console.log("Register submitted:", data)
-    // TODO: handle auth logic
+  const newUserMutation = useMutation({
+    mutationFn: signUp,
+    onSuccess: (response) => {
+      console.log(response)
+    },
+  });
+
+
+  const onSubmit = async (data: RegisterFormValues) => {
+    const {firstName, lastName, email, password} = data
+    console.log(firstName, lastName, email, password)
+    try {
+      const response = await newUserMutation.mutateAsync({
+        firstName,
+        lastName,
+        email,
+        password,
+        role: ["user"],
+      });;
+      console.log(response)
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -85,7 +113,7 @@ export default function RegisterForm() {
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Jane"
+                      placeholder="Smith"
                       type="text"
                       {...field}
                     />
@@ -151,9 +179,9 @@ export default function RegisterForm() {
 
             <Button
               type="submit"
-              className="w-full mt-2 hover:shadow-md transition"
+              className="w-full mt-2 hover:shadow-md transition cursor-pointer"
             >
-              Log In
+              Sign Up
             </Button>
 
             <p className="text-center text-sm text-muted-foreground mt-4">
