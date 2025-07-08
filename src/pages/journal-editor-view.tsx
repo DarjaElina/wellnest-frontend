@@ -7,5 +7,5 @@ export default function JournalEditorView() {
   if (!journal) {
     return null;
   }
-  return <JournalEntryEditor journalColor={journal.color} />;
+  return <JournalEntryEditor />;
 }

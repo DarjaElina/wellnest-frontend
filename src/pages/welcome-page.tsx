@@ -1,8 +1,8 @@
-import { motion } from "framer-motion"
-import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Sparkles, NotebookText, HeartPulse, Pill } from "lucide-react"
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Sparkles, NotebookText, HeartPulse, Pill } from "lucide-react";
 
 export default function WelcomePage() {
   return (
@@ -12,16 +12,18 @@ export default function WelcomePage() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-
       <div className="max-w-5xl w-full text-center z-10">
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-          Welcome to <span className="text-teal-500">Wellnest</span>
+          Welcome to <span className="text-brand-primary">Wellnest</span>
         </h1>
         <p className="text-lg sm:text-xl text-muted-foreground mb-8">
           Your cozy space to track wellness — one breath, one entry at a time.
         </p>
         <div className="flex justify-center gap-4 mb-12">
-          <Button className="hover:scale-105 hover:shadow-lg transition" asChild>
+          <Button
+            className="hover:scale-105 hover:shadow-lg transition"
+            asChild
+          >
             <Link to="/login">Login</Link>
           </Button>
           <Button
@@ -73,16 +75,17 @@ export default function WelcomePage() {
 
       <div className="text-center mt-20 max-w-3xl z-10">
         <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center gap-2">
-          <Sparkles className="text-teal-500 w-6 h-6" />
+          <Sparkles className="text-brand-primary w-6 h-6" />
           Why choose Wellnest?
         </h2>
         <p className="text-muted-foreground text-lg">
           Because health tracking should feel human — not clinical. With
-          Wellnest, you build healthy habits and feel supported every step of the way.
+          Wellnest, you build healthy habits and feel supported every step of
+          the way.
         </p>
       </div>
     </motion.section>
-  )
+  );
 }
 
 function Feature({
@@ -90,27 +93,27 @@ function Feature({
   title,
   description,
 }: {
-  icon: React.ElementType
-  title: string
-  description: string
+  icon: React.ElementType;
+  title: string;
+  description: string;
 }) {
   return (
     <Card className="shadow-md hover:shadow-xl transition hover:scale-[1.02]">
       <CardContent className="p-6 text-center">
-        <Icon className="w-8 h-8 text-teal-500 mx-auto mb-4" />
+        <Icon className="w-8 h-8 text-brand-primary mx-auto mb-4" />
         <h3 className="text-lg font-semibold mb-2">{title}</h3>
         <p className="text-sm text-muted-foreground">{description}</p>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function FadeIn({
   children,
   delay = 0,
 }: {
-  children: React.ReactNode
-  delay?: number
+  children: React.ReactNode;
+  delay?: number;
 }) {
   return (
     <motion.div
@@ -120,5 +123,5 @@ function FadeIn({
     >
       {children}
     </motion.div>
-  )
+  );
 }

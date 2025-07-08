@@ -53,7 +53,7 @@ export function JournalEntryCard({
       </CardHeader>
 
       <CardContent
-        className="text-sm text-gray-700 mt-1 line-clamp-2"
+        className="text-sm text-muted-foreground mt-1 line-clamp-2"
         dangerouslySetInnerHTML={{ __html: parsedParagraph }}
       />
     </Card>

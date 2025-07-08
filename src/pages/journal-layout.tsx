@@ -1,6 +1,6 @@
 import { Outlet, useParams, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, NotebookTabs } from "lucide-react";
+import { Plus, NotebookTabs, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JournalEntryList } from "@/components/shared/journal-entry/journal-entry-list";
 import { createJournalEntry } from "@/services/journal-entry";
@@ -65,8 +65,8 @@ export default function JournalLayout() {
             "bg",
           )}`}
         >
-          <div className="w-4 h-4 rounded-full border border-white dark:border-muted" />
-          <h2 className="text-lg font-semibold text-white truncate">
+          <SquarePen className="text-neutral-100"/>
+          <h2 className="text-lg font-semibold text-neutral-100 truncate">
             {journal.name}
           </h2>
         </div>
@@ -90,7 +90,7 @@ export default function JournalLayout() {
           <Button
             size="sm"
             onClick={handleNewEntry}
-            className={`cursor-pointer ${getColorClass(journal.color, "bg")} ${getColorClass(
+            className={`text-neutral-100 cursor-pointer ${getColorClass(journal.color, "bg")} ${getColorClass(
               journal.color,
               "hover",
             )}`}

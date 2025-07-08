@@ -27,9 +27,9 @@ export function JournalEntryList({ journalColor }: { journalColor: string }) {
   };
 
   if (isLoading)
-    return <p className="text-sm text-gray-500">Loading entries...</p>;
+    return <p className="text-sm text-muted-foreground">Loading entries...</p>;
   if (isError)
-    return <p className="text-sm text-red-500">Could not load entries.</p>;
+    return <p className="text-sm text-destructive">Could not load entries.</p>;
 
   if (data && data.length === 0) {
     return <div className="space-y-3">No Entries Yet</div>;
