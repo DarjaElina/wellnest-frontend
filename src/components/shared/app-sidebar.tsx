@@ -7,6 +7,7 @@ import {
   Home,
   ChevronDown,
   Plus,
+  LogOut,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ModeToggle } from "@/components/shared/mode-toggle";
@@ -37,6 +38,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getJournals } from "@/services/journal";
 import { useState } from "react";
 import type { Journal } from "@/types/journal.types";
+import { logout } from "@/reducers/authReducer";
+import { useDispatch } from "react-redux";
 
 const items = [
   { title: "Symptom Log", url: "symptom-log", icon: Stethoscope },
@@ -47,11 +50,16 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const query = useQuery({
+  const {data, isError, isLoading} = useQuery({
     queryKey: ["journals"],
     queryFn: getJournals,
   });
   const [dialogOpen, setDialogOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  }
 
   return (
     <Sidebar className="bg-sidebar text-foreground border-r border-border shadow-sm">
@@ -76,18 +84,18 @@ export function AppSidebar() {
 
                 <CollapsibleContent>
                   <SidebarMenuSub className="ml-2 space-y-1">
-                    {query.isLoading && (
+                    {isLoading && (
                       <SidebarMenuSubItem className="text-muted-foreground text-sm italic">
                         Loading journals…
                       </SidebarMenuSubItem>
                     )}
-                    {query.isError && (
+                    {isError && (
                       <SidebarMenuSubItem className="text-destructive text-sm">
                         Error loading journals
                       </SidebarMenuSubItem>
                     )}
-                    {query.data && query.data.length > 0 ? (
-                      query.data.map((journal: Journal) => (
+                    {data && data.length > 0 ? (
+                      data.map((journal: Journal) => (
                         <SidebarMenuSubItem key={journal.id}>
                           <Link
                             to={`./journals/${journal.id}`}
@@ -143,9 +151,20 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <div className="mt-auto pt-4 border-t border-border">
+        <div className="flex flex-col gap-2">
           <ModeToggle />
+          <Button
+            variant="outline"
+            className="h-8 w-full justify-start text-sm px-2 cursor-pointer "
+            onClick={handleLogout}
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
         </div>
+      </div>
       </SidebarContent>
     </Sidebar>
   );
 }
+

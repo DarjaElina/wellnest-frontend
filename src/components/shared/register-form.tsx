@@ -1,11 +1,10 @@
-import { z } from "zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
-import { signUp } from "@/services/auth"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { signUp } from "@/services/auth";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -13,81 +12,68 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Link } from "react-router-dom"
-
-const registerSchema = z
-  .object({
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.string().email({ message: "Please enter a valid email address." }),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters.",
-    }),
-    confirmPassword: z.string().min(6, {
-      message: "Password must be at least 6 characters.",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-type RegisterFormValues = z.infer<typeof registerSchema>
+} from "@/components/ui/form";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Link } from "react-router-dom";
+import { registerFormSchema } from "@/types/auth.types";
+import type { RegisterFormValues } from "@/types/auth.types";
+import { showErrorToast } from "@/helper/error";
+import { loginSuccess } from "@/reducers/authReducer";
+import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "@/hooks/useLoginMutation";
+import { useDispatch } from "react-redux";
 
 export default function RegisterForm() {
   const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     },
-  })
+  });
+  const dispatch = useDispatch();
+
 
   const newUserMutation = useMutation({
     mutationFn: signUp,
     onSuccess: (response) => {
-      console.log(response)
+      console.log(response);
     },
   });
-
+  const navigate = useNavigate();
+  const [mutateAsync] = useLoginMutation();
 
   const onSubmit = async (data: RegisterFormValues) => {
-    const {firstName, lastName, email, password} = data
-    console.log(firstName, lastName, email, password)
+    const { email, password, firstName, lastName } = data;
     try {
-      const response = await newUserMutation.mutateAsync({
-        firstName,
-        lastName,
-        email,
-        password,
-        role: ["user"],
-      });;
-      console.log(response)
+      await newUserMutation.mutateAsync({ firstName, lastName, email, password });
+  
+      const loginResponse = await mutateAsync({ username: email, password });
+  
+      dispatch(loginSuccess({ token: loginResponse.accessToken }));
+  
+      navigate('/dashboard');
+  
     } catch (error) {
-      console.log(error);
+      showErrorToast(error);
     }
-  }
+  };
 
   return (
     <Card className="w-full max-w-md shadow-xl rounded-2xl">
       <CardHeader className="text-center pb-0">
         <h1 className="text-3xl font-bold text-foreground">Create Account</h1>
         <p className="text-muted-foreground text-sm mt-1">
-            Join Wellnest and start reflecting with care 🌿
-          </p>
+          Join Wellnest and start reflecting with care 🌿
+        </p>
       </CardHeader>
 
       <CardContent className="mt-4">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="firstName"
@@ -95,11 +81,7 @@ export default function RegisterForm() {
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Jane"
-                      type="text"
-                      {...field}
-                    />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -112,11 +94,7 @@ export default function RegisterForm() {
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Smith"
-                      type="text"
-                      {...field}
-                    />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -129,11 +107,7 @@ export default function RegisterForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="you@example.com"
-                      type="email"
-                      {...field}
-                    />
+                    <Input type="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -147,35 +121,26 @@ export default function RegisterForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="••••••••"
-                      type="password"
-                      {...field}
-                    />
+                    <Input type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-          <FormField
+            <FormField
               control={form.control}
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="••••••••"
-                      type="password"
-                      {...field}
-                    />
+                    <Input type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
 
             <Button
               type="submit"
@@ -197,7 +162,5 @@ export default function RegisterForm() {
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-
-

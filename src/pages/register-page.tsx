@@ -1,5 +1,5 @@
-import { motion } from "framer-motion"
-import RegisterForm from "@/components/shared/register-form"
+import { motion } from "framer-motion";
+import RegisterForm from "@/components/shared/register-form";
 
 export default function RegisterPage() {
   return (
@@ -18,7 +18,8 @@ export default function RegisterPage() {
 
         <div className="relative z-10 max-w-md text-center bg-muted/60 dark:bg-background/70 backdrop-blur-sm rounded-xl p-6 shadow-xl text-foreground">
           <blockquote className="text-lg italic mb-4 text-muted-foreground dark:text-foreground">
-            “I started journaling with Wellnest every morning. It’s like a breath of fresh air — calming, grounding, and so simple.”
+            “I started journaling with Wellnest every morning. It’s like a
+            breath of fresh air — calming, grounding, and so simple.”
           </blockquote>
           <div className="flex items-center justify-center gap-3">
             <img
@@ -43,5 +44,5 @@ export default function RegisterPage() {
         <RegisterForm />
       </motion.div>
     </div>
-  )
+  );
 }
