@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { login } from "@/services/auth";
 import type { LoginInput } from "@/types/auth.types";
 import { signInSchema } from "@/types/auth.types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,11 +14,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/reducers/authReducer";
 import { useNavigate } from "react-router-dom";
 import { showErrorToast } from "@/helper/error";
+import { useLoginMutation } from "@/hooks/useLoginMutation";
 
 export default function LoginForm() {
   const form = useForm<LoginInput>({
@@ -30,23 +29,17 @@ export default function LoginForm() {
     },
   });
   const dispatch = useDispatch();
-
-  const loginMutation = useMutation({
-    mutationFn: login,
-    onSuccess: (response) => {
-      console.log(response);
-    },
-    onError: (res) => {
-      console.log(res);
-    },
-  });
   const navigate = useNavigate();
+
+  const [mutateAsync] = useLoginMutation();
+
+  
 
   const onSubmit = async (data: LoginInput) => {
     // even though user logs in with email, spring backend expects username field
     const { username, password } = data;
     try {
-      const response = await loginMutation.mutateAsync({
+      const response = await mutateAsync({
         username,
         password,
       });

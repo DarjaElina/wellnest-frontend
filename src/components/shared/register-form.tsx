@@ -18,6 +18,10 @@ import { Link } from "react-router-dom";
 import { registerFormSchema } from "@/types/auth.types";
 import type { RegisterFormValues } from "@/types/auth.types";
 import { showErrorToast } from "@/helper/error";
+import { loginSuccess } from "@/reducers/authReducer";
+import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "@/hooks/useLoginMutation";
+import { useDispatch } from "react-redux";
 
 export default function RegisterForm() {
   const form = useForm<RegisterFormValues>({
@@ -30,6 +34,8 @@ export default function RegisterForm() {
       confirmPassword: "",
     },
   });
+  const dispatch = useDispatch();
+
 
   const newUserMutation = useMutation({
     mutationFn: signUp,
@@ -37,19 +43,22 @@ export default function RegisterForm() {
       console.log(response);
     },
   });
+  const navigate = useNavigate();
+  const [mutateAsync] = useLoginMutation();
 
   const onSubmit = async (data: RegisterFormValues) => {
-    const { firstName, lastName, email, password } = data;
+    const { email, password, firstName, lastName } = data;
     try {
-      const response = await newUserMutation.mutateAsync({
-        firstName,
-        lastName,
-        email,
-        password,
-      });
-      console.log(response);
+      await newUserMutation.mutateAsync({ firstName, lastName, email, password });
+  
+      const loginResponse = await mutateAsync({ username: email, password });
+  
+      dispatch(loginSuccess({ token: loginResponse.accessToken }));
+  
+      navigate('/dashboard');
+  
     } catch (error) {
-     showErrorToast(error)
+      showErrorToast(error);
     }
   };
 
