@@ -1,5 +1,5 @@
-import { motion } from "framer-motion"
-import LoginForm from "@/components/shared/login-form"
+import { motion } from "framer-motion";
+import LoginForm from "@/components/shared/login-form";
 
 export default function LoginPage() {
   return (
@@ -18,7 +18,8 @@ export default function LoginPage() {
         <div className="relative z-10 max-w-md text-center bg-muted/60 dark:bg-background/70 backdrop-blur-sm rounded-xl p-6 shadow-xl text-foreground">
           <h2 className="text-xl font-semibold mb-2">Welcome back ❤️</h2>
           <p className="text-muted-foreground dark:text-foreground text-sm italic">
-            Wellnest is built to help you reflect, not just track. Your space is always here.
+            Wellnest is built to help you reflect, not just track. Your space is
+            always here.
           </p>
         </div>
       </motion.div>
@@ -32,7 +33,5 @@ export default function LoginPage() {
         <LoginForm />
       </motion.div>
     </div>
-  )
+  );
 }
-
-

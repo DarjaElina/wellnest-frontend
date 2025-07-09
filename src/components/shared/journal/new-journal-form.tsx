@@ -31,7 +31,7 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
   const form = useForm<JournalCreateInput>({
     resolver: zodResolver(journalCreateSchema),
     defaultValues: {
-      name: "New Journal",
+      name: "",
       color: "rose",
     },
   });
@@ -47,8 +47,12 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
   });
 
   const onSubmit = async (values: JournalCreateInput) => {
+    const {name, color} = values;
     try {
-      const journal = await newJournalMutation.mutateAsync(values);
+      const journal = await newJournalMutation.mutateAsync({
+        name: name ?? "New Journal",
+        color
+      });
       closeDialog?.();
       navigate(`journals/${journal.id}`);
     } catch (error) {

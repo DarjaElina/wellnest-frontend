@@ -30,7 +30,7 @@ export function JournalEntryEditor() {
   );
 
   const [entry, setEntry] = useState<JournalEntry>({
-    content: "",
+    content: "<h2></h2><p></p>",
     entryDate: formatISO9075(new Date()),
     isFavorite: false,
     tags: [],

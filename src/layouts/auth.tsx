@@ -1,5 +1,6 @@
 import { ModeToggle } from "@/components/shared/mode-toggle";
 import { Link, Outlet } from "react-router";
+import { Toaster } from "sonner";
 
 export default function AuthLayout() {
   return (
@@ -9,14 +10,17 @@ export default function AuthLayout() {
           Wellnest
         </h1>
         <div>
-          <Link to="/" className="text-brand-primary font-bold mr-5 text-xl">Home</Link>
+          <Link to="/" className="text-brand-primary font-bold mr-5 text-xl">
+            Home
+          </Link>
           <ModeToggle />
         </div>
       </header>
 
       <main>
         <Outlet />
+        <Toaster position="top-right" richColors/>
       </main>
     </div>
-  )
+  );
 }

@@ -65,7 +65,7 @@ export default function JournalLayout() {
             "bg",
           )}`}
         >
-          <SquarePen className="text-neutral-100"/>
+          <SquarePen className="text-neutral-100" />
           <h2 className="text-lg font-semibold text-neutral-100 truncate">
             {journal.name}
           </h2>

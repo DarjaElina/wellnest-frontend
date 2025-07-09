@@ -1,14 +1,61 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import type { LoginInput } from "@/types/auth.types";
+import { signInSchema } from "@/types/auth.types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "@/reducers/authReducer";
+import { useNavigate } from "react-router-dom";
+import { showErrorToast } from "@/helper/error";
+import { useLoginMutation } from "@/hooks/useLoginMutation";
 
 export default function LoginForm() {
+  const form = useForm<LoginInput>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [mutateAsync] = useLoginMutation();
+
+  
+
+  const onSubmit = async (data: LoginInput) => {
+    // even though user logs in with email, spring backend expects username field
+    const { username, password } = data;
+    try {
+      const response = await mutateAsync({
+        username,
+        password,
+      });
+      const { accessToken } = response
+      dispatch(loginSuccess({ token: accessToken }));
+      navigate('/dashboard');
+    } catch (error) {
+      showErrorToast(error)
+    }
+  };
   return (
     <Card className="w-full max-w-md shadow-xl rounded-2xl">
       <CardHeader className="text-center pb-0">
-        <h1 className="text-3xl font-bold text-foreground">Log In to Wellnest</h1>
+        <h1 className="text-3xl font-bold text-foreground">
+          Log In to Wellnest
+        </h1>
         <p className="text-center text-sm text-muted-foreground mt-4">
           Don’t have an account?{" "}
           <Link
@@ -20,28 +67,40 @@ export default function LoginForm() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4 mt-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-          />
-        </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-          />
-        </div>
-
-        <Button className="w-full mt-2 hover:shadow-md transition">
-          Log In
-        </Button>
-
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button className="w-full mt-2 hover:shadow-md transition cursor-pointer">
+              Log In
+            </Button>
+          </form>
+        </Form>
         <p className="text-center text-sm text-muted-foreground mt-4">
           <Link
             to="/register"
