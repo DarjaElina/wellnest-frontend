@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { login } from "@/services/auth";
 import type { LoginInput } from "@/types/auth.types";
 import { signInSchema } from "@/types/auth.types";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -14,10 +14,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { useMutation } from "@tanstack/react-query"
-
-
+} from "@/components/ui/form";
+import { useMutation } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "@/reducers/authReducer";
 
 export default function LoginForm() {
   const form = useForm<LoginInput>({
@@ -26,36 +26,39 @@ export default function LoginForm() {
       username: "",
       password: "",
     },
-  })
+  });
+  const dispatch = useDispatch();
 
-   const loginMutation = useMutation({
-     mutationFn: login,
-     onSuccess: (response) => {
-       console.log(response)
-     },
-     onError: (res) => {
-      console.log(res)
-     }
-   });
-
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      console.log(response);
+    },
+    onError: (res) => {
+      console.log(res);
+    },
+  });
 
   const onSubmit = async (data: LoginInput) => {
     // even though user logs in with email, spring backend expects username field
-     const {username, password} = data
-     try {
-       const response = await loginMutation.mutateAsync({
+    const { username, password } = data;
+    try {
+      const response = await loginMutation.mutateAsync({
         username,
         password,
-       });;
-       console.log(response)
-     } catch (error) {
-       console.log(error);
-     }
-   }
+      });
+      const { accessToken } = response
+      dispatch(loginSuccess({ token: accessToken }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Card className="w-full max-w-md shadow-xl rounded-2xl">
       <CardHeader className="text-center pb-0">
-        <h1 className="text-3xl font-bold text-foreground">Log In to Wellnest</h1>
+        <h1 className="text-3xl font-bold text-foreground">
+          Log In to Wellnest
+        </h1>
         <p className="text-center text-sm text-muted-foreground mt-4">
           Don’t have an account?{" "}
           <Link
@@ -67,11 +70,8 @@ export default function LoginForm() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4 mt-4">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-4"
-            >
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="username"
@@ -79,27 +79,21 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      type="text"
-                      {...field}
-                    />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-           <FormField
+            <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      {...field}
-                    />
+                    <Input type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -108,9 +102,8 @@ export default function LoginForm() {
             <Button className="w-full mt-2 hover:shadow-md transition cursor-pointer">
               Log In
             </Button>
-
           </form>
-          </Form>
+        </Form>
         <p className="text-center text-sm text-muted-foreground mt-4">
           <Link
             to="/register"

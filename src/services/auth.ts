@@ -6,10 +6,10 @@ export async function signUp(userObj: UserCreateInput) {
   return response.data;
 }
 
-export async function login({username, password}: LoginInput) {
+export async function login({ username, password }: LoginInput) {
   const response = await api.post("/auth/sign-in", {
     username,
-    password
-  })
+    password,
+  });
   return response.data;
 }

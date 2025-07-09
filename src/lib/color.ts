@@ -78,4 +78,3 @@ export const tailwindColorMap: Record<
     softBg: "bg-pink-100",
   },
 };
-

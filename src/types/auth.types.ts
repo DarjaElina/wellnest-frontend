@@ -19,13 +19,12 @@ export const registerFormSchema = baseRegisterSchema.refine(
   {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  }
+  },
 );
 
-
-export const userCreateSchema = baseRegisterSchema
-  .omit({ confirmPassword: true })
-
+export const userCreateSchema = baseRegisterSchema.omit({
+  confirmPassword: true,
+});
 
 export type RegisterFormValues = z.infer<typeof registerFormSchema>;
 export type UserCreateInput = z.infer<typeof userCreateSchema>;
@@ -34,11 +33,12 @@ export type UserCreateInput = z.infer<typeof userCreateSchema>;
 
 // even though user logs in with email, spring backend expects username field
 export const signInSchema = z.object({
-  username: z.string().email({ message: "Please enter a valid email address." }),
+  username: z
+    .string()
+    .email({ message: "Please enter a valid email address." }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
-})
+});
 
 export type LoginInput = z.infer<typeof signInSchema>;
-

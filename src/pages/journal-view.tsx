@@ -13,7 +13,9 @@ export default function JournalView() {
       >
         <div className="flex items-center gap-3 px-6 py-4">
           <BookOpenText className="w-6 h-6 text-neutral-100" />
-          <h2 className="text-xl font-semibold text-neutral-100">{journal.name}</h2>
+          <h2 className="text-xl font-semibold text-neutral-100">
+            {journal.name}
+          </h2>
         </div>
       </div>
 

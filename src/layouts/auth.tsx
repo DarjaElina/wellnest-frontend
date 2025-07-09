@@ -9,7 +9,9 @@ export default function AuthLayout() {
           Wellnest
         </h1>
         <div>
-          <Link to="/" className="text-brand-primary font-bold mr-5 text-xl">Home</Link>
+          <Link to="/" className="text-brand-primary font-bold mr-5 text-xl">
+            Home
+          </Link>
           <ModeToggle />
         </div>
       </header>
@@ -18,5 +20,5 @@ export default function AuthLayout() {
         <Outlet />
       </main>
     </div>
-  )
+  );
 }
