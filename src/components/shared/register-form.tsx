@@ -1,4 +1,3 @@
-import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -16,29 +15,12 @@ import {
 } from "@/components/ui/form"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Link } from "react-router-dom"
-
-const registerSchema = z
-  .object({
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.string().email({ message: "Please enter a valid email address." }),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters.",
-    }),
-    confirmPassword: z.string().min(6, {
-      message: "Password must be at least 6 characters.",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-type RegisterFormValues = z.infer<typeof registerSchema>
+import { registerFormSchema } from "@/types/auth.types";
+import type { RegisterFormValues } from "@/types/auth.types"
 
 export default function RegisterForm() {
   const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -58,14 +40,12 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     const {firstName, lastName, email, password} = data
-    console.log(firstName, lastName, email, password)
     try {
       const response = await newUserMutation.mutateAsync({
         firstName,
         lastName,
         email,
-        password,
-        role: ["user"],
+        password
       });;
       console.log(response)
     } catch (error) {
@@ -96,7 +76,6 @@ export default function RegisterForm() {
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Jane"
                       type="text"
                       {...field}
                     />
@@ -113,7 +92,6 @@ export default function RegisterForm() {
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Smith"
                       type="text"
                       {...field}
                     />
@@ -130,7 +108,6 @@ export default function RegisterForm() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="you@example.com"
                       type="email"
                       {...field}
                     />
@@ -148,7 +125,6 @@ export default function RegisterForm() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="••••••••"
                       type="password"
                       {...field}
                     />
@@ -166,7 +142,6 @@ export default function RegisterForm() {
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="••••••••"
                       type="password"
                       {...field}
                     />
