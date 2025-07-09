@@ -18,6 +18,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/reducers/authReducer";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const form = useForm<LoginInput>({
@@ -38,6 +39,7 @@ export default function LoginForm() {
       console.log(res);
     },
   });
+  const navigate = useNavigate();
 
   const onSubmit = async (data: LoginInput) => {
     // even though user logs in with email, spring backend expects username field
@@ -49,6 +51,7 @@ export default function LoginForm() {
       });
       const { accessToken } = response
       dispatch(loginSuccess({ token: accessToken }));
+      navigate('/dashboard');
     } catch (error) {
       console.log(error);
     }
