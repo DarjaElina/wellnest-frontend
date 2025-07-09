@@ -19,6 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/reducers/authReducer";
 import { useNavigate } from "react-router-dom";
+import { showErrorToast } from "@/helper/error";
 
 export default function LoginForm() {
   const form = useForm<LoginInput>({
@@ -53,7 +54,7 @@ export default function LoginForm() {
       dispatch(loginSuccess({ token: accessToken }));
       navigate('/dashboard');
     } catch (error) {
-      console.log(error);
+      showErrorToast(error)
     }
   };
   return (

@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { registerFormSchema } from "@/types/auth.types";
 import type { RegisterFormValues } from "@/types/auth.types";
+import { showErrorToast } from "@/helper/error";
 
 export default function RegisterForm() {
   const form = useForm<RegisterFormValues>({
@@ -48,7 +49,7 @@ export default function RegisterForm() {
       });
       console.log(response);
     } catch (error) {
-      console.log(error);
+     showErrorToast(error)
     }
   };
 

@@ -1,5 +1,6 @@
 import { ModeToggle } from "@/components/shared/mode-toggle";
 import { Link, Outlet } from "react-router";
+import { Toaster } from "sonner";
 
 export default function AuthLayout() {
   return (
@@ -18,6 +19,7 @@ export default function AuthLayout() {
 
       <main>
         <Outlet />
+        <Toaster position="top-right" richColors/>
       </main>
     </div>
   );
