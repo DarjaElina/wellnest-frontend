@@ -28,3 +28,8 @@ export async function updateJournalEntry(
   );
   return response.data;
 }
+
+export async function updateEntryTags(entryId: string, journalId: string, tags: string[]) {
+  const res = await api.patch(`/journals/${journalId}/entries/${entryId}/tags`, { tags });
+  return res.data;
+}

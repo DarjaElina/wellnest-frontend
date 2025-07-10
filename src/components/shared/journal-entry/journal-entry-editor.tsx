@@ -181,7 +181,7 @@ export function JournalEntryEditor() {
         </AnimatePresence>
       </div>
 
-      <JournalEntryEditorToolbar editor={editor} />
+      <JournalEntryEditorToolbar editor={editor} tags={entry.tags}/>
 
       <div
         className={`border bg-card rounded-xl shadow-sm p-4 transition-shadow focus-within:shadow-md`}

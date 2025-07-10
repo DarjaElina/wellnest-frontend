@@ -1,93 +1,19 @@
 import { Button } from "@/components/ui/button.tsx";
-import {
-  MoreVerticalIcon,
-  Trash2,
-  Heart,
-  Download,
-  Heading1,
-  Bold,
-  Italic,
-  List,
-  ListOrdered,
-} from "lucide-react";
+import { MoreVerticalIcon, Trash2, Heart, Download } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import { FormattingButtons } from "./formatting-buttons";
+import type { Editor } from "@tiptap/react";
 
-export function JournalEntryEditorToolbar({ editor }) {
+export function JournalEntryEditorToolbar({ editor, tags }: {editor: Editor | null; tags: string[] }) {
   return (
+    
     <div className="flex justify-between items-center px-4 py-3 rounded-md bg-card border shadow-sm mb-4">
-      <div className="flex gap-2">
-        <Button
-          size="sm"
-          variant="outline"
-          className="cursor-pointer"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-        >
-          <Italic className="w-4 h-4 mr-1" />
-        </Button>
-
-        <Button
-          size="sm"
-          variant="outline"
-          className="cursor-pointer"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-        >
-          <Bold className="w-4 h-4 mr-1" />
-        </Button>
-
-        <Button
-          size="sm"
-          variant="outline"
-          className="cursor-pointer"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-        >
-          <List className="w-4 h-4 mr-1" />
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          className="cursor-pointer"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        >
-          <ListOrdered className="w-4 h-4 mr-1" />
-        </Button>
-
-        <Button
-          size="sm"
-          variant="outline"
-          className="cursor-pointer"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-        >
-          H1
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          className="cursor-pointer"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-        >
-          H2
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          className="cursor-pointer"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-        >
-          H3
-        </Button>
-      </div>
-
+      <FormattingButtons editor={editor} tags={tags}/>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon">
