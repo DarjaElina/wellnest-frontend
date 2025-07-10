@@ -15,11 +15,14 @@ import {
 } from "date-fns";
 import debounce from "lodash.debounce";
 import { type JournalEntry } from "@/types/journalEntry.types";
-import { updateJournalEntry } from "@/services/journal-entry";
+import { updateEntryTags, updateJournalEntry } from "@/services/journal-entry";
 import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cloud, Check } from "lucide-react";
+import { Cloud, Check, Trash2 } from "lucide-react";
 import type { RouteParams } from "@/types/shared.types";
+import { setCurrentEntry } from "@/reducers/journalReducer";
+import { showErrorToast } from "@/helper/error";
+import { useDispatch } from "react-redux";
 
 export function JournalEntryEditor() {
   const journalEntry = useSelector(
@@ -36,6 +39,8 @@ export function JournalEntryEditor() {
     tags: [],
     id: "",
   });
+
+  const dispatch = useDispatch();
 
   const queryClient = useQueryClient();
   const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
@@ -129,6 +134,26 @@ export function JournalEntryEditor() {
     }
   }, [journalEntry, editor]);
 
+  const handleRemoveTag = async (tagToRemove: string) => {
+    const newTags = entry.tags.filter((tag) => tag !== tagToRemove);
+
+    try {
+      const updatedEntry = await updateEntryTags(entry.id, journalId, newTags);
+
+      queryClient.setQueryData<JournalEntry[]>(
+        ["journalEntries", journalId],
+        (oldEntries = []) =>
+          oldEntries.map((e) =>
+            e.id === updatedEntry.id ? { ...e, tags: updatedEntry.tags } : e,
+          ),
+      );
+
+      dispatch(setCurrentEntry(updatedEntry));
+    } catch (err) {
+      showErrorToast(err);
+    }
+  };
+
   return (
     <div className="p-6 max-w-3xl mx-auto bg-card rounded-xl shadow space-y-4">
       <div className="flex justify-between items-center">
@@ -181,12 +206,30 @@ export function JournalEntryEditor() {
         </AnimatePresence>
       </div>
 
-      <JournalEntryEditorToolbar editor={editor} />
+      <JournalEntryEditorToolbar editor={editor} tags={entry.tags} />
 
       <div
         className={`border bg-card rounded-xl shadow-sm p-4 transition-shadow focus-within:shadow-md`}
       >
-        <EditorContent editor={editor} className="min-h-[60vh]" />
+        <EditorContent editor={editor} className="min-h-[55vh]" />
+      </div>
+      <div className="flex flex-wrap gap-2 mt-2">
+        {entry.tags.map((tag) => (
+          <span
+            key={tag}
+            className="flex items-center gap-1 px-2 py-1 text-sm rounded bg-muted text-muted-foreground"
+          >
+            #{tag}
+            <button
+              onClick={() => handleRemoveTag(tag)}
+              className="hover:text-destructive focus:outline-none cursor-pointer"
+              title="Remove tag"
+              type="button"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </span>
+        ))}
       </div>
     </div>
   );
