@@ -32,7 +32,6 @@ export default function RegisterForm() {
     },
   });
 
-
   const newUserMutation = useMutation({
     mutationFn: signUp,
     onSuccess: (response) => {
@@ -44,10 +43,14 @@ export default function RegisterForm() {
   const onSubmit = async (data: RegisterFormValues) => {
     const { email, password, firstName, lastName } = data;
     try {
-      await newUserMutation.mutateAsync({ firstName, lastName, email, password });
-  
-      navigate('/dashboard');
-  
+      await newUserMutation.mutateAsync({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+
+      navigate("/dashboard");
     } catch (error) {
       showErrorToast(error);
     }

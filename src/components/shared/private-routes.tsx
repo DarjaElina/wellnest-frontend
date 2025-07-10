@@ -10,5 +10,3 @@ export default function PrivateRoute() {
 
   return <Outlet />;
 }
-
-
