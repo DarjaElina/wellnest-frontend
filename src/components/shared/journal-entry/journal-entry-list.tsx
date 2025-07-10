@@ -7,19 +7,31 @@ import { type JournalEntry } from "@/types/journalEntry.types";
 import { useParams, useNavigate } from "react-router";
 import type { RootState } from "@/store";
 import type { RouteParams } from "@/types/shared.types";
+import { useEffect } from "react";
 
 export function JournalEntryList({ journalColor }: { journalColor: string }) {
-  const { journalId } = useParams<RouteParams>() as RouteParams;
+  const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["journalEntries", journalId],
     queryFn: () => getJournalEntriesByJournal(journalId),
   });
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const currentEntry = useSelector(
     (state: RootState) => state.journal.currentEntry,
   );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!currentEntry && data) {
+      const found = data.find((entry: JournalEntry) => entry.id === entryId);
+      if (found) {
+        dispatch(setCurrentEntry(found));
+      }
+    }
+  }, [currentEntry, data, dispatch, entryId]);
+
+  const navigate = useNavigate();
 
   const onSelect = (entry: JournalEntry) => {
     dispatch(setCurrentEntry(entry));

@@ -19,6 +19,8 @@ import { updateEntryTags } from "@/services/journal-entry";
 import type { RouteParams } from "@/types/shared.types";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import { showErrorToast } from "@/helper/error";
+import { useDispatch } from "react-redux";
+import { setCurrentEntry } from "@/reducers/journalReducer";
 
 export function TagsDialog({ initialTags }: { initialTags: string[] }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,11 +28,12 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
   const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const filteredTags = useMemo(() => {
     if (!searchTerm.trim()) return selectedTags;
     return selectedTags.filter((tag) =>
-      tag.toLowerCase().includes(searchTerm.trim().toLowerCase())
+      tag.toLowerCase().includes(searchTerm.trim().toLowerCase()),
     );
   }, [searchTerm, selectedTags]);
 
@@ -51,11 +54,17 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
   const tagsMutation = useMutation({
     mutationFn: () => updateEntryTags(entryId, journalId, selectedTags),
     onSuccess: (updatedEntry: JournalEntry) => {
-      queryClient.setQueryData<JournalEntry[]>(["journalEntries"], (oldEntries = []) =>
-        oldEntries.map((entry) =>
-          entry.id === updatedEntry.id ? { ...entry, tags: updatedEntry.tags } : entry
-        )
+      // Update React Query cache
+      queryClient.setQueryData<JournalEntry[]>(
+        ["journalEntries", journalId],
+        (oldEntries = []) =>
+          oldEntries.map((entry) =>
+            entry.id === updatedEntry.id
+              ? { ...entry, tags: updatedEntry.tags }
+              : entry,
+          ),
       );
+      dispatch(setCurrentEntry(updatedEntry));
     },
   });
 
@@ -74,79 +83,80 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
+      <DialogTrigger asChild>
         <Button size="sm" variant="outline" className="cursor-pointer">
           <Tag className="w-4 h-4 mr-1" />
           Tags
         </Button>
       </DialogTrigger>
       <DialogContent>
-      <DialogHeader>
-        <DialogTitle className="mb-2">Tags</DialogTitle>
-        <DialogDescription>
-          Add or remove tags for your journal entry
-        </DialogDescription>
-      </DialogHeader>
-    <form onSubmit={handleSave} className="flex flex-col h-full space-y-6">
-      
+        <DialogHeader>
+          <DialogTitle className="mb-2">Tags</DialogTitle>
+          <DialogDescription>
+            Add or remove tags for your journal entry
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSave} className="flex flex-col h-full space-y-6">
+          <div className="grid gap-4">
+            <div className="grid gap-3">
+              <Label className="mb-2" htmlFor="tag-search">
+                Tag Name
+              </Label>
+              <Input
+                id="tag-search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search or add tag"
+              />
+            </div>
 
-      <div className="grid gap-4">
-        <div className="grid gap-3">
-          <Label className="mb-2" htmlFor="tag-search">Tag Name</Label>
-          <Input
-            id="tag-search"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search or add tag"
-          />
-        </div>
+            <div className="grid gap-3">
+              {filteredTags.length > 0 && (
+                <ul className="max-h-40 overflow-auto border rounded p-2 flex flex-col gap-2">
+                  {filteredTags.map((tag) => (
+                    <Button
+                      variant="outline"
+                      key={tag}
+                      className="w-full justify-start"
+                      onClick={() => removeTag(tag)}
+                      type="button"
+                    >
+                      <Tag className="mr-2" />
+                      {tag}
+                    </Button>
+                  ))}
+                </ul>
+              )}
 
-        <div className="grid gap-3">
-          {filteredTags.length > 0 && (
-            <ul className="max-h-40 overflow-auto border rounded p-2 flex flex-col gap-2">
-              {filteredTags.map((tag) => (
+              {!tagExistsInSelected && searchTerm.trim() !== "" && (
                 <Button
-                  variant="outline"
-                  key={tag}
-                  className="w-full justify-start"
-                  onClick={() => removeTag(tag)}
                   type="button"
+                  variant="outline"
+                  className="flex gap-2 mt-2"
+                  onClick={() => addTag(searchTerm.trim())}
                 >
-                  <Tag className="mr-2" />
-                  {tag}
+                  <Plus className="w-4 h-4" /> Add tag "{searchTerm.trim()}"
                 </Button>
-              ))}
-            </ul>
-          )}
+              )}
+            </div>
+          </div>
 
-          {!tagExistsInSelected && searchTerm.trim() !== "" && (
-            <Button
-              type="button"
-              variant="outline"
-              className="flex gap-2 mt-2"
-              onClick={() => addTag(searchTerm.trim())}
-            >
-              <Plus className="w-4 h-4" /> Add tag "{searchTerm.trim()}"
+          <DialogFooter className="mt-4">
+            <DialogClose asChild>
+              <Button
+                type="button"
+                variant="outline"
+                className="cursor-pointer"
+              >
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="submit" className="cursor-pointer">
+              Save changes
             </Button>
-          )}
-        </div>
-      </div>
-
-      <DialogFooter className="mt-4">
-        <DialogClose asChild>
-          <Button type="button" variant="outline" className="cursor-pointer">
-            Cancel
-          </Button>
-        </DialogClose>
-        <Button type="submit" className="cursor-pointer" disabled={selectedTags.length === 0}>
-          Save changes
-        </Button>
-      </DialogFooter>
-    </form>
-    </DialogContent>
+          </DialogFooter>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }
-
-
-

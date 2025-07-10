@@ -2,10 +2,15 @@ import { Bold, Italic, List, ListOrdered } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TagsDialog } from "./tags-dialog";
 import type { Editor } from "@tiptap/react";
-export function FormattingButtons({ editor, tags }: {editor: Editor | null; tags: string[] }) {
-
+export function FormattingButtons({
+  editor,
+  tags,
+}: {
+  editor: Editor | null;
+  tags: string[];
+}) {
   if (!editor) {
-    return null
+    return null;
   }
 
   return (
@@ -70,9 +75,7 @@ export function FormattingButtons({ editor, tags }: {editor: Editor | null; tags
         H3
       </Button>
 
-      
-        <TagsDialog initialTags={tags}/>
-      
+      <TagsDialog initialTags={tags} />
     </div>
   );
 }
