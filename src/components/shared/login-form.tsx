@@ -14,8 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "@/reducers/authReducer";
 import { useNavigate } from "react-router-dom";
 import { showErrorToast } from "@/helper/error";
 import { useLoginMutation } from "@/hooks/useLoginMutation";
@@ -28,7 +26,6 @@ export default function LoginForm() {
       password: "",
     },
   });
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [mutateAsync] = useLoginMutation();
@@ -36,18 +33,12 @@ export default function LoginForm() {
   
 
   const onSubmit = async (data: LoginInput) => {
-    // even though user logs in with email, spring backend expects username field
     const { username, password } = data;
     try {
-      const response = await mutateAsync({
-        username,
-        password,
-      });
-      const { accessToken } = response
-      dispatch(loginSuccess({ token: accessToken }));
+      await mutateAsync({ username, password });
       navigate('/dashboard');
     } catch (error) {
-      showErrorToast(error)
+      showErrorToast(error);
     }
   };
   return (

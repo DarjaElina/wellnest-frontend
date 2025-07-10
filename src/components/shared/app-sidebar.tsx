@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 import {
   Collapsible,
@@ -38,8 +39,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getJournals } from "@/services/journal";
 import { useState } from "react";
 import type { Journal } from "@/types/journal.types";
-import { logout } from "@/reducers/authReducer";
-import { useDispatch } from "react-redux";
+import { useQueryClient } from "@tanstack/react-query";
+import { logout } from "@/services/auth";
 
 const items = [
   { title: "Symptom Log", url: "symptom-log", icon: Stethoscope },
@@ -55,12 +56,14 @@ export function AppSidebar() {
     queryFn: getJournals,
   });
   const [dialogOpen, setDialogOpen] = useState(false);
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logout());
-  }
-
+  const handleLogout = async () => {
+    await logout();
+    queryClient.removeQueries({ queryKey: ["authUser"], exact: true })
+    navigate("/")
+  };
   return (
     <Sidebar className="bg-sidebar text-foreground border-r border-border shadow-sm">
       <SidebarContent className=" flex flex-col h-full rounded-r-2xl p-4">
@@ -167,4 +170,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-

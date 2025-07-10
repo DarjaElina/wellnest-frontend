@@ -18,11 +18,11 @@ export default function App() {
   return (
     <Suspense fallback={<AppLoader />}>
       <Routes>
-        <Route element={<AuthLayout />}>
-          <Route index element={<WelcomePage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-        </Route>
+          <Route element={<AuthLayout />}>
+            <Route index element={<WelcomePage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+          </Route>
 
         <Route element={<PrivateRoutes/>}>
           <Route path="dashboard" element={<Dashboard />}>

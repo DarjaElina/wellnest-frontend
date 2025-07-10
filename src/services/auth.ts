@@ -7,9 +7,18 @@ export async function signUp(userObj: UserCreateInput) {
 }
 
 export async function login({ username, password }: LoginInput) {
-  const response = await api.post("/auth/sign-in", {
+  const response = await api.post("/auth/login", {
     username,
     password,
   });
   return response.data;
+}
+
+export async function getAuthUser() {
+  const response = await api.get("/user/me");
+  return response.data;
+}
+
+export async function logout() {
+  return api.post("/auth/logout", null, { withCredentials: true });
 }
