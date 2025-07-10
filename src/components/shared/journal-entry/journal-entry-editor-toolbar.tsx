@@ -8,6 +8,7 @@ import {
   Bold,
   Italic,
   List,
+  ListOrdered,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -16,26 +17,75 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 
-export function JournalEntryEditorToolbar() {
+export function JournalEntryEditorToolbar({ editor }) {
   return (
     <div className="flex justify-between items-center px-4 py-3 rounded-md bg-card border shadow-sm mb-4">
       <div className="flex gap-2">
-        {[
-          { label: "H1", icon: Heading1 },
-          { label: "Bold", icon: Bold },
-          { label: "Italic", icon: Italic },
-          { label: "List", icon: List },
-        ].map(({ label, icon: Icon }) => (
-          <Button
-            key={label}
-            size="sm"
-            variant="outline"
-            className="cursor-pointer"
-          >
-            <Icon className="w-4 h-4 mr-1" />
-            {label}
-          </Button>
-        ))}
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+        >
+          <Italic className="w-4 h-4 mr-1" />
+        </Button>
+
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+        >
+          <Bold className="w-4 h-4 mr-1" />
+        </Button>
+
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+        >
+          <List className="w-4 h-4 mr-1" />
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        >
+          <ListOrdered className="w-4 h-4 mr-1" />
+        </Button>
+
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+        >
+          H1
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+        >
+          H2
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+        >
+          H3
+        </Button>
       </div>
 
       <DropdownMenu>

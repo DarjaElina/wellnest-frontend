@@ -30,13 +30,11 @@ export default function LoginForm() {
 
   const [mutateAsync] = useLoginMutation();
 
-  
-
   const onSubmit = async (data: LoginInput) => {
     const { username, password } = data;
     try {
       await mutateAsync({ username, password });
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (error) {
       showErrorToast(error);
     }
@@ -113,7 +111,8 @@ export default function LoginForm() {
           variant="outline"
           className="w-full flex items-center justify-center gap-2 mt-4 hover:shadow-md transition cursor-pointer"
           onClick={() => {
-            window.location.href = "http://localhost:8080/api/oauth2/authorization/google";
+            window.location.href =
+              "http://localhost:8080/api/oauth2/authorization/google";
           }}
         >
           <img

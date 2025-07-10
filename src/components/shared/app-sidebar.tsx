@@ -51,7 +51,7 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const {data, isError, isLoading} = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: ["journals"],
     queryFn: getJournals,
   });
@@ -61,8 +61,8 @@ export function AppSidebar() {
 
   const handleLogout = async () => {
     await logout();
-    queryClient.removeQueries({ queryKey: ["authUser"], exact: true })
-    navigate("/")
+    queryClient.removeQueries({ queryKey: ["authUser"], exact: true });
+    navigate("/");
   };
   return (
     <Sidebar className="bg-sidebar text-foreground border-r border-border shadow-sm">
@@ -154,18 +154,18 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <div className="mt-auto pt-4 border-t border-border">
-        <div className="flex flex-col gap-2">
-          <ModeToggle />
-          <Button
-            variant="outline"
-            className="h-8 w-full justify-start text-sm px-2 cursor-pointer "
-            onClick={handleLogout}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
+          <div className="flex flex-col gap-2">
+            <ModeToggle />
+            <Button
+              variant="outline"
+              className="h-8 w-full justify-start text-sm px-2 cursor-pointer "
+              onClick={handleLogout}
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
-      </div>
       </SidebarContent>
     </Sidebar>
   );
