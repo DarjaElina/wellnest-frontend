@@ -9,45 +9,42 @@ import {
 import { FormattingButtons } from "./formatting-buttons";
 import type { Editor } from "@tiptap/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteJournalEntry, toggleFavorite } from "@/services/journal-entry";
+import { deleteJournalEntry, toggleFavorite } from "@/services/journalEntry";
 import { showErrorToast } from "@/helper/error";
 import { useNavigate, useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentEntry } from "@/reducers/journalReducer";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import type { RouteParams } from "@/types/shared.types";
-import type { RootState } from "@/store";
 import { toast } from "sonner";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { JournalEntryPdf } from "../journal-entry-pdf";
+import { db } from "@/lib/journal-db";
+import { formatISO9075 } from "date-fns";
 
 export function JournalEntryEditorToolbar({
   editor,
-  tags,
+  entry,
 }: {
   editor: Editor | null;
-  tags: string[];
+  entry: JournalEntry;
 }) {
   const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
-  const entry = useSelector((state: RootState) => state.journal.currentEntry);
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const deleteMutation = useMutation({
     mutationFn: () => deleteJournalEntry(journalId, entryId),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.setQueryData<JournalEntry[]>(
         ["journalEntries", journalId],
         (oldEntries = []) => oldEntries.filter((e) => e.id !== entryId),
       );
-      dispatch(setCurrentEntry(null));
-      navigate(`/dashboard/journals/${journalId}`);
     },
     onError: showErrorToast,
   });
 
   const favoriteMutation = useMutation({
     mutationFn: () => toggleFavorite(journalId, entryId),
-    onSuccess: (updatedEntry) => {
+    onSuccess: async (updatedEntry) => {
       queryClient.setQueryData<JournalEntry[]>(
         ["journalEntries", journalId],
         (entries = []) =>
@@ -57,30 +54,48 @@ export function JournalEntryEditorToolbar({
               : entry,
           ),
       );
-      dispatch(setCurrentEntry(updatedEntry));
     },
     onError: showErrorToast,
   });
 
-  if (!entry) {
-    return null;
-  }
-
-  const handleDelete = () => {
-    toast.warning("Are you sure you want to delete?", {
+  const handleDelete = async () => {
+    toast("Are you sure you want to delete?", {
       action: {
         label: "Yes, Delete",
-        onClick: () => deleteMutation.mutate(),
+        onClick: async () => {
+          await db.journalEntries.update(entryId, {
+            markedForDeletion: true,
+            needsSync: true,
+          });
+
+          queryClient.setQueryData<JournalEntry[]>(
+            ["journalEntries", journalId],
+            (oldEntries = []) => oldEntries.filter((e) => e.id !== entryId),
+          );
+
+          navigate(`/dashboard/journals/${journalId}`);
+
+          deleteMutation.mutate();
+        },
+      },
+      cancel: {
+        label: "Cancel",
+        onClick: () => console.log("cancelled"),
       },
     });
   };
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = async () => {
+    await db.journalEntries.update(entryId, {
+      isFavorite: !entry.isFavorite,
+      needsSync: true,
+      updatedAt: formatISO9075(new Date()),
+    });
     favoriteMutation.mutate();
   };
   return (
     <div className="flex justify-between items-center px-4 py-3 rounded-md bg-card border shadow-sm mb-4">
-      <FormattingButtons editor={editor} tags={tags} />
+      <FormattingButtons editor={editor} tags={entry.tags} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <Button variant="ghost" size="icon">
@@ -88,13 +103,29 @@ export function JournalEntryEditorToolbar({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-44">
-          <DropdownMenuItem
-            onClick={() => console.log("Exporting as PDF 🐸📄")}
-            className="flex items-center gap-2 text-muted-foreground cursor-pointer"
+          <PDFDownloadLink
+            document={
+              <JournalEntryPdf
+                title={"Journal Entry"}
+                date={new Date(entry.entryDate).toLocaleDateString()}
+                content={entry.content}
+              />
+            }
+            fileName="journal-entry.pdf"
           >
-            <Download className="w-4 h-4" />
-            <span>Export as PDF</span>
-          </DropdownMenuItem>
+            {({ loading }) =>
+              loading ? (
+                <span className="text-sm text-muted-foreground">
+                  Preparing PDF…
+                </span>
+              ) : (
+                <DropdownMenuItem className="flex items-center gap-2 text-muted-foreground cursor-pointer">
+                  <Download className="w-4 h-4" />
+                  <span>Export as PDF</span>
+                </DropdownMenuItem>
+              )
+            }
+          </PDFDownloadLink>
           <DropdownMenuItem
             onClick={handleDelete}
             className="flex items-center gap-2 text-destructive cursor-pointer"

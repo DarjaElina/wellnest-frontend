@@ -9,6 +9,11 @@ export async function getJournalEntriesByJournal(journalId: string) {
   return response.data;
 }
 
+export const getJournalEntry = async (journalId: string, entryId: string) => {
+  const response = await api.get(`journals/${journalId}/entries/${entryId}`);
+  return response.data;
+};
+
 export async function createJournalEntry(
   entry: JournalEntryCreateInput,
   journalId: string,
@@ -39,11 +44,6 @@ export async function updateEntryTags(
     { tags },
   );
   return res.data;
-}
-
-export async function getJournalEntryById(entryId: string) {
-  const response = await api.get(`/journal-entries/${entryId}`);
-  return response.data;
 }
 
 export async function deleteJournalEntry(journalId: string, entryId: string) {

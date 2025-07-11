@@ -15,12 +15,12 @@ import { Plus, Tag } from "lucide-react";
 import { useState, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { updateEntryTags } from "@/services/journal-entry";
+import { updateEntryTags } from "@/services/journalEntry";
 import type { RouteParams } from "@/types/shared.types";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import { showErrorToast } from "@/helper/error";
-import { useDispatch } from "react-redux";
-import { setCurrentEntry } from "@/reducers/journalReducer";
+import { formatISO9075 } from "date-fns";
+import { db } from "@/lib/journal-db";
 
 export function TagsDialog({ initialTags }: { initialTags: string[] }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +28,6 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
   const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
 
   const filteredTags = useMemo(() => {
     if (!searchTerm.trim()) return selectedTags;
@@ -53,8 +52,13 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
 
   const tagsMutation = useMutation({
     mutationFn: () => updateEntryTags(entryId, journalId, selectedTags),
-    onSuccess: (updatedEntry: JournalEntry) => {
-      // Update React Query cache
+    onMutate: async () => {
+      await db.journalEntries.update(entryId, {
+        tags: selectedTags,
+        updatedAt: formatISO9075(new Date()),
+      });
+    },
+    onSuccess: async (updatedEntry: JournalEntry) => {
       queryClient.setQueryData<JournalEntry[]>(
         ["journalEntries", journalId],
         (oldEntries = []) =>
@@ -64,13 +68,17 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
               : entry,
           ),
       );
-      dispatch(setCurrentEntry(updatedEntry));
     },
   });
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      await db.journalEntries.update(entryId, {
+        tags: selectedTags,
+        needsSync: true,
+        updatedAt: formatISO9075(new Date()),
+      });
       await tagsMutation.mutateAsync();
       setSearchTerm("");
       setOpen(false);

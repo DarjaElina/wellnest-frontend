@@ -1,21 +1,25 @@
 import { Outlet, useParams, useNavigate } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Plus, NotebookTabs, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JournalEntryList } from "@/components/shared/journal-entry/journal-entry-list";
-import { createJournalEntry } from "@/services/journal-entry";
+import { createJournalEntry } from "@/services/journalEntry";
 import { formatISO9075 } from "date-fns";
-import { useDispatch } from "react-redux";
-import { setCurrentEntry } from "@/reducers/journalReducer";
 import { getJournalById } from "@/services/journal";
 import { getColorClass } from "@/lib/utils";
 import type { RouteParams } from "@/types/shared.types";
+import { db } from "@/lib/journal-db";
+import type {
+  JournalEntry,
+  LocalJournalEntry,
+} from "@/types/journalEntry.types";
+import { v4 as uuidv4 } from "uuid";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function JournalLayout() {
   const { journalId } = useParams<RouteParams>() as RouteParams;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
 
   const {
     data: journal,
@@ -27,28 +31,56 @@ export default function JournalLayout() {
     enabled: !!journalId,
   });
 
-  const mutation = useMutation({
-    mutationFn: () =>
-      createJournalEntry(
-        {
-          content: "<h2></h2><p></p>",
-          tags: [],
-          entryDate: formatISO9075(new Date()),
-          isFavorite: false,
-        },
-        journalId,
-      ),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ["journalEntries", journalId],
-      });
-      navigate(`/dashboard/journals/${journalId}/${data.id}`);
-      dispatch(setCurrentEntry(data));
+  const newEntryMutation = useMutation({
+    mutationFn: (offlineEntry: LocalJournalEntry) =>
+      createJournalEntry(offlineEntry, offlineEntry.journalId),
+    onSuccess: async (data) => {
+      const realId = data.id;
+      const offlineId = data.clientId;
+
+      const local = await db.journalEntries.get(offlineId);
+      if (!local) return;
+
+      const updatedEntry = {
+        ...local,
+        id: realId,
+        needsSync: false,
+      };
+
+      await db.journalEntries.delete(offlineId);
+      await db.journalEntries.put(updatedEntry);
+
+      queryClient.setQueryData<JournalEntry[]>(
+        ["journalEntries", updatedEntry.journalId],
+        (old = []) =>
+          old.map((entry) => (entry.id === offlineId ? updatedEntry : entry)),
+      );
+
+      navigate(`/dashboard/journals/${updatedEntry.journalId}/${realId}`);
+    },
+    onError: (err) => {
+      console.error("Failed to sync with backend:", err);
     },
   });
 
-  const handleNewEntry = () => {
-    if (journalId) mutation.mutate();
+  const handleNewEntry = async () => {
+    const newId = `offline-${uuidv4()}`;
+    const now = formatISO9075(new Date());
+
+    const newEntry: LocalJournalEntry = {
+      clientId: newId,
+      journalId,
+      content: "<h2></h2><p></p>",
+      tags: [],
+      entryDate: now,
+      isFavorite: false,
+      updatedAt: now,
+      needsSync: true,
+      id: newId,
+    };
+
+    await db.journalEntries.put(newEntry);
+    newEntryMutation.mutate(newEntry);
   };
 
   const navigateToJournalView = () => {
