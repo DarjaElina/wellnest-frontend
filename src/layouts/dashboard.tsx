@@ -9,7 +9,7 @@ export default function Dashboard() {
       <AppSidebar />
       <SidebarTrigger className="cursor-pointer mx-3" />
       <Outlet />
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-center" richColors />
     </SidebarProvider>
   );
 }

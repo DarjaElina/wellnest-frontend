@@ -51,6 +51,10 @@ export default function JournalLayout() {
     if (journalId) mutation.mutate();
   };
 
+  const navigateToJournalView = () => {
+    navigate(`/dashboard/journals/${journalId}`);
+  }
+
   if (isLoading)
     return <p className="p-6 text-muted-foreground">Loading journal...</p>;
   if (isError || !journal)
@@ -60,7 +64,8 @@ export default function JournalLayout() {
     <div className="flex w-full h-screen overflow-hidden">
       <aside className="w-96 border-r border-border flex flex-col bg-background">
         <div
-          className={`px-4 py-4 border-b border-border flex items-center gap-3 ${getColorClass(
+          onClick={navigateToJournalView}
+          className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${getColorClass(
             journal.color,
             "bg",
           )}`}

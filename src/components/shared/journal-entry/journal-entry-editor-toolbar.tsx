@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button.tsx";
-import { MoreVerticalIcon, Trash2, Heart, Download, Star } from "lucide-react";
+import { MoreVerticalIcon, Trash2, Download, Star } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +17,7 @@ import { setCurrentEntry } from "@/reducers/journalReducer";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import type { RouteParams } from "@/types/shared.types";
 import type { RootState } from "@/store";
+import { toast } from "sonner";
 
 export function JournalEntryEditorToolbar({
   editor,
@@ -56,7 +57,7 @@ export function JournalEntryEditorToolbar({
               : entry,
           ),
       );
-      dispatch(setCurrentEntry(updatedEntry)); // update current entry
+      dispatch(setCurrentEntry(updatedEntry));
     },
     onError: showErrorToast,
   });
@@ -66,7 +67,12 @@ export function JournalEntryEditorToolbar({
   }
 
   const handleDelete = () => {
-    deleteMutation.mutate();
+    toast.warning("Are you sure you want to delete?", {
+      action: {
+        label: "Yes, Delete",
+        onClick: () => deleteMutation.mutate(),
+      },
+    });
   };
 
   const handleToggleFavorite = () => {

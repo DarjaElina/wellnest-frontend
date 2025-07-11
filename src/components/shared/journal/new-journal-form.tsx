@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router";
 import ColorPicker from "../color-picker";
-import { journalCreateSchema } from "@/types/journal.types.ts";
-import type { JournalCreateInput } from "@/types/journal.types.ts";
+import { journalInputSchema } from "@/types/journal.types.ts";
+import type { JournalInput } from "@/types/journal.types.ts";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,8 +28,8 @@ import type { Journal } from "@/types/journal.types";
 import type { JournalColor } from "@/lib/color";
 
 export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
-  const form = useForm<JournalCreateInput>({
-    resolver: zodResolver(journalCreateSchema),
+  const form = useForm<JournalInput>({
+    resolver: zodResolver(journalInputSchema),
     defaultValues: {
       name: "",
       color: "rose",
@@ -46,7 +46,7 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
     },
   });
 
-  const onSubmit = async (values: JournalCreateInput) => {
+  const onSubmit = async (values: JournalInput) => {
     const { name, color } = values;
     try {
       const journal = await newJournalMutation.mutateAsync({

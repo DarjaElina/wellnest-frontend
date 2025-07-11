@@ -1,7 +1,4 @@
 import { z } from "zod";
-
-// sign up
-
 const baseRegisterSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
@@ -29,9 +26,6 @@ export const userCreateSchema = baseRegisterSchema.omit({
 export type RegisterFormValues = z.infer<typeof registerFormSchema>;
 export type UserCreateInput = z.infer<typeof userCreateSchema>;
 
-// sign in
-
-// even though user logs in with email, spring backend expects username field
 export const signInSchema = z.object({
   username: z
     .string()
