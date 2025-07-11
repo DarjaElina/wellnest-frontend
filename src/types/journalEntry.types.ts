@@ -13,3 +13,11 @@ export const journalEntrySchema = journalEntryCreateSchema.extend({
 
 export type JournalEntryCreateInput = z.infer<typeof journalEntryCreateSchema>;
 export type JournalEntry = z.infer<typeof journalEntrySchema>;
+
+export type LocalJournalEntry = JournalEntry & {
+  clientId?: string;
+  journalId: string;
+  updatedAt: string;
+  needsSync: boolean;
+  markedForDeletion?: boolean;
+};

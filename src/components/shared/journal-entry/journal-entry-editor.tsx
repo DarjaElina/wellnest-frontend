@@ -3,8 +3,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { JournalEntryEditorToolbar } from "@/components/shared/journal-entry/journal-entry-editor-toolbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DateTimePicker } from "@/components/shared/date-time-picker.tsx";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
 import { useEffect, useState, useRef } from "react";
 import {
   setHours,
@@ -15,19 +13,19 @@ import {
 } from "date-fns";
 import debounce from "lodash.debounce";
 import { type JournalEntry } from "@/types/journalEntry.types";
-import { updateEntryTags, updateJournalEntry } from "@/services/journal-entry";
+import { updateJournalEntry } from "@/services/journalEntry";
 import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cloud, Check, Trash2 } from "lucide-react";
 import type { RouteParams } from "@/types/shared.types";
-import { setCurrentEntry } from "@/reducers/journalReducer";
-import { showErrorToast } from "@/helper/error";
-import { useDispatch } from "react-redux";
+import { db } from "@/lib/journal-db";
+import { saveToLocal } from "@/lib/utils";
 
-export function JournalEntryEditor() {
-  const journalEntry = useSelector(
-    (state: RootState) => state.journal.currentEntry,
-  );
+export function JournalEntryEditor({
+  journalEntry,
+}: {
+  journalEntry: JournalEntry;
+}) {
   const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "saved">(
     "idle",
   );
@@ -40,25 +38,21 @@ export function JournalEntryEditor() {
     id: "",
   });
 
-  const dispatch = useDispatch();
-
   const queryClient = useQueryClient();
   const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
-
   const mutateAndTrack = (updatedEntry: JournalEntry) => {
-    setSyncStatus("syncing");
     updatedEntryMutation.mutate(updatedEntry, {
       onSuccess: (updatedEntry) => {
         setSyncStatus("saved");
         setTimeout(() => setSyncStatus("idle"), 2000);
-        const journalEntries: JournalEntry[] =
-          queryClient.getQueryData(["journalEntries", journalId]) ?? [];
-        const updatedEntries = journalEntries.map((entry) =>
-          entry.id === updatedEntry.id ? updatedEntry : entry,
+        queryClient.setQueryData<JournalEntry[]>(
+          ["journalEntries", journalId],
+          (entries = []) =>
+            entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e)),
         );
-        queryClient.setQueryData(["journalEntries", journalId], updatedEntries);
       },
     });
+    setSyncStatus("syncing");
   };
 
   const updatedEntryMutation = useMutation({
@@ -95,63 +89,77 @@ export function JournalEntryEditor() {
     onUpdate({ editor }) {
       const html = editor.getHTML();
 
-      setEntry((prev) => {
-        const updated = { ...prev, content: html };
-        debouncedUpdate(updated);
-        return updated;
-      });
+      const updated = { ...entry, content: html };
+
+      setEntry(updated);
+
+      saveToLocal(updated, journalId);
+
+      debouncedUpdate(updated);
 
       setSyncStatus("syncing");
     },
   });
 
-  const updateEntryDate = (newDate: Date) => {
+  const updateEntryDate = async (newDate: Date) => {
     const oldTime = format(new Date(entry.entryDate), "HH:mm");
     const merged = mergeDateAndTime(newDate, oldTime);
-    setEntry((prev) => {
-      const updated = { ...prev, entryDate: merged };
-      mutateAndTrack(updated);
-      return updated;
-    });
+
+    const updated = { ...entry, entryDate: merged };
+
+    setEntry(updated);
+    await saveToLocal(updated, journalId);
+    mutateAndTrack(updated);
   };
 
-  const updateEntryTime = (newTime: string) => {
+  const updateEntryTime = async (newTime: string) => {
     const oldDate = new Date(entry.entryDate);
     const merged = mergeDateAndTime(oldDate, newTime);
-    setEntry((prev) => {
-      const updated = { ...prev, entryDate: merged };
-      mutateAndTrack(updated);
-      return updated;
-    });
+
+    const updated = { ...entry, entryDate: merged };
+
+    setEntry(updated);
+    await saveToLocal(updated, journalId);
+    mutateAndTrack(updated);
   };
 
   useEffect(() => {
-    if (journalEntry) {
-      setEntry(journalEntry);
-      if (editor) {
-        editor.commands.setContent(journalEntry.content);
+    let cancelled = false;
+
+    const load = async () => {
+      const local = await db.journalEntries.get(journalEntry.id);
+
+      if (!cancelled && local) {
+        setEntry(local);
+        editor?.commands.setContent(local.content);
+      } else if (journalEntry) {
+        setEntry(journalEntry);
+        editor?.commands.setContent(journalEntry.content);
       }
-    }
-  }, [journalEntry, editor]);
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [editor, journalEntry]);
 
   const handleRemoveTag = async (tagToRemove: string) => {
     const newTags = entry.tags.filter((tag) => tag !== tagToRemove);
+    const updated = { ...entry, tags: newTags };
 
-    try {
-      const updatedEntry = await updateEntryTags(entry.id, journalId, newTags);
+    setEntry(updated);
+    await saveToLocal(updated, journalId);
 
-      queryClient.setQueryData<JournalEntry[]>(
-        ["journalEntries", journalId],
-        (oldEntries = []) =>
-          oldEntries.map((e) =>
-            e.id === updatedEntry.id ? { ...e, tags: updatedEntry.tags } : e,
-          ),
-      );
-
-      dispatch(setCurrentEntry(updatedEntry));
-    } catch (err) {
-      showErrorToast(err);
-    }
+    mutateAndTrack(updated);
+    queryClient.setQueryData<JournalEntry[]>(
+      ["journalEntries", journalId],
+      (oldEntries = []) =>
+        oldEntries.map((e) =>
+          e.id === updated.id ? { ...e, tags: updated.tags } : e,
+        ),
+    );
   };
 
   return (
@@ -206,7 +214,7 @@ export function JournalEntryEditor() {
         </AnimatePresence>
       </div>
 
-      <JournalEntryEditorToolbar editor={editor} tags={entry.tags} />
+      <JournalEntryEditorToolbar editor={editor} entry={entry} />
 
       <div
         className={`border bg-card rounded-xl shadow-sm p-4 transition-shadow focus-within:shadow-md`}

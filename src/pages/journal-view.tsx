@@ -87,10 +87,14 @@ export default function JournalView() {
   };
 
   const handleDelete = () => {
-    toast.warning("Are you sure you want to delete?", {
+    toast("Are you sure you want to delete?", {
       action: {
         label: "Yes, Delete",
         onClick: () => deleteMutation.mutate(),
+      },
+      cancel: {
+        label: "Cancel",
+        onClick: () => console.log("cancelled"),
       },
     });
   };
@@ -117,11 +121,17 @@ export default function JournalView() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setDialogOpen(true)} className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => setDialogOpen(true)}
+              className="cursor-pointer"
+            >
               <Settings className="mr-2 w-4 h-4" />
               Journal Settings
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log("Exporting...")} className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => console.log("Exporting...")}
+              className="cursor-pointer"
+            >
               <Download className="mr-2 w-4 h-4" />
               Export as PDF
             </DropdownMenuItem>
