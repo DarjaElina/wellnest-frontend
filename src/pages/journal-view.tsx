@@ -117,18 +117,18 @@ export default function JournalView() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setDialogOpen(true)}>
+            <DropdownMenuItem onClick={() => setDialogOpen(true)} className="cursor-pointer">
               <Settings className="mr-2 w-4 h-4" />
               Journal Settings
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log("Exporting...")}>
+            <DropdownMenuItem onClick={() => console.log("Exporting...")} className="cursor-pointer">
               <Download className="mr-2 w-4 h-4" />
               Export as PDF
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleDelete}
-              className="text-destructive"
+              className="text-destructive cursor-pointer"
             >
               <Trash2 className="mr-2 w-4 h-4 text-destructive" />
               Delete Journal
