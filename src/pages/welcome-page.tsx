@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, NotebookText, HeartPulse, Pill } from "lucide-react";
+import { Sparkles, NotebookText, SmilePlus, FileDown } from "lucide-react";
 
 export default function WelcomePage() {
   return (
@@ -40,26 +40,25 @@ export default function WelcomePage() {
         <FadeIn delay={0.1}>
           <Feature
             icon={NotebookText}
-            title="Journal"
-            description="Reflect and write freely about your experiences, progress, and feelings."
+            title="Rich Journaling"
+            description="Write freely with a clean, focused editor designed for self-reflection and creativity."
           />
         </FadeIn>
         <FadeIn delay={0.2}>
           <Feature
-            icon={HeartPulse}
-            title="Symptom Log"
-            description="Track symptoms day by day and spot helpful patterns over time."
+            icon={SmilePlus}
+            title="Mood Tracking"
+            description="Log your mood and visualize how you’re feeling over time with beautiful charts."
           />
         </FadeIn>
         <FadeIn delay={0.3}>
           <Feature
-            icon={Pill}
-            title="Medication Tracker"
-            description="Never miss a dose — log your medications and track usage easily."
+            icon={FileDown}
+            title="Export as PDF"
+            description="Download your journal entries and keep a record of your progress and reflections."
           />
         </FadeIn>
       </div>
-
       <div className="w-full max-w-5xl grid sm:grid-cols-2 gap-6 z-10">
         <Card className="aspect-video bg-muted/30 animate-pulse">
           <CardContent className="flex items-center justify-center h-full text-muted-foreground">
@@ -68,7 +67,7 @@ export default function WelcomePage() {
         </Card>
         <Card className="aspect-video bg-muted/30 animate-pulse">
           <CardContent className="flex items-center justify-center h-full text-muted-foreground">
-            Screenshot: Symptom Log
+            Screenshot: Mood Tracker
           </CardContent>
         </Card>
       </div>
@@ -79,9 +78,9 @@ export default function WelcomePage() {
           Why choose Wellnest?
         </h2>
         <p className="text-muted-foreground text-lg">
-          Because health tracking should feel human — not clinical. With
-          Wellnest, you build healthy habits and feel supported every step of
-          the way.
+          Because journaling should feel empowering — not overwhelming. With
+          Wellnest, you reflect, track your emotions, and stay in tune with your
+          mental wellbeing.
         </p>
       </div>
     </motion.section>

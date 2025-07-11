@@ -53,7 +53,7 @@ export default function JournalLayout() {
 
   const navigateToJournalView = () => {
     navigate(`/dashboard/journals/${journalId}`);
-  }
+  };
 
   if (isLoading)
     return <p className="p-6 text-muted-foreground">Loading journal...</p>;

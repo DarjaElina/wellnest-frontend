@@ -1,52 +1,43 @@
 import {
-  Stethoscope,
-  Dumbbell,
-  Apple,
-  Tablets,
   BookHeart,
-  Home,
   ChevronDown,
-  Plus,
   LogOut,
+  Plus,
+  SmilePlus,
+  BarChartBig,
+  Home,
 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { ModeToggle } from "@/components/shared/mode-toggle";
-import { NewJournalForm } from "./journal/new-journal-form";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getJournals } from "@/services/journal";
+import { logout } from "@/services/auth";
+import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useNavigate } from "react-router-dom";
-
 import {
   Collapsible,
-  CollapsibleContent,
   CollapsibleTrigger,
+  CollapsibleContent,
 } from "@/components/ui/collapsible";
-import { Button } from "../ui/button";
-import { useQuery } from "@tanstack/react-query";
-import { getJournals } from "@/services/journal";
-import { useState } from "react";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import type { Journal } from "@/types/journal.types";
-import { useQueryClient } from "@tanstack/react-query";
-import { logout } from "@/services/auth";
+import { ModeToggle } from "./mode-toggle";
+import { NewJournalForm } from "./journal/new-journal-form";
 
 const items = [
-  { title: "Symptom Log", url: "symptom-log", icon: Stethoscope },
-  { title: "Medication Log", url: "medication", icon: Tablets },
-  { title: "Exercise Tracker", url: "exercises", icon: Dumbbell },
-  { title: "Food Habit Tracker", url: "food", icon: Apple },
+  { title: "Mood Tracker", url: "mood", icon: SmilePlus },
+  { title: "Analytics", url: "analytics", icon: BarChartBig },
   { title: "Home", url: "", icon: Home },
 ];
 
@@ -64,9 +55,10 @@ export function AppSidebar() {
     queryClient.removeQueries({ queryKey: ["authUser"], exact: true });
     navigate("/");
   };
+
   return (
     <Sidebar className="bg-sidebar text-foreground border-r border-border shadow-sm">
-      <SidebarContent className=" flex flex-col h-full rounded-r-2xl p-4">
+      <SidebarContent className="flex flex-col h-full rounded-r-2xl p-4">
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold tracking-tight text-brand-primary">
             Wellnest
@@ -158,7 +150,7 @@ export function AppSidebar() {
             <ModeToggle />
             <Button
               variant="outline"
-              className="h-8 w-full justify-start text-sm px-2 cursor-pointer "
+              className="h-8 w-full justify-start text-sm px-2 cursor-pointer"
               onClick={handleLogout}
             >
               <LogOut className="h-4 w-4 mr-2" />

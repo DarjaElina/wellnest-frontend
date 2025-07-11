@@ -16,5 +16,3 @@ export const journalSchema = journalInputSchema.extend({
 
 export type JournalInput = z.infer<typeof journalInputSchema>;
 export type Journal = z.infer<typeof journalSchema>;
-
-

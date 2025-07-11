@@ -28,11 +28,15 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { journalInputSchema, type Journal, type JournalInput } from "@/types/journal.types";
+import {
+  journalInputSchema,
+  type Journal,
+  type JournalInput,
+} from "@/types/journal.types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {updateJournal, deleteJournal} from '@/services/journal';
+import { updateJournal, deleteJournal } from "@/services/journal";
 import {
   FormField,
   FormItem,
@@ -60,13 +64,10 @@ export default function JournalView() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: JournalInput) =>
-      updateJournal(journal.id, data),
+    mutationFn: (data: JournalInput) => updateJournal(journal.id, data),
     onSuccess: (updatedJournal: Journal) => {
-      queryClient.setQueryData<Journal[]>(
-        ["journals"],
-        (old = []) =>
-          old.map((j) => (j.id === updatedJournal.id ? updatedJournal : j)),
+      queryClient.setQueryData<Journal[]>(["journals"], (old = []) =>
+        old.map((j) => (j.id === updatedJournal.id ? updatedJournal : j)),
       );
       setDialogOpen(false);
     },
@@ -75,9 +76,8 @@ export default function JournalView() {
   const deleteMutation = useMutation({
     mutationFn: () => deleteJournal(journal.id),
     onSuccess: () => {
-      queryClient.setQueryData<Journal[]>(
-        ["journals"],
-        (old = []) => old.filter((j) => j.id !== journal.id)
+      queryClient.setQueryData<Journal[]>(["journals"], (old = []) =>
+        old.filter((j) => j.id !== journal.id),
       );
       navigate("/dashboard");
     },
@@ -191,9 +191,7 @@ export default function JournalView() {
               <FormLabel>Journal Color</FormLabel>
               <ColorPicker
                 value={form.watch("color")}
-                onChange={(val) =>
-                  form.setValue("color", val as JournalColor)
-                }
+                onChange={(val) => form.setValue("color", val as JournalColor)}
               />
 
               <DialogFooter>
@@ -213,4 +211,3 @@ export default function JournalView() {
     </div>
   );
 }
-

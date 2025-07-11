@@ -1,9 +1,7 @@
 import api from "./index";
 import type { Journal, JournalInput } from "@/types/journal.types.ts";
 
-export async function createJournal(
-  data: JournalInput,
-): Promise<Journal> {
+export async function createJournal(data: JournalInput): Promise<Journal> {
   const response = await api.post("/journals", data);
   return response.data;
 }
@@ -27,5 +25,3 @@ export async function updateJournal(id: string, updatedJournal: JournalInput) {
   const response = await api.patch(`/journals/${id}`, updatedJournal);
   return response.data;
 }
-
-
