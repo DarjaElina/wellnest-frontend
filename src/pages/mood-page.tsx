@@ -1,4 +1,9 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { moodSets } from "@/types/mood.types";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -29,12 +34,14 @@ export default function MoodPage() {
         <span className="font-medium">Mood style:</span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="cursor-pointer">{selectedSet}</Button>
+            <Button variant="outline" className="cursor-pointer">
+              {selectedSet}
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {moodSets.map((set) => (
               <DropdownMenuItem
-              className="cursor-pointer"
+                className="cursor-pointer"
                 key={set.name}
                 onClick={() => setSelectedSet(set.name)}
               >

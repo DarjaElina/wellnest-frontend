@@ -1,19 +1,16 @@
 import api from "./index";
 
 export async function getMoodEntries() {
-  const response = await api.get('/mood-entries');
+  const response = await api.get("/mood-entries");
   return response.data;
 }
 export async function createMoodEntry(newEntry) {
-  const response = await api.post('/mood-entries', newEntry);
+  const response = await api.post("/mood-entries", newEntry);
   return response.data;
 }
 
 export async function updateMoodEntry(updatedEntry, entryId) {
-  const response = await api.put(
-    `/mood-entries/${entryId}`,
-    updatedEntry,
-  );
+  const response = await api.put(`/mood-entries/${entryId}`, updatedEntry);
   return response.data;
 }
 

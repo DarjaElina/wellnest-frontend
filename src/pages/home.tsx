@@ -12,7 +12,7 @@ export default function HomePage() {
         </p>
       </div>
 
-      <MoodPopup/>
+      <MoodPopup />
 
       <RecentSummary />
     </div>
