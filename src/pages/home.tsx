@@ -1,5 +1,5 @@
+import { MoodPopup } from "@/components/shared/mood-popup";
 import { RecentSummary } from "@/components/shared/recent-summary.tsx";
-import { MoodTrackerGraph } from "@/components/shared/mood-tracker-graph.tsx";
 export default function HomePage() {
   return (
     <div className="px-6 py-10 max-w-5xl space-y-6 ">
@@ -12,8 +12,9 @@ export default function HomePage() {
         </p>
       </div>
 
+      <MoodPopup/>
+
       <RecentSummary />
-      <MoodTrackerGraph />
     </div>
   );
 }

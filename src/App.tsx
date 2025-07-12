@@ -4,7 +4,7 @@ import { AppLoader } from "./components/ui/app-loader";
 
 const WelcomePage = lazy(() => import("@/pages/welcome-page.tsx"));
 const Dashboard = lazy(() => import("@/layouts/dashboard"));
-const MoodTrackerPage = lazy(() => import("@/pages/mood-tracker-page"));
+const MoodPage = lazy(() => import("@/pages/mood-page"));
 const Home = lazy(() => import("@/pages/home.tsx"));
 const JournalLayout = lazy(() => import("@/pages/journal-layout.tsx"));
 const JournalView = lazy(() => import("@/pages/journal-view"));
@@ -36,7 +36,7 @@ export default function App() {
               />
             </Route>
 
-            <Route path="mood" element={<MoodTrackerPage />} />
+            <Route path="mood" element={<MoodPage />} />
           </Route>
         </Route>
       </Routes>
