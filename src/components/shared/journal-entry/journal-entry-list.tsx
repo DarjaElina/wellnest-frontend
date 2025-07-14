@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import type { RouteParams } from "@/types/shared.types";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "@/lib/journal-db";
+import { db } from "@/lib/db";
 
 export function JournalEntryList({ journalColor }: { journalColor: string }) {
   const { journalId, entryId } = useParams<RouteParams>() as RouteParams;

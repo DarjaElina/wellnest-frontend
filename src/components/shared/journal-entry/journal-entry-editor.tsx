@@ -18,7 +18,7 @@ import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cloud, Check, Trash2 } from "lucide-react";
 import type { RouteParams } from "@/types/shared.types";
-import { db } from "@/lib/journal-db";
+import { db } from "@/lib/db";
 import { saveToLocal } from "@/lib/utils";
 
 export function JournalEntryEditor({

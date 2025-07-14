@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { tailwindColorMap, type JournalColor } from "./color";
-import { db } from "./journal-db";
+import { db } from "./db";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import { formatISO9075 } from "date-fns";
 

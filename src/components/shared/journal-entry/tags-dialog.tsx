@@ -20,7 +20,7 @@ import type { RouteParams } from "@/types/shared.types";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import { showErrorToast } from "@/helper/error";
 import { formatISO9075 } from "date-fns";
-import { db } from "@/lib/journal-db";
+import { db } from "@/lib/db";
 
 export function TagsDialog({ initialTags }: { initialTags: string[] }) {
   const [searchTerm, setSearchTerm] = useState("");

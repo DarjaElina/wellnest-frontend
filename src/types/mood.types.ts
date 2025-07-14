@@ -1,7 +1,6 @@
 export type MoodType = {
-  id: string;
   label: string;
-  icon: string;
+  iconUrl: string;
 };
 
 export type MoodSet = {
@@ -11,55 +10,27 @@ export type MoodSet = {
 
 export const moodSets: MoodSet[] = [
   {
-    name: "Shiba Inu",
+    name: "Default",
     moods: [
-      { id: "peace", label: "Peace", icon: "/src/assets/moods/shiba-mood/peace.png" },
-      { id: "love", label: "Love", icon: "/src/assets/moods/shiba-mood/love.png" },
-      { id: "cool", label: "Cool", icon: "/src/assets/moods/shiba-mood/cool.png" },
-      { id: "cry", label: "Cry", icon: "/src/assets/moods/shiba-mood/cry.png" },
-      { id: "laughing", label: "Laughing", icon: "/src/assets/moods/shiba-mood/laughing.png" },
-      { id: "rolling-eyes", label: "Rolling eyes", icon: "/src/assets/moods/shiba-mood/rolling-eyes.png" },
-    ],
-  },
-  {
-    name: "Cat",
-    moods: [
-      { id: "peace", label: "Peace", icon: "/src/assets/moods/cat-mood/peace.png" },
-      { id: "love", label: "Love", icon: "/src/assets/moods/cat-mood/love.png" },
-      { id: "cool", label: "Cool", icon: "/src/assets/moods/cat-mood/cool.png" },
-      { id: "cry", label: "Cry", icon: "/src/assets/moods/cat-mood/cry.png" },
-      { id: "laughing", label: "Laughing", icon: "/src/assets/moods/cat-mood/laughing.png" },
-      { id: "rolling-eyes", label: "Rolling eyes", icon: "/src/assets/moods/cat-mood/rolling-eyes.png" },
-    ],
-  },
-  {
-    name: "Koala",
-    moods: [
-      { id: "peace", label: "Peace", icon: "/src/assets/moods/koala-mood/peace.png" },
-      { id: "love", label: "Love", icon: "/src/assets/moods/koala-mood/love.png" },
-      { id: "cool", label: "Cool", icon: "/src/assets/moods/koala-mood/cool.png" },
-      { id: "cry", label: "Cry", icon: "/src/assets/moods/koala-mood/cry.png" },
-      { id: "laughing", label: "Laughing", icon: "/src/assets/moods/koala-mood/laughing.png" },
-      { id: "rolling-eyes", label: "Rolling eyes", icon: "/src/assets/moods/koala-mood/rolling-eyes.png" },
-    ],
-  },
-  {
-    name: "Emoji",
-    moods: [
-      { id: "peace", label: "Peace", icon: "/src/assets/moods/emoji-mood/peace.png" },
-      { id: "love", label: "Love", icon: "/src/assets/moods/emoji-mood/love.png" },
-      { id: "cool", label: "Cool", icon: "/src/assets/moods/emoji-mood/cool.png" },
-      { id: "cry", label: "Cry", icon: "/src/assets/moods/emoji-mood/cry.png" },
-      { id: "laughing", label: "Laughing", icon: "/src/assets/moods/emoji-mood/laughing.png" },
-      { id: "rolling-eyes", label: "Rolling eyes", icon: "/src/assets/moods/emoji-mood/rolling-eyes.png" },
+      {
+        label: "calm",
+        iconUrl: "/src/assets/moods/default/calm.png",
+      },
+      {
+        label: "grateful",
+        iconUrl: "/src/assets/moods/default/grateful.png",
+      },
+      {
+        label: "okay",
+        iconUrl: "/src/assets/moods/default/okay.png",
+      },
+      { label: "low", iconUrl: "/src/assets/moods/default/low.png" },
+      {
+        label: "stressed",
+        iconUrl: "/src/assets/moods/default/stressed.png",
+      },
     ],
   },
 ];
 
-
-
-// <a href="https://www.flaticon.com/free-icons/scared" title="scared icons">Scared icons created by André Luiz Gollo - Flaticon</a>
-// for emoji attributions so i can find them later 
-
-// <a href="https://www.flaticon.com/free-icons/shiba-inu" title="shiba inu icons">Shiba inu icons created by AomAm - Flaticon</a> 
-// for coala, dog and cat emojis
+export type MoodDialogMode = "edit" | "auto-checkin" | "manual-checkin";
