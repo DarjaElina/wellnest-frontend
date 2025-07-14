@@ -1,16 +1,14 @@
 import {
   BookHeart,
   ChevronDown,
-  LogOut,
   Plus,
   SmilePlus,
-  BarChartBig,
   Home,
+  LogOut,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { getJournals } from "@/services/journal";
-import { logout } from "@/services/auth";
 import { useState } from "react";
 import {
   Sidebar,
@@ -23,6 +21,7 @@ import {
   SidebarMenuButton,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
@@ -32,13 +31,18 @@ import {
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import type { Journal } from "@/types/journal.types";
-import { ModeToggle } from "./mode-toggle";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "@/services/auth";
+import { useNavigate } from "react-router-dom";
+import { showErrorToast } from "@/helper/error";
+
 import { NewJournalForm } from "./journal/new-journal-form";
 
+import SettingsDialog from "./settings-dialog";
+
 const items = [
-  { title: "Mood Tracker", url: "mood", icon: SmilePlus },
-  { title: "Analytics", url: "analytics", icon: BarChartBig },
   { title: "Home", url: "", icon: Home },
+  { title: "Mood Tracker", url: "mood", icon: SmilePlus },
 ];
 
 export function AppSidebar() {
@@ -46,14 +50,22 @@ export function AppSidebar() {
     queryKey: ["journals"],
     queryFn: getJournals,
   });
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      navigate("/login");
+      localStorage.clear();
+    },
+  });
 
-  const handleLogout = async () => {
-    await logout();
-    queryClient.removeQueries({ queryKey: ["authUser"], exact: true });
-    navigate("/");
+  const handleLogout = () => {
+    try {
+      logoutMutation.mutate();
+    } catch (e) {
+      showErrorToast(e);
+    }
   };
 
   return (
@@ -141,23 +153,27 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
+              <SettingsDialog />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        <div className="mt-auto pt-4 border-t border-border">
-          <div className="flex flex-col gap-2">
-            <ModeToggle />
-            <Button
-              variant="outline"
-              className="h-8 w-full justify-start text-sm px-2 cursor-pointer"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
-          </div>
-        </div>
+        <SidebarGroup>
+          <SidebarFooter className="mt-auto pt-4 border-t border-border">
+            <SidebarMenu className="space-y-1">
+              <SidebarMenuItem>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );

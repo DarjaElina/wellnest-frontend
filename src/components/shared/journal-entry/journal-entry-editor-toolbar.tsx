@@ -17,7 +17,7 @@ import type { RouteParams } from "@/types/shared.types";
 import { toast } from "sonner";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { JournalEntryPdf } from "../journal-entry-pdf";
-import { db } from "@/lib/journal-db";
+import { db } from "@/lib/db";
 import { formatISO9075 } from "date-fns";
 
 export function JournalEntryEditorToolbar({

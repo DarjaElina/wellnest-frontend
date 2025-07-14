@@ -14,6 +14,11 @@ export async function updateMoodEntry(updatedEntry, entryId) {
   return response.data;
 }
 
-export async function deleteMoodEntry(moodId: string, entryId: string) {
-  await api.delete(`/moods/${moodId}/entries/${entryId}`);
+export async function deleteMoodEntry(moodId: string) {
+  await api.delete(`/mood-entries/${moodId}`);
+}
+
+export async function getTodayMoodEntry() {
+  const response = await api.get("/mood-entries/today");
+  return response.data;
 }

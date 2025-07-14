@@ -1,10 +1,11 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AppLoader } from "./components/ui/app-loader";
+import PageWallpaperWrapper from "./layouts/wallpaper";
 
 const WelcomePage = lazy(() => import("@/pages/welcome-page.tsx"));
 const Dashboard = lazy(() => import("@/layouts/dashboard"));
-const MoodPage = lazy(() => import("@/pages/mood-page"));
+const MoodTrackerPage = lazy(() => import("@/pages/mood-tracker-page"));
 const Home = lazy(() => import("@/pages/home.tsx"));
 const JournalLayout = lazy(() => import("@/pages/journal-layout.tsx"));
 const JournalView = lazy(() => import("@/pages/journal-view"));
@@ -26,7 +27,10 @@ export default function App() {
 
         <Route element={<PrivateRoutes />}>
           <Route path="dashboard" element={<Dashboard />}>
-            <Route index element={<Home />} />
+            <Route element={<PageWallpaperWrapper />}>
+              <Route index element={<Home />} />
+              <Route path="mood" element={<MoodTrackerPage />} />
+            </Route>
             <Route path="journals" element={<JournalLayout />}>
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path=":journalId" element={<JournalView />} />
@@ -35,8 +39,6 @@ export default function App() {
                 element={<JournalEditorView />}
               />
             </Route>
-
-            <Route path="mood" element={<MoodPage />} />
           </Route>
         </Route>
       </Routes>

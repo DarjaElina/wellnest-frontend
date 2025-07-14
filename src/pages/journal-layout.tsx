@@ -8,7 +8,7 @@ import { formatISO9075 } from "date-fns";
 import { getJournalById } from "@/services/journal";
 import { getColorClass } from "@/lib/utils";
 import type { RouteParams } from "@/types/shared.types";
-import { db } from "@/lib/journal-db";
+import { db } from "@/lib/db";
 import type {
   JournalEntry,
   LocalJournalEntry,

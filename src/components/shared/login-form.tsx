@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
 import { showErrorToast } from "@/helper/error";
-import { useLoginMutation } from "@/hooks/useLoginMutation";
+import { useLoginMutation } from "@/hooks/use-login-mutation";
 
 export default function LoginForm() {
   const form = useForm<LoginInput>({

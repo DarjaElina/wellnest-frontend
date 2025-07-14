@@ -1,6 +1,6 @@
 export type MoodType = {
   label: string;
-  icon: string;
+  iconUrl: string;
 };
 
 export type MoodSet = {
@@ -10,97 +10,27 @@ export type MoodSet = {
 
 export const moodSets: MoodSet[] = [
   {
-    name: "Shiba Inu",
+    name: "Default",
     moods: [
       {
-        label: "Peace",
-        icon: "/src/assets/moods/shiba-mood/peace.png",
+        label: "calm",
+        iconUrl: "/src/assets/moods/default/calm.png",
       },
       {
-        label: "Love",
-        icon: "/src/assets/moods/shiba-mood/love.png",
+        label: "grateful",
+        iconUrl: "/src/assets/moods/default/grateful.png",
       },
       {
-        label: "Cool",
-        icon: "/src/assets/moods/shiba-mood/cool.png",
+        label: "okay",
+        iconUrl: "/src/assets/moods/default/okay.png",
       },
-      { label: "Cry", icon: "/src/assets/moods/shiba-mood/cry.png" },
+      { label: "low", iconUrl: "/src/assets/moods/default/low.png" },
       {
-        label: "Laughing",
-        icon: "/src/assets/moods/shiba-mood/laughing.png",
-      },
-    ],
-  },
-  {
-    name: "Cat",
-    moods: [
-      {
-        label: "Peace",
-        icon: "/src/assets/moods/cat-mood/peace.png",
-      },
-      {
-        label: "Love",
-        icon: "/src/assets/moods/cat-mood/love.png",
-      },
-      {
-        label: "Cool",
-        icon: "/src/assets/moods/cat-mood/cool.png",
-      },
-      { label: "Cry", icon: "/src/assets/moods/cat-mood/cry.png" },
-      {
-        label: "Laughing",
-        icon: "/src/assets/moods/cat-mood/laughing.png",
-      },
-    ],
-  },
-  {
-    name: "Koala",
-    moods: [
-      {
-        label: "Peace",
-        icon: "/src/assets/moods/koala-mood/peace.png",
-      },
-      {
-        label: "Love",
-        icon: "/src/assets/moods/koala-mood/love.png",
-      },
-      {
-        label: "Cool",
-        icon: "/src/assets/moods/koala-mood/cool.png",
-      },
-      { label: "Cry", icon: "/src/assets/moods/koala-mood/cry.png" },
-      {
-        label: "Laughing",
-        icon: "/src/assets/moods/koala-mood/laughing.png",
-      },
-    ],
-  },
-  {
-    name: "Emoji",
-    moods: [
-      {
-        label: "Peace",
-        icon: "/src/assets/moods/emoji-mood/peace.png",
-      },
-      {
-        label: "Love",
-        icon: "/src/assets/moods/emoji-mood/love.png",
-      },
-      {
-        label: "Cool",
-        icon: "/src/assets/moods/emoji-mood/cool.png",
-      },
-      { label: "Cry", icon: "/src/assets/moods/emoji-mood/cry.png" },
-      {
-        label: "Laughing",
-        icon: "/src/assets/moods/emoji-mood/laughing.png",
+        label: "stressed",
+        iconUrl: "/src/assets/moods/default/stressed.png",
       },
     ],
   },
 ];
 
-// <a href="https://www.flaticon.com/free-icons/scared" title="scared icons">Scared icons created by André Luiz Gollo - Flaticon</a>
-// for emoji attributions so i can find them later
-
-// <a href="https://www.flaticon.com/free-icons/shiba-inu" title="shiba inu icons">Shiba inu icons created by AomAm - Flaticon</a>
-// for coala, dog and cat emojis
+export type MoodDialogMode = "edit" | "auto-checkin" | "manual-checkin";
