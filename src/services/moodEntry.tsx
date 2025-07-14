@@ -1,15 +1,16 @@
 import api from "./index";
+import type { MoodType } from "@/types/mood.types";
 
 export async function getMoodEntries() {
   const response = await api.get("/mood-entries");
   return response.data;
 }
-export async function createMoodEntry(newEntry) {
+export async function createMoodEntry(newEntry: MoodType) {
   const response = await api.post("/mood-entries", newEntry);
   return response.data;
 }
 
-export async function updateMoodEntry(updatedEntry, entryId) {
+export async function updateMoodEntry(updatedEntry: MoodType, entryId: string) {
   const response = await api.put(`/mood-entries/${entryId}`, updatedEntry);
   return response.data;
 }
@@ -20,5 +21,10 @@ export async function deleteMoodEntry(moodId: string) {
 
 export async function getTodayMoodEntry() {
   const response = await api.get("/mood-entries/today");
+  return response.data;
+}
+
+export async function getWeekSummary() {
+  const response = await api.get("/mood-entries/week-summary");
   return response.data;
 }

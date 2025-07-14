@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { WeekMoodSummary } from "./mood/week-mood-summary";
+import { MoodWeekSummary } from "./mood/mood-week-summary";
 
 export function RecentSummary() {
   return (
@@ -29,7 +29,7 @@ export function RecentSummary() {
             </Link>
           </CardContent>
         </Card>
-        <WeekMoodSummary/>
+        <MoodWeekSummary />
       </div>
     </section>
   );

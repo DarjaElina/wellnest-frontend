@@ -1,4 +1,3 @@
-import MoodDialog from "@/components/shared/mood/create-mood-dialog";
 import { RecentSummary } from "@/components/shared/recent-summary.tsx";
 import {
   Card,
