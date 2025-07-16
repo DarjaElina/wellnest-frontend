@@ -26,7 +26,7 @@ import { textColorMap } from "@/lib/journalColor";
 export function TagsDialog({ initialTags, color }: { initialTags: string[], color: string }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>(initialTags || []);
-  const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
+  const { entryId } = useParams<RouteParams>() as RouteParams;
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 

@@ -19,10 +19,9 @@ import { useLiveQuery } from "dexie-react-hooks";
 import debounce from "lodash.debounce";
 import { SquarePen, NotebookTabs, Plus, NotebookPen } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Outlet, useNavigate} from "react-router-dom";
+import { Outlet} from "react-router-dom";
 
 export default function AllEntriesLayout() {
-  const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedJournal, setSelectedJournal] = useState<Journal | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -35,8 +34,9 @@ export default function AllEntriesLayout() {
     queryFn: getJournals,
   });
 
-  const allEntries = useLiveQuery(() => db.journalEntries.toArray(), []);
 
+  const allEntries = useLiveQuery(() => db.journalEntries.toArray(), []);
+  
   const debouncedSetSearchTerm = useMemo(
     () =>
       debounce((value: string) => {
@@ -112,8 +112,7 @@ export default function AllEntriesLayout() {
       </aside>
 
       <main className="flex-1 flex flex-col bg-background">
-        <div className="px-6 py-3 border-b border-border flex items-center justify-between bg-card">
-          <span className="text-muted-foreground text-sm">All entries</span>
+        <div className="px-6 py-3 border-b border-border flex items-center justify-end bg-card">
 
           <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>
@@ -146,7 +145,7 @@ export default function AllEntriesLayout() {
                 <div className="space-y-4">
                   <Select
                     onValueChange={(value) => {
-                      const found = journals.find((j) => j.id === value);
+                      const found = journals.find((j: Journal) => j.id === value);
                       setSelectedJournal(found ?? null);
                     }}
                   >
@@ -154,7 +153,7 @@ export default function AllEntriesLayout() {
                       <SelectValue placeholder="Select journal" />
                     </SelectTrigger>
                     <SelectContent>
-                      {journals.map((j) => (
+                      {journals.map((j: Journal) => (
                         <SelectItem key={j.id} value={j.id}>
                           {j.name}
                         </SelectItem>
@@ -183,7 +182,7 @@ export default function AllEntriesLayout() {
               <NotebookPen className="w-16 h-16 mb-4 text-border" />
               <h3 className="text-xl font-semibold">No journal selected</h3>
               <p className="text-sm mt-2 max-w-sm text-center">
-                Select a journal or create an entry to get started ✨
+                Select a journal or create an entry to get started
               </p>
             </div>
           )}

@@ -34,10 +34,9 @@ export function JournalEntryEditorToolbar({
   const deleteMutation = useMutation({
     mutationFn: () => deleteJournalEntry(entryId),
     onSuccess: async () => {
-      queryClient.setQueryData<JournalEntry[]>(
-        ["journalEntries", journalId],
-        (oldEntries = []) => oldEntries.filter((e) => e.id !== entryId),
-      );
+      queryClient.setQueriesData<JournalEntry[]>({
+        queryKey: ["journalEntries"],
+      }, (oldEntries = []) => oldEntries.filter((e) => e.id !== entryId))
     },
     onError: showErrorToast,
   });
@@ -56,7 +55,6 @@ export function JournalEntryEditorToolbar({
       );
       queryClient.setQueryData(["journalEntry", updatedEntry.id],
         (entry: JournalEntry) => {
-          console.log("entry from favorite mutation is: ", entry)
           return {...entry, favorite: updatedEntry.favorite}
         }
       )

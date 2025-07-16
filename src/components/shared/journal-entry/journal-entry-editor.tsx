@@ -50,12 +50,11 @@ export function JournalEntryEditor({
       onSuccess: (updatedEntry) => {
         setSyncStatus("saved");
         setTimeout(() => setSyncStatus("idle"), 2000);
-        queryClient.setQueryData<JournalEntry[]>(
-          ["journalEntries", journalId],
-          (entries = []) =>
-            entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e)),
-        );
-      },
+        queryClient.setQueriesData<JournalEntry[]>({
+          queryKey: ["journalEntries"],
+        }, (entries = []) =>
+          entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e))
+        )} 
     });
     setSyncStatus("syncing");
   };
