@@ -21,7 +21,9 @@ export const getJournalEntry = async (entryId: string) => {
   return response.data;
 };
 
-export async function createJournalEntry(entry: JournalEntryCreateInput): Promise<JournalEntry> {
+export async function createJournalEntry(
+  entry: JournalEntryCreateInput,
+): Promise<JournalEntry> {
   const response = await api.post(`/entries`, entry);
   return response.data;
 }

@@ -8,5 +8,5 @@ export const getUserSettings = async () =>
     wallpaperUrl: "nature",
   };
 
-export const updateSettings = async (updates: Omit<UserSettings, 'key'>) =>
+export const updateSettings = async (updates: Omit<UserSettings, "key">) =>
   db.settings.put({ key: "user", ...(await getUserSettings()), ...updates });

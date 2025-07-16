@@ -1,9 +1,11 @@
 import { db } from "@/lib/db";
 import { createJournalEntry } from "@/services/journalEntry";
-import type { JournalEntry, LocalJournalEntry } from "@/types/journalEntry.types";
+import type {
+  JournalEntry,
+  LocalJournalEntry,
+} from "@/types/journalEntry.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-
 
 export function useCreateEntry() {
   const navigate = useNavigate();
@@ -29,9 +31,7 @@ export function useCreateEntry() {
       queryClient.setQueryData<JournalEntry[]>(
         ["journalEntries", journalId],
         (old = []) =>
-          old.map((entry) =>
-            entry.id === clientId ? updatedEntry : entry
-          ),
+          old.map((entry) => (entry.id === clientId ? updatedEntry : entry)),
       );
 
       navigate(`/dashboard/journals/${journalId}/${realId}`);

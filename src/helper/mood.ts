@@ -126,5 +126,5 @@ export const scaleColorVarMap = [
   {
     scale: 5,
     color: "var(--color-chart-5)",
-  }
+  },
 ];

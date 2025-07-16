@@ -43,15 +43,16 @@ export default function EditMoodDialog({
     mutationFn: async () => updateMoodEntry(entry, entry.id),
     onSuccess: (updatedEntry) => {
       console.log(updatedEntry);
-  
+
       queryClient.setQueryData(["todayMood"], updatedEntry);
-  
-      const currentSummary: MoodType[] = queryClient.getQueryData(["moodWeekSummary"]) || [];
+
+      const currentSummary: MoodType[] =
+        queryClient.getQueryData(["moodWeekSummary"]) || [];
       const updatedSummary = currentSummary.map((e) =>
-        e.id === updatedEntry.id ? updatedEntry : e
+        e.id === updatedEntry.id ? updatedEntry : e,
       );
       queryClient.setQueryData(["moodWeekSummary"], updatedSummary);
-  
+
       onOpenChange(false);
     },
   });

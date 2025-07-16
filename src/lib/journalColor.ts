@@ -1,4 +1,11 @@
-export type JournalColor = "moss" | "clay" | "sky" | "lavender" | "rose" | "sand" | "ocean";
+export type JournalColor =
+  | "moss"
+  | "clay"
+  | "sky"
+  | "lavender"
+  | "rose"
+  | "sand"
+  | "ocean";
 
 export const JOURNAL_COLORS = [
   "moss",
@@ -59,4 +66,3 @@ export const hoverColorMap: Record<string, string> = {
   sand: "hover:bg-journal-sand/70",
   ocean: "hover:bg-journal-ocean/70",
 };
-

@@ -38,7 +38,7 @@ export function JournalEntryEditor({
     tags: [],
     id: "",
     color: "",
-    journalId: ""
+    journalId: "",
   });
 
   const queryClient = useQueryClient();
@@ -50,11 +50,14 @@ export function JournalEntryEditor({
       onSuccess: (updatedEntry) => {
         setSyncStatus("saved");
         setTimeout(() => setSyncStatus("idle"), 2000);
-        queryClient.setQueriesData<JournalEntry[]>({
-          queryKey: ["journalEntries"],
-        }, (entries = []) =>
-          entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e))
-        )} 
+        queryClient.setQueriesData<JournalEntry[]>(
+          {
+            queryKey: ["journalEntries"],
+          },
+          (entries = []) =>
+            entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e)),
+        );
+      },
     });
     setSyncStatus("syncing");
   };
@@ -216,14 +219,13 @@ export function JournalEntryEditor({
             key={tag}
             className="flex items-center gap-1 px-2 py-1 text-sm rounded bg-muted text-muted-foreground"
           >
-            <Hash className={`${textColorMap[entry.color]}`}/> {tag}
+            <Hash className={`${textColorMap[entry.color]}`} /> {tag}
             <button
               onClick={() => handleRemoveTag(tag)}
               className="hover:text-destructive focus:outline-none cursor-pointer"
               title="Remove tag"
               type="button"
-            >
-            </button>
+            ></button>
           </span>
         ))}
       </div>

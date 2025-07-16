@@ -1,27 +1,32 @@
 import { Outlet, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, NotebookTabs, SquarePen } from "lucide-react";
+import { Plus, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { JournalEntryList } from "@/components/shared/journal-entry/journal-entry-list";
 import { getJournalById } from "@/services/journal";
 import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useCreateEntry } from "@/hooks/useCreateEntry";
 import { createOfflineEntry } from "@/helper/journal-entry";
-import { bgColorMap, hoverColorMap, textColorMap } from "@/lib/journalColor";
+import { bgColorMap, hoverColorMap } from "@/lib/journalColor";
 import { getEntries } from "@/services/journalEntry";
-import { Input } from "@/components/ui/input";
 import { useEffect, useMemo, useState } from "react";
 import debounce from "lodash.debounce";
+import { EntriesSidebar } from "@/components/shared/journal-entry/entries-sidebar";
 
 export default function JournalEntryLayout() {
   const { journalId } = useParams();
   const navigate = useNavigate();
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [filterTags, setFilterTags] = useState<string[]>([]);
 
   const [inputValue, setInputValue] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: journal, isLoading: isJournalLoading, isError: isJournalError } = useQuery({
+  const {
+    data: journal,
+    isLoading: isJournalLoading,
+    isError: isJournalError,
+  } = useQuery({
     queryKey: ["journal", journalId],
     queryFn: () => getJournalById(journalId!),
     enabled: !!journalId,
@@ -32,7 +37,7 @@ export default function JournalEntryLayout() {
       debounce((value: string) => {
         setSearchTerm(value);
       }, 500),
-    []
+    [],
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,19 +46,14 @@ export default function JournalEntryLayout() {
     debouncedSetSearchTerm(value);
   };
 
-  const {
-    data,
-    isLoading,
-    isError,
-    isSuccess
-  } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["journalEntries", journalId],
     queryFn: () =>
       getEntries({
         journalId: journalId!,
         limit: 50,
       }),
-    enabled: !!journalId
+    enabled: !!journalId,
   });
 
   useEffect(() => {
@@ -68,12 +68,13 @@ export default function JournalEntryLayout() {
     };
   }, [debouncedSetSearchTerm]);
 
-  const entries = useLiveQuery(() =>
-    db.journalEntries
-      .where("journalId")
-      .equals(journalId!)
-      .sortBy("entryDate"),
-    [journalId]
+  const entries = useLiveQuery(
+    () =>
+      db.journalEntries
+        .where("journalId")
+        .equals(journalId!)
+        .sortBy("entryDate"),
+    [journalId],
   );
 
   const filteredEntries = useMemo(() => {
@@ -81,7 +82,9 @@ export default function JournalEntryLayout() {
     if (!searchTerm.trim()) return entries;
 
     const term = searchTerm.toLowerCase();
-    return entries.filter((entry) => entry.content?.toLowerCase().includes(term));
+    return entries.filter((entry) =>
+      entry.content?.toLowerCase().includes(term),
+    );
   }, [entries, searchTerm]);
 
   const createEntryMutation = useCreateEntry();
@@ -116,24 +119,15 @@ export default function JournalEntryLayout() {
           </h2>
         </div>
 
-        <div className="px-4 py-3 border-b border-border flex items-center gap-2 text-muted-foreground">
-          <NotebookTabs className={`w-5 h-5 ${textColorMap[journal.color]}`} />
-          <span className="font-medium text-sm">Entries</span>
-        </div>
-
-        <div className="overflow-y-auto px-4 py-2 flex-1">
-          <Input
-            className="mb-5"
-            placeholder="Search entries..."
-            value={inputValue}
-            onChange={handleSearchChange}
-          />
-
-          {isLoading && <p className="text-muted-foreground">Loading entries…</p>}
-          {isError && <p className="text-destructive">Failed to fetch entries.</p>}
-
-          <JournalEntryList entries={filteredEntries} />
-        </div>
+        <EntriesSidebar
+          entries={filteredEntries}
+          inputValue={inputValue}
+          onInputChange={handleSearchChange}
+          filterTags={filterTags}
+          onChangeFilterTags={setFilterTags}
+          sortOrder={sortOrder}
+          onChangeSortOrder={setSortOrder}
+        />
       </aside>
 
       <main className="flex-1 flex flex-col bg-background">

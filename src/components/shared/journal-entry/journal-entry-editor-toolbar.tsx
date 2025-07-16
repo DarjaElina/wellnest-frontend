@@ -34,9 +34,12 @@ export function JournalEntryEditorToolbar({
   const deleteMutation = useMutation({
     mutationFn: () => deleteJournalEntry(entryId),
     onSuccess: async () => {
-      queryClient.setQueriesData<JournalEntry[]>({
-        queryKey: ["journalEntries"],
-      }, (oldEntries = []) => oldEntries.filter((e) => e.id !== entryId))
+      queryClient.setQueriesData<JournalEntry[]>(
+        {
+          queryKey: ["journalEntries"],
+        },
+        (oldEntries = []) => oldEntries.filter((e) => e.id !== entryId),
+      );
     },
     onError: showErrorToast,
   });
@@ -53,11 +56,12 @@ export function JournalEntryEditorToolbar({
               : entry,
           ),
       );
-      queryClient.setQueryData(["journalEntry", updatedEntry.id],
+      queryClient.setQueryData(
+        ["journalEntry", updatedEntry.id],
         (entry: JournalEntry) => {
-          return {...entry, favorite: updatedEntry.favorite}
-        }
-      )
+          return { ...entry, favorite: updatedEntry.favorite };
+        },
+      );
     },
     onError: showErrorToast,
   });
@@ -92,7 +96,11 @@ export function JournalEntryEditorToolbar({
 
   return (
     <div className="flex justify-between items-center px-4 py-3 rounded-md bg-card border shadow-sm mb-4">
-      <FormattingButtons editor={editor} tags={entry.tags} color={entry.color}/>
+      <FormattingButtons
+        editor={editor}
+        tags={entry.tags}
+        color={entry.color}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <Button variant="ghost" size="icon">
