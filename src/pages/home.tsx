@@ -1,4 +1,3 @@
-import MoodDialog from "@/components/shared/mood/create-mood-dialog";
 import { RecentSummary } from "@/components/shared/recent-summary.tsx";
 import {
   Card,
@@ -25,7 +24,7 @@ export default function HomePage() {
         </h1>
       </div>
 
-      <Card className="bg-card border-muted shadow-sm">
+      <Card className="bg-background/90">
         <CardHeader>
           <CardTitle>Mood check-in</CardTitle>
           <CardDescription>Track how you're feeling today</CardDescription>
@@ -54,7 +53,7 @@ export default function HomePage() {
                   Feeling {data?.label}
                   <img
                     src={data?.iconUrl}
-                    className="w-6 h-6"
+                    className="w-8 h-8"
                     alt="Mood icon"
                   />
                 </span>

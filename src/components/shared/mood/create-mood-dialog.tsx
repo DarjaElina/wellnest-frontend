@@ -18,9 +18,9 @@ import { format } from "date-fns";
 import {
   hasDismissedMoodPopupToday,
   markMoodPopupAsDismissed,
-} from "@/helper/mood-popup-dismiss";
+} from "@/helper/mood";
 import type { MoodType } from "@/types/mood.types";
-import { getDynamicMessage } from "@/helper/mood-popup-dismiss";
+import { getDynamicMessage } from "@/helper/mood";
 import { showErrorToast } from "@/helper/error";
 
 type MoodDialogMode = "manual-checkin" | "auto-checkin";
@@ -85,6 +85,8 @@ export default function CreateMoodDialog({
       queryClient.setQueryData(["todayMood"], newEntry);
       onOpenChange(false);
       markMoodPopupAsDismissed();
+      const currentSummary: MoodType[] = queryClient.getQueryData(["moodWeekSummary"]) || []
+      queryClient.setQueryData(["moodWeekSummary"], currentSummary.concat(newEntry))
     },
   });
 

@@ -29,7 +29,7 @@ export default function SettingsDialog() {
             className="hover:bg-muted/40 transition-all rounded-lg px-3 py-2 cursor-pointer"
           >
             <button className="w-full text-left flex items-center">
-              <Settings className="w-4 h-4 mr-2 text-brand-primary" />
+              <Settings className="w-4 h-4 mr-2" />
               <span>Settings</span>
             </button>
           </SidebarMenuButton>

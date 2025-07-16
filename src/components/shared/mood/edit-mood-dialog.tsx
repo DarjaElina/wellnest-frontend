@@ -42,7 +42,16 @@ export default function EditMoodDialog({
   const mutation = useMutation({
     mutationFn: async () => updateMoodEntry(entry, entry.id),
     onSuccess: (updatedEntry) => {
+      console.log(updatedEntry);
+  
       queryClient.setQueryData(["todayMood"], updatedEntry);
+  
+      const currentSummary: MoodType[] = queryClient.getQueryData(["moodWeekSummary"]) || [];
+      const updatedSummary = currentSummary.map((e) =>
+        e.id === updatedEntry.id ? updatedEntry : e
+      );
+      queryClient.setQueryData(["moodWeekSummary"], updatedSummary);
+  
       onOpenChange(false);
     },
   });
@@ -55,8 +64,20 @@ export default function EditMoodDialog({
     return null;
   }
 
+  const resetFields = () => {
+    setEntry({
+      id: initialEntry?.id ?? "",
+      label: initialEntry?.label ?? "",
+      iconUrl: initialEntry?.iconUrl ?? "",
+      note: initialEntry?.note ?? "",
+      moodSet: "Default",
+      date: format(new Date(), "yyyy-MM-dd"),
+    });
+    onOpenChange(false);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={resetFields}>
       <DialogContent className="flex flex-col space-y-4 overflow-hidden">
         <motion.div
           layout
@@ -71,10 +92,10 @@ export default function EditMoodDialog({
           </DialogHeader>
         </motion.div>
 
-        <div className="flex-1 overflow-y-auto space-y-4 px-1">
+        <div className="flex-1 overflow-y-auto space-y-4 p-1">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
-              key="editOrStep2"
+              key="edit"
               layout
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

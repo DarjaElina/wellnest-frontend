@@ -1,22 +1,4 @@
-const colorOptions = [
-  { name: "Rose", value: "rose", className: "bg-rose-500" },
-  { name: "Sky", value: "sky", className: "bg-sky-500" },
-  { name: "Teal", value: "teal", className: "bg-teal-500" },
-  { name: "Amber", value: "amber", className: "bg-amber-500" },
-  { name: "Violet", value: "violet", className: "bg-violet-500" },
-  { name: "Indigo", value: "indigo", className: "bg-indigo-500" },
-  { name: "Pink", value: "pink", className: "bg-pink-500" },
-];
-
-const ringColorMap: Record<string, string> = {
-  rose: "ring-rose-300",
-  amber: "ring-amber-300",
-  teal: "ring-teal-300",
-  sky: "ring-sky-300",
-  violet: "ring-violet-300",
-  indigo: "ring-indigo-300",
-  pink: "ring-pink-300",
-};
+import { colorOptions, ringColorMap } from "@/lib/journalColor";
 
 interface ColorPickerProps {
   value: string;

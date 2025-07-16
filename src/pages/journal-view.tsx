@@ -9,7 +9,6 @@ import {
   Settings,
   Trash2,
 } from "lucide-react";
-import { getColorClass } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -46,11 +45,12 @@ import {
   Form,
 } from "@/components/ui/form";
 import ColorPicker from "@/components/shared/color-picker";
-import type { JournalColor } from "@/lib/color";
 import { toast } from "sonner";
+import { bgColorMap, textColorMap } from "@/lib/journalColor";
 
 export default function JournalView() {
   const { journal } = useOutletContext<{ journal: Journal }>();
+ 
   const [dialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -86,6 +86,7 @@ export default function JournalView() {
     updateMutation.mutate(data);
   };
 
+ 
   const handleDelete = () => {
     toast("Are you sure you want to delete?", {
       action: {
@@ -102,10 +103,7 @@ export default function JournalView() {
   return (
     <div className="max-w-3xl mx-auto">
       <div
-        className={`flex items-center justify-between rounded-xl shadow-md overflow-hidden mb-6 px-6 py-4 ${getColorClass(
-          journal.color,
-          "bg",
-        )}`}
+        className={`flex items-center justify-between rounded-xl shadow-md overflow-hidden mb-6 px-6 py-4 ${bgColorMap[journal.color]}`}
       >
         <div className="flex items-center gap-3">
           <BookOpenText className="w-6 h-6 text-neutral-100" />
@@ -117,7 +115,7 @@ export default function JournalView() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="cursor-pointer">
-              <MoreHorizontal className="w-7 h-7" />
+              <MoreHorizontal className="w-7 h-7 text-neutral-100" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -150,7 +148,7 @@ export default function JournalView() {
       <div className="space-y-3 bg-card border border-border rounded-xl shadow-sm p-6">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <CalendarDays
-            className={`w-4 h-4 ${getColorClass(journal.color, "text")}`}
+            className={`w-4 h-4 ${textColorMap[journal.color]}`}
           />
           <span>
             Last updated:{" "}
@@ -162,7 +160,7 @@ export default function JournalView() {
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <ListOrdered
-            className={`w-4 h-4 ${getColorClass(journal.color, "text")}`}
+            className={`w-4 h-4 ${textColorMap[journal.color]}`}
           />
           <span>
             Total entries:{" "}
@@ -201,7 +199,7 @@ export default function JournalView() {
               <FormLabel>Journal Color</FormLabel>
               <ColorPicker
                 value={form.watch("color")}
-                onChange={(val) => form.setValue("color", val as JournalColor)}
+                onChange={(val) => form.setValue("color", val)}
               />
 
               <DialogFooter>

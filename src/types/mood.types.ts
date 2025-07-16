@@ -1,6 +1,9 @@
 export type MoodType = {
   label: string;
   iconUrl: string;
+  id?: string;
+  date?: string;
+  note?: string;
 };
 
 export type MoodSet = {

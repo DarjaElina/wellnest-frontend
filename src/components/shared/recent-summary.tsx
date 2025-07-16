@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { MoodWeekSummary } from "./mood/mood-week-summary";
 
 export function RecentSummary() {
   return (
@@ -9,7 +10,7 @@ export function RecentSummary() {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="hover:shadow-lg transition-shadow">
+        <Card className="bg-background/90">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
               Last Journal Entry
@@ -28,17 +29,7 @@ export function RecentSummary() {
             </Link>
           </CardContent>
         </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-              Mood This Week
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <p className="text-xl">😊 😐 😢 😊 😊 😴 😊</p>
-          </CardContent>
-        </Card>
+        <MoodWeekSummary />
       </div>
     </section>
   );
