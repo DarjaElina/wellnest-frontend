@@ -8,19 +8,29 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useMood } from "@/context/moodContext";
 import EditMoodDialog from "@/components/shared/mood/edit-mood-dialog";
 import CreateMoodDialog from "@/components/shared/mood/create-mood-dialog";
+import { useAuthQuery } from "@/hooks/useAuthQuery";
+import { useQuery } from "@tanstack/react-query";
+import { getTodayMoodEntry } from "@/services/moodEntry";
 
 export default function HomePage() {
-  const { data, isLoading, isError } = useMood();
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["todayMood"],
+    queryFn: getTodayMoodEntry,
+  });
+
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const { data: user } = useAuthQuery();
 
   return (
     <div className="px-6 py-10 max-w-5xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight mb-1">
-          Welcome back, Anna!
+          {user?.firstName
+            ? `Welcome back, ${user?.firstName}!`
+            : "Welcome back!"}
         </h1>
       </div>
 

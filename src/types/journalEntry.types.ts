@@ -15,6 +15,7 @@ export type JournalEntryCreateInput = z.infer<typeof journalEntryCreateSchema>;
 export type JournalEntry = z.infer<typeof journalEntrySchema> & {
   color: string;
   journalId: string;
+  updatedAt: string;
 };
 
 export type LocalJournalEntry = JournalEntry & {

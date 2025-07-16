@@ -9,18 +9,14 @@ import { useCreateEntry } from "@/hooks/useCreateEntry";
 import { createOfflineEntry } from "@/helper/journal-entry";
 import { bgColorMap, hoverColorMap } from "@/lib/journalColor";
 import { getEntries } from "@/services/journalEntry";
-import { useEffect, useMemo, useState } from "react";
-import debounce from "lodash.debounce";
+import { useEffect, useMemo } from "react";
 import { EntriesSidebar } from "@/components/shared/journal-entry/entries-sidebar";
+import { useFilter } from "@/context/filterContext";
 
 export default function JournalEntryLayout() {
   const { journalId } = useParams();
   const navigate = useNavigate();
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [filterTags, setFilterTags] = useState<string[]>([]);
-
-  const [inputValue, setInputValue] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+    const { state } = useFilter();
 
   const {
     data: journal,
@@ -32,21 +28,7 @@ export default function JournalEntryLayout() {
     enabled: !!journalId,
   });
 
-  const debouncedSetSearchTerm = useMemo(
-    () =>
-      debounce((value: string) => {
-        setSearchTerm(value);
-      }, 500),
-    [],
-  );
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInputValue(value);
-    debouncedSetSearchTerm(value);
-  };
-
-  const { data, isLoading, isError, isSuccess } = useQuery({
+  const { data, isSuccess } = useQuery({
     queryKey: ["journalEntries", journalId],
     queryFn: () =>
       getEntries({
@@ -62,12 +44,6 @@ export default function JournalEntryLayout() {
     }
   }, [data, isSuccess]);
 
-  useEffect(() => {
-    return () => {
-      debouncedSetSearchTerm.cancel();
-    };
-  }, [debouncedSetSearchTerm]);
-
   const entries = useLiveQuery(
     () =>
       db.journalEntries
@@ -79,19 +55,43 @@ export default function JournalEntryLayout() {
 
   const filteredEntries = useMemo(() => {
     if (!entries) return [];
-    if (!searchTerm.trim()) return entries;
 
-    const term = searchTerm.toLowerCase();
-    return entries.filter((entry) =>
-      entry.content?.toLowerCase().includes(term),
-    );
-  }, [entries, searchTerm]);
+    let result = entries;
+
+    if (state.searchTerm.trim()) {
+      const term = state.searchTerm.toLowerCase();
+      result = result.filter((entry) =>
+        entry.content?.toLowerCase().includes(term),
+      );
+    }
+
+    if (state.selectedTags.length > 0) {
+      result = result.filter((entry) =>
+        entry.tags?.some((tag) => state.selectedTags.includes(tag)),
+      );
+    }
+
+    if (state.sortOrder === "asc") {
+      result = result.sort(
+        (a, b) =>
+          new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
+      );
+
+    } else {
+      result = result.sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+      );
+    }
+    return result;
+  }, [entries, state]);
 
   const createEntryMutation = useCreateEntry();
 
   const handleNewEntry = async () => {
     if (journalId && journal) {
       const offlineEntry = await createOfflineEntry(journalId, journal.color);
+      console.log("offline entry is", offlineEntry)
       createEntryMutation.mutate(offlineEntry);
     }
   };
@@ -121,12 +121,6 @@ export default function JournalEntryLayout() {
 
         <EntriesSidebar
           entries={filteredEntries}
-          inputValue={inputValue}
-          onInputChange={handleSearchChange}
-          filterTags={filterTags}
-          onChangeFilterTags={setFilterTags}
-          sortOrder={sortOrder}
-          onChangeSortOrder={setSortOrder}
         />
       </aside>
 

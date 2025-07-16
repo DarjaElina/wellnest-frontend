@@ -39,6 +39,7 @@ export function JournalEntryEditor({
     id: "",
     color: "",
     journalId: "",
+    updatedAt: formatISO9075(new Date()),
   });
 
   const queryClient = useQueryClient();
@@ -92,7 +93,7 @@ export function JournalEntryEditor({
     },
     onUpdate({ editor }) {
       const html = editor.getHTML();
-      const updated = { ...entry, content: html };
+      const updated = { ...entry, content: html, updatedAt: formatISO9075(new Date()), };
       setEntry(updated);
       saveToLocal(updated, journalId);
       debouncedUpdate(updated);
@@ -104,7 +105,7 @@ export function JournalEntryEditor({
     const oldTime = format(new Date(entry.entryDate), "HH:mm");
     const merged = mergeDateAndTime(newDate, oldTime);
 
-    const updated = { ...entry, entryDate: merged };
+    const updated = { ...entry, entryDate: merged, updatedAt: formatISO9075(new Date()) };
 
     setEntry(updated);
     await saveToLocal(updated, journalId);
@@ -115,7 +116,7 @@ export function JournalEntryEditor({
     const oldDate = new Date(entry.entryDate);
     const merged = mergeDateAndTime(oldDate, newTime);
 
-    const updated = { ...entry, entryDate: merged };
+    const updated = { ...entry, entryDate: merged, updatedAt: formatISO9075(new Date()) };
 
     setEntry(updated);
     await saveToLocal(updated, journalId);
@@ -146,7 +147,7 @@ export function JournalEntryEditor({
 
   const handleRemoveTag = async (tagToRemove: string) => {
     const newTags = entry.tags.filter((tag) => tag !== tagToRemove);
-    const updated = { ...entry, tags: newTags };
+    const updated = { ...entry, tags: newTags, updatedAt: formatISO9075(new Date()) };
 
     setEntry(updated);
     await saveToLocal(updated, journalId);

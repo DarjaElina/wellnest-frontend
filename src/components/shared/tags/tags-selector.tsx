@@ -9,7 +9,6 @@ export function TagSelector({
   color,
   selectedTags,
   onChange,
-  allowAdd = true,
 }: {
   color: string;
   selectedTags: string[];
@@ -24,8 +23,6 @@ export function TagSelector({
       tag.toLowerCase().includes(searchTerm.trim().toLowerCase()),
     );
   }, [searchTerm, selectedTags]);
-
-  console.log(selectedTags);
 
   const tagExists = selectedTags.some(
     (tag) => tag.toLowerCase() === searchTerm.trim().toLowerCase(),
@@ -42,6 +39,8 @@ export function TagSelector({
     onChange(selectedTags.filter((t) => t !== tag));
   };
 
+  console.log("filteres tags are:", filteredTags);
+
   return (
     <div className="grid gap-4">
       <div className="grid gap-3">
@@ -52,7 +51,7 @@ export function TagSelector({
           id="tag-search"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search or add tag"
+          placeholder={"Search or add tag"}
         />
       </div>
 
@@ -74,7 +73,7 @@ export function TagSelector({
           </ul>
         )}
 
-        {!tagExists && searchTerm.trim() !== "" && allowAdd && (
+        {!tagExists && searchTerm.trim() !== "" && (
           <Button
             type="button"
             variant="outline"

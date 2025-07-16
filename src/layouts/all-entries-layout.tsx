@@ -5,20 +5,17 @@ import { getJournals } from "@/services/journal";
 import type { Journal } from "@/types/journal.types";
 import { useQuery } from "@tanstack/react-query";
 import { useLiveQuery } from "dexie-react-hooks";
-import debounce from "lodash.debounce";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { EntriesSidebar } from "@/components/shared/journal-entry/entries-sidebar";
 import { CreateEntryDialog } from "@/components/shared/journal-entry/create-entry-dialog";
 import { EmptyState } from "@/components/shared/journal-entry/empty-state";
 import { SquarePen } from "lucide-react";
+import { useFilter } from "@/context/filterContext";
 
 export default function AllEntriesLayout() {
   const [openDialog, setOpenDialog] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [filterTags, setFilterTags] = useState<string[]>([]);
+  const { state } = useFilter();
 
   const createEntryMutation = useCreateEntry();
 
@@ -33,37 +30,39 @@ export default function AllEntriesLayout() {
 
   const allEntries = useLiveQuery(() => db.journalEntries.toArray(), []);
 
-  const debouncedSetSearchTerm = useMemo(
-    () =>
-      debounce((value: string) => {
-        setSearchTerm(value);
-      }, 400),
-    [],
-  );
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInputValue(value);
-    debouncedSetSearchTerm(value);
-  };
-
-  useEffect(() => {
-    return () => {
-      debouncedSetSearchTerm.cancel();
-    };
-  }, [debouncedSetSearchTerm]);
+  console.log(state)
 
   const filteredEntries = useMemo(() => {
     if (!allEntries) return [];
 
-    if (!searchTerm.trim()) return allEntries;
+    let result = allEntries;
+    if (state.searchTerm.trim()) {
+      const term = state.searchTerm.toLowerCase();
+      result = result.filter((entry) =>
+        entry.content?.toLowerCase().includes(term),
+      );
+    }
 
-    const term = searchTerm.toLowerCase();
+    if (state.selectedTags.length > 0) {
+      result = result.filter((entry) =>
+        entry.tags?.some((tag) => state.selectedTags.includes(tag)),
+      );
+    }
 
-    return allEntries.filter((entry) => {
-      return entry.content?.toLowerCase().includes(term);
-    });
-  }, [allEntries, searchTerm]);
+    if (state.sortOrder === "asc") {
+      result = result.sort(
+        (a, b) =>
+          new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
+      );
+
+    } else {
+      result = result.sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+      );
+    }
+    return result;
+  }, [allEntries, state]);
 
   const handleNewEntry = async (selectedJournal: Journal) => {
     const offlineEntry = await createOfflineEntry(
@@ -76,7 +75,7 @@ export default function AllEntriesLayout() {
 
   return (
     <div className="flex w-full h-screen overflow-hidden">
-    <aside className="w-96 border-r border-border flex flex-col bg-background">
+      <aside className="w-96 border-r border-border flex flex-col bg-background">
         <div
           className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 bg-brand-secondary`}
         >
@@ -85,15 +84,7 @@ export default function AllEntriesLayout() {
             All Entries
           </h2>
         </div>
-        <EntriesSidebar
-          entries={filteredEntries}
-          inputValue={inputValue}
-          onInputChange={handleSearchChange}
-          filterTags={filterTags}
-          onChangeFilterTags={setFilterTags}
-          sortOrder={sortOrder}
-          onChangeSortOrder={setSortOrder}
-        />
+        <EntriesSidebar entries={filteredEntries} />
       </aside>
 
       <main className="flex-1 flex flex-col bg-background">

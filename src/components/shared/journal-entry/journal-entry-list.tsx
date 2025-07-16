@@ -4,10 +4,10 @@ import { useParams } from "react-router-dom";
 export function JournalEntryList({ entries }: { entries: JournalEntry[] }) {
   const { entryId } = useParams();
   if (!entries) {
-    return <div className="text-muted-foreground">Loading entries...</div>;
+    return <div className="text-muted-foreground m-4">Loading entries...</div>;
   }
   if (entries.length === 0) {
-    return <div className="text-muted-foreground">No entries yet.</div>;
+    return <div className="text-muted-foreground m-4">No entries found.</div>;
   }
   return (
     <div className="space-y-3">
