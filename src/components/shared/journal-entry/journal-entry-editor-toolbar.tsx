@@ -32,7 +32,7 @@ export function JournalEntryEditorToolbar({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const deleteMutation = useMutation({
-    mutationFn: () => deleteJournalEntry(journalId, entryId),
+    mutationFn: () => deleteJournalEntry(entryId),
     onSuccess: async () => {
       queryClient.setQueryData<JournalEntry[]>(
         ["journalEntries", journalId],
@@ -43,10 +43,10 @@ export function JournalEntryEditorToolbar({
   });
 
   const favoriteMutation = useMutation({
-    mutationFn: () => toggleFavorite(journalId, entryId),
+    mutationFn: () => toggleFavorite(entryId),
     onSuccess: async (updatedEntry) => {
       queryClient.setQueryData<JournalEntry[]>(
-        ["journalEntries", journalId],
+        ["journalEntry", updatedEntry],
         (entries = []) =>
           entries.map((entry) =>
             entry.id === updatedEntry.id
@@ -54,6 +54,12 @@ export function JournalEntryEditorToolbar({
               : entry,
           ),
       );
+      queryClient.setQueryData(["journalEntry", updatedEntry.id],
+        (entry: JournalEntry) => {
+          console.log("entry from favorite mutation is: ", entry)
+          return {...entry, favorite: updatedEntry.favorite}
+        }
+      )
     },
     onError: showErrorToast,
   });
@@ -63,15 +69,7 @@ export function JournalEntryEditorToolbar({
       action: {
         label: "Yes, Delete",
         onClick: async () => {
-          await db.journalEntries.update(entryId, {
-            markedForDeletion: true,
-            needsSync: true,
-          });
-
-          queryClient.setQueryData<JournalEntry[]>(
-            ["journalEntries", journalId],
-            (oldEntries = []) => oldEntries.filter((e) => e.id !== entryId),
-          );
+          await db.journalEntries.delete(entryId);
 
           navigate(`/dashboard/journals/${journalId}`);
 
@@ -93,9 +91,10 @@ export function JournalEntryEditorToolbar({
     });
     favoriteMutation.mutate();
   };
+
   return (
     <div className="flex justify-between items-center px-4 py-3 rounded-md bg-card border shadow-sm mb-4">
-      <FormattingButtons editor={editor} tags={entry.tags} />
+      <FormattingButtons editor={editor} tags={entry.tags} color={entry.color}/>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <Button variant="ghost" size="icon">

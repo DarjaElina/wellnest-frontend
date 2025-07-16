@@ -1,6 +1,5 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/shared/app-sidebar.tsx";
-import { Toaster } from "sonner";
 import { useSettings } from "@/context/settingsContext";
 import MoodDialog from "@/components/shared/mood/create-mood-dialog";
 import { useState } from "react";
@@ -28,7 +27,6 @@ export default function Dashboard() {
           )}
         </main>
       </div>
-      <Toaster position="top-center" richColors />
     </SidebarProvider>
   );
 }

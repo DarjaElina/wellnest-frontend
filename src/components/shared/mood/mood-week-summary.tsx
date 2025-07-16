@@ -33,8 +33,6 @@ export function MoodWeekSummary() {
     return <p>Error</p>;
   }
 
-  console.log(data)
-
   const chartData = transformMoodEntriesToChart(data);
 
   return (
@@ -81,7 +79,7 @@ export function MoodWeekSummary() {
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={scaleColorVarMap[entry.scale].color ?? "var(--color-chart-3)"}
+                  fill={scaleColorVarMap[entry.scale - 1]?.color ?? "var(--color-chart-3)"}
                 />
               ))}
             </Bar>

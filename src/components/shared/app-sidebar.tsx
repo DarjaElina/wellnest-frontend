@@ -5,6 +5,7 @@ import {
   SmilePlus,
   Home,
   LogOut,
+  BookOpenText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -41,6 +42,7 @@ import { NewJournalForm } from "./journal/new-journal-form";
 import SettingsDialog from "./settings-dialog";
 
 const items = [
+  { title: "All Entries", url: "journal-entries/all", icon: BookOpenText },
   { title: "Home", url: "", icon: Home },
   { title: "Mood Tracker", url: "mood", icon: SmilePlus },
 ];
@@ -72,7 +74,7 @@ export function AppSidebar() {
     <Sidebar className="bg-sidebar text-foreground border-r border-border shadow-sm">
       <SidebarContent className="flex flex-col h-full rounded-r-2xl p-4">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg font-bold tracking-tight text-brand-primary">
+          <SidebarGroupLabel className="text-lg font-bold tracking-tight text-brand-secondary">
             Wellnest
           </SidebarGroupLabel>
 
@@ -82,7 +84,7 @@ export function AppSidebar() {
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="hover:bg-muted/40 transition-all rounded-lg px-3 py-2">
-                      <BookHeart className="mr-2 h-4 w-4 text-brand-primary" />
+                      <BookHeart className="mr-2 h-4 w-4" />
                       <span>Journals</span>
                       <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
@@ -125,7 +127,7 @@ export function AppSidebar() {
                             variant="ghost"
                             className="h-8 w-full justify-start text-sm px-2 cursor-pointer hover:bg-muted/30 transition"
                           >
-                            <Plus className="h-4 w-4 mr-2 text-brand-primary" />
+                            <Plus className="h-4 w-4 mr-2" />
                             Create Journal
                           </Button>
                         </DialogTrigger>
@@ -147,7 +149,7 @@ export function AppSidebar() {
                     className="hover:bg-muted/40 transition-all rounded-lg px-3 py-2"
                   >
                     <Link to={item.url}>
-                      <item.icon className="mr-2 h-4 w-4 text-brand-primary" />
+                      <item.icon className="mr-2 h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>

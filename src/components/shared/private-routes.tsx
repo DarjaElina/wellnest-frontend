@@ -1,4 +1,4 @@
-import { useAuthQuery } from "@/hooks/use-auth-query";
+import { useAuthQuery } from "@/hooks/useAuthQuery";
 import { Navigate, Outlet } from "react-router-dom";
 
 export default function PrivateRoute() {

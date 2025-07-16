@@ -5,9 +5,11 @@ import type { Editor } from "@tiptap/react";
 export function FormattingButtons({
   editor,
   tags,
+  color
 }: {
   editor: Editor | null;
   tags: string[];
+  color: string;
 }) {
   if (!editor) {
     return null;
@@ -75,7 +77,7 @@ export function FormattingButtons({
         H3
       </Button>
 
-      <TagsDialog initialTags={tags} />
+      <TagsDialog initialTags={tags} color={color}/>
     </div>
   );
 }

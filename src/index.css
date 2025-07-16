@@ -46,6 +46,14 @@
   --color-brand-primary: hsl(var(--brand-primary));
   --color-brand-secondary: hsl(var(--brand-secondary));
   --color-brand-accent: hsl(var(--brand-accent));
+  
+  --color-journal-moss: hsl(var(--journal-moss));
+  --color-journal-clay: hsl(var(--journal-clay));
+  --color-journal-sky: hsl(var(--journal-sky));
+  --color-journal-lavender: hsl(var(--journal-lavender));
+  --color-journal-rose: hsl(var(--journal-rose));
+  --color-journal-sand: hsl(var(--journal-sand));
+  --color-journal-ocean: hsl(var(--journal-ocean));
 }
 
 @layer base {
@@ -121,6 +129,14 @@
     --brand-primary: 180 80% 40%;
     --brand-secondary: 262 70% 60%;
     --brand-accent: 340 82% 70%;
+
+    --journal-moss: 96 24% 45%;
+    --journal-clay: 18 30% 55%;
+    --journal-sky: 204 40% 65%;
+    --journal-lavender: 270 30% 70%;
+    --journal-rose: 345 50% 70%;
+    --journal-sand: 40 30% 70%;
+    --journal-ocean: 200 30% 50%;
   }
 
   .dark {
@@ -161,6 +177,14 @@
     --brand-primary: 174 72% 55%;
     --brand-secondary: 266 60% 65%;
     --brand-accent: 345 70% 65%;
+
+    --journal-moss: 96 24% 45%;
+    --journal-clay: 18 30% 55%;
+    --journal-sky: 204 40% 65%;
+    --journal-lavender: 270 30% 70%;
+    --journal-rose: 345 50% 70%;
+    --journal-sand: 40 30% 70%;
+    --journal-ocean: 200 30% 50%;
   }
 }
 

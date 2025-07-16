@@ -16,10 +16,11 @@ import { type JournalEntry } from "@/types/journalEntry.types";
 import { updateJournalEntry } from "@/services/journalEntry";
 import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cloud, Check, Trash2 } from "lucide-react";
+import { Cloud, Check, Hash } from "lucide-react";
 import type { RouteParams } from "@/types/shared.types";
 import { db } from "@/lib/db";
 import { saveToLocal } from "@/lib/utils";
+import { textColorMap } from "@/lib/journalColor";
 
 export function JournalEntryEditor({
   journalEntry,
@@ -36,10 +37,14 @@ export function JournalEntryEditor({
     isFavorite: false,
     tags: [],
     id: "",
+    color: "",
+    journalId: ""
   });
 
   const queryClient = useQueryClient();
-  const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
+
+  const { journalId } = useParams<RouteParams>() as RouteParams;
+
   const mutateAndTrack = (updatedEntry: JournalEntry) => {
     updatedEntryMutation.mutate(updatedEntry, {
       onSuccess: (updatedEntry) => {
@@ -57,10 +62,7 @@ export function JournalEntryEditor({
 
   const updatedEntryMutation = useMutation({
     mutationFn: (updatedEntry: JournalEntry) =>
-      updateJournalEntry(updatedEntry, journalId, entryId),
-    onSuccess: (data) => {
-      queryClient.setQueryData(["journalEntries", { id: data.id }], data);
-    },
+      updateJournalEntry(updatedEntry),
   });
 
   const debouncedUpdate = useRef(
@@ -88,15 +90,10 @@ export function JournalEntryEditor({
     },
     onUpdate({ editor }) {
       const html = editor.getHTML();
-
       const updated = { ...entry, content: html };
-
       setEntry(updated);
-
       saveToLocal(updated, journalId);
-
       debouncedUpdate(updated);
-
       setSyncStatus("syncing");
     },
   });
@@ -153,13 +150,6 @@ export function JournalEntryEditor({
     await saveToLocal(updated, journalId);
 
     mutateAndTrack(updated);
-    queryClient.setQueryData<JournalEntry[]>(
-      ["journalEntries", journalId],
-      (oldEntries = []) =>
-        oldEntries.map((e) =>
-          e.id === updated.id ? { ...e, tags: updated.tags } : e,
-        ),
-    );
   };
 
   return (
@@ -227,14 +217,13 @@ export function JournalEntryEditor({
             key={tag}
             className="flex items-center gap-1 px-2 py-1 text-sm rounded bg-muted text-muted-foreground"
           >
-            #{tag}
+            <Hash className={`${textColorMap[entry.color]}`}/> {tag}
             <button
               onClick={() => handleRemoveTag(tag)}
               className="hover:text-destructive focus:outline-none cursor-pointer"
               title="Remove tag"
               type="button"
             >
-              <Trash2 className="w-4 h-4" />
             </button>
           </span>
         ))}

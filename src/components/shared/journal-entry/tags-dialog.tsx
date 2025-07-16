@@ -21,8 +21,9 @@ import type { JournalEntry } from "@/types/journalEntry.types";
 import { showErrorToast } from "@/helper/error";
 import { formatISO9075 } from "date-fns";
 import { db } from "@/lib/db";
+import { textColorMap } from "@/lib/journalColor";
 
-export function TagsDialog({ initialTags }: { initialTags: string[] }) {
+export function TagsDialog({ initialTags, color }: { initialTags: string[], color: string }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>(initialTags || []);
   const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
@@ -51,7 +52,7 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
   };
 
   const tagsMutation = useMutation({
-    mutationFn: () => updateEntryTags(entryId, journalId, selectedTags),
+    mutationFn: () => updateEntryTags(entryId, selectedTags),
     onMutate: async () => {
       await db.journalEntries.update(entryId, {
         tags: selectedTags,
@@ -59,15 +60,9 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
       });
     },
     onSuccess: async (updatedEntry: JournalEntry) => {
-      queryClient.setQueryData<JournalEntry[]>(
-        ["journalEntries", journalId],
-        (oldEntries = []) =>
-          oldEntries.map((entry) =>
-            entry.id === updatedEntry.id
-              ? { ...entry, tags: updatedEntry.tags }
-              : entry,
-          ),
-      );
+      queryClient.setQueryData(["journalEntry", entryId], (oldEntry: JournalEntry) => {
+        return oldEntry = {...oldEntry, tags: updatedEntry.tags}
+      })
     },
   });
 
@@ -129,7 +124,7 @@ export function TagsDialog({ initialTags }: { initialTags: string[] }) {
                       onClick={() => removeTag(tag)}
                       type="button"
                     >
-                      <Tag className="mr-2" />
+                      <Tag className={`mr-2 ${textColorMap[color]}`} />
                       {tag}
                     </Button>
                   ))}

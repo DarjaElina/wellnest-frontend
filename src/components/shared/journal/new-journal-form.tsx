@@ -25,14 +25,14 @@ import {
 import { createJournal } from "@/services/journal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Journal } from "@/types/journal.types";
-import type { JournalColor } from "@/lib/color";
+import type { JournalColor } from "@/lib/journalColor";
 
 export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
   const form = useForm<JournalInput>({
     resolver: zodResolver(journalInputSchema),
     defaultValues: {
       name: "",
-      color: "rose",
+      color: "sand",
     },
   });
   const queryClient = useQueryClient();

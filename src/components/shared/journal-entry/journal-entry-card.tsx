@@ -9,31 +9,36 @@ import DOMPurify from "dompurify";
 import { getJournalPreviewTitle } from "@/helper/journal";
 import { StickyNote } from "lucide-react";
 import clsx from "clsx";
-import { getColorClass } from "@/lib/utils";
+import { useNavigate } from "react-router";
+import type { JournalEntry } from "@/types/journalEntry.types";
+import { parse, format } from "date-fns";
+import { ringColorMap, textColorMap } from "@/lib/journalColor";
 
-export function JournalEntryCard({
-  content,
-  date,
-  onSelect,
-  isActive,
-  journalColor,
-}: {
-  content: string;
-  date: string;
-  onSelect: () => void;
-  isActive?: boolean;
-  journalColor: string;
-}) {
+export function JournalEntryCard({entry, isActive}: {entry: JournalEntry, isActive: boolean}) {
+  const {journalId, id, color, content, entryDate} = entry;
+  const formattedDate = format(
+    parse(entryDate, "yyyy-MM-dd HH:mm:ss", new Date()),
+    "MMMM d, yyyy 'at' h:mm a"
+  );
+  const navigate = useNavigate();
+
+  const handleSelect = () => {
+    navigate(`/dashboard/journals/${journalId}/${id}`);
+  };
   const sanitizedHTML = DOMPurify.sanitize(content);
   const { parsedHeading, parsedParagraph } =
     getJournalPreviewTitle(sanitizedHTML);
+
+  if (!entry) {
+    return null;
+  }
   return (
     <Card
-      onClick={onSelect}
+      onClick={handleSelect}
       className={clsx(
         "cursor-pointer transition-shadow border shadow-sm",
         isActive
-          ? `ring-2 ${getColorClass(journalColor, "ring")} border-transparent`
+          ? `ring-2  ${ringColorMap[color]} border-transparent`
           : "hover:shadow-md hover:border-gray-300",
       )}
     >
@@ -44,11 +49,11 @@ export function JournalEntryCard({
             dangerouslySetInnerHTML={{ __html: parsedHeading }}
           />
           <CardDescription className="text-xs mt-1">
-            {new Date(date).toLocaleString()}
+            {formattedDate}
           </CardDescription>
         </div>
         <StickyNote
-          className={`w-4 h-4 ${getColorClass(journalColor, "text")} opacity-80`}
+          className={`w-4 h-4 ${textColorMap[color]} opacity-80`}
         />
       </CardHeader>
 

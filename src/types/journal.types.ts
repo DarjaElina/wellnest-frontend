@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { JOURNAL_COLORS } from "@/lib/color";
+import { JOURNAL_COLORS } from "@/lib/journalColor";
 
 const journalColorSchema = z.enum(JOURNAL_COLORS);
 

@@ -6,7 +6,7 @@ import type { RouteParams } from "@/types/shared.types";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
-export default function JournalEditorView() {
+export default function JournalEntryEditorView() {
   const { journalId, entryId } = useParams<RouteParams>() as RouteParams;
   const {
     data: journalEntry,
@@ -14,7 +14,7 @@ export default function JournalEditorView() {
     isError,
   } = useQuery({
     queryKey: ["journalEntry", entryId],
-    queryFn: () => getJournalEntry(journalId, entryId),
+    queryFn: () => getJournalEntry(entryId),
     enabled: !!journalId && !!entryId,
   });
 
