@@ -38,7 +38,8 @@ export function JournalEntryEditor({
     tags: [],
     id: "",
     color: "",
-    journalId: ""
+    journalId: "",
+    updatedAt: formatISO9075(new Date()),
   });
 
   const queryClient = useQueryClient();
@@ -50,8 +51,10 @@ export function JournalEntryEditor({
       onSuccess: (updatedEntry) => {
         setSyncStatus("saved");
         setTimeout(() => setSyncStatus("idle"), 2000);
-        queryClient.setQueryData<JournalEntry[]>(
-          ["journalEntries", journalId],
+        queryClient.setQueriesData<JournalEntry[]>(
+          {
+            queryKey: ["journalEntries"],
+          },
           (entries = []) =>
             entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e)),
         );
@@ -90,7 +93,7 @@ export function JournalEntryEditor({
     },
     onUpdate({ editor }) {
       const html = editor.getHTML();
-      const updated = { ...entry, content: html };
+      const updated = { ...entry, content: html, updatedAt: formatISO9075(new Date()), };
       setEntry(updated);
       saveToLocal(updated, journalId);
       debouncedUpdate(updated);
@@ -102,7 +105,7 @@ export function JournalEntryEditor({
     const oldTime = format(new Date(entry.entryDate), "HH:mm");
     const merged = mergeDateAndTime(newDate, oldTime);
 
-    const updated = { ...entry, entryDate: merged };
+    const updated = { ...entry, entryDate: merged, updatedAt: formatISO9075(new Date()) };
 
     setEntry(updated);
     await saveToLocal(updated, journalId);
@@ -113,7 +116,7 @@ export function JournalEntryEditor({
     const oldDate = new Date(entry.entryDate);
     const merged = mergeDateAndTime(oldDate, newTime);
 
-    const updated = { ...entry, entryDate: merged };
+    const updated = { ...entry, entryDate: merged, updatedAt: formatISO9075(new Date()) };
 
     setEntry(updated);
     await saveToLocal(updated, journalId);
@@ -144,7 +147,7 @@ export function JournalEntryEditor({
 
   const handleRemoveTag = async (tagToRemove: string) => {
     const newTags = entry.tags.filter((tag) => tag !== tagToRemove);
-    const updated = { ...entry, tags: newTags };
+    const updated = { ...entry, tags: newTags, updatedAt: formatISO9075(new Date()) };
 
     setEntry(updated);
     await saveToLocal(updated, journalId);
@@ -217,14 +220,13 @@ export function JournalEntryEditor({
             key={tag}
             className="flex items-center gap-1 px-2 py-1 text-sm rounded bg-muted text-muted-foreground"
           >
-            <Hash className={`${textColorMap[entry.color]}`}/> {tag}
+            <Hash className={`${textColorMap[entry.color]}`} /> {tag}
             <button
               onClick={() => handleRemoveTag(tag)}
               className="hover:text-destructive focus:outline-none cursor-pointer"
               title="Remove tag"
               type="button"
-            >
-            </button>
+            ></button>
           </span>
         ))}
       </div>

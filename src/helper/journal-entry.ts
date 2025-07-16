@@ -17,7 +17,7 @@ export async function createOfflineEntry(journalId: string, color: string) {
     updatedAt: now,
     needsSync: true,
     id: newId,
-    color
+    color,
   };
 
   await db.journalEntries.put(newEntry);

@@ -14,11 +14,17 @@ import type { JournalEntry } from "@/types/journalEntry.types";
 import { parse, format } from "date-fns";
 import { ringColorMap, textColorMap } from "@/lib/journalColor";
 
-export function JournalEntryCard({entry, isActive}: {entry: JournalEntry, isActive: boolean}) {
-  const {journalId, id, color, content, entryDate} = entry;
+export function JournalEntryCard({
+  entry,
+  isActive,
+}: {
+  entry: JournalEntry;
+  isActive: boolean;
+}) {
+  const { journalId, id, color, content, entryDate } = entry;
   const formattedDate = format(
     parse(entryDate, "yyyy-MM-dd HH:mm:ss", new Date()),
-    "MMMM d, yyyy 'at' h:mm a"
+    "MMMM d, yyyy 'at' h:mm a",
   );
   const navigate = useNavigate();
 
@@ -52,9 +58,7 @@ export function JournalEntryCard({entry, isActive}: {entry: JournalEntry, isActi
             {formattedDate}
           </CardDescription>
         </div>
-        <StickyNote
-          className={`w-4 h-4 ${textColorMap[color]} opacity-80`}
-        />
+        <StickyNote className={`w-4 h-4 ${textColorMap[color]} opacity-80`} />
       </CardHeader>
 
       <CardContent

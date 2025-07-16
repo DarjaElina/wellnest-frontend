@@ -8,7 +8,7 @@ import {
   BookOpenText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getJournals } from "@/services/journal";
 import { useState } from "react";
 import {
@@ -40,6 +40,7 @@ import { showErrorToast } from "@/helper/error";
 import { NewJournalForm } from "./journal/new-journal-form";
 
 import SettingsDialog from "./settings-dialog";
+import { db } from "@/lib/db";
 
 const items = [
   { title: "All Entries", url: "journal-entries/all", icon: BookOpenText },
@@ -52,6 +53,7 @@ export function AppSidebar() {
     queryKey: ["journals"],
     queryFn: getJournals,
   });
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
   const logoutMutation = useMutation({
@@ -62,9 +64,12 @@ export function AppSidebar() {
     },
   });
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      logoutMutation.mutate();
+      await logoutMutation.mutateAsync();
+      await db.delete();
+      await db.open();
+      queryClient.clear();
     } catch (e) {
       showErrorToast(e);
     }

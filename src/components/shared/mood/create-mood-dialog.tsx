@@ -85,8 +85,12 @@ export default function CreateMoodDialog({
       queryClient.setQueryData(["todayMood"], newEntry);
       onOpenChange(false);
       markMoodPopupAsDismissed();
-      const currentSummary: MoodType[] = queryClient.getQueryData(["moodWeekSummary"]) || []
-      queryClient.setQueryData(["moodWeekSummary"], currentSummary.concat(newEntry))
+      const currentSummary: MoodType[] =
+        queryClient.getQueryData(["moodWeekSummary"]) || [];
+      queryClient.setQueryData(
+        ["moodWeekSummary"],
+        currentSummary.concat(newEntry),
+      );
     },
   });
 

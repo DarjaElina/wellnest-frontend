@@ -50,7 +50,7 @@ import { bgColorMap, textColorMap } from "@/lib/journalColor";
 
 export default function JournalView() {
   const { journal } = useOutletContext<{ journal: Journal }>();
- 
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -86,7 +86,6 @@ export default function JournalView() {
     updateMutation.mutate(data);
   };
 
- 
   const handleDelete = () => {
     toast("Are you sure you want to delete?", {
       action: {
@@ -147,9 +146,7 @@ export default function JournalView() {
 
       <div className="space-y-3 bg-card border border-border rounded-xl shadow-sm p-6">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CalendarDays
-            className={`w-4 h-4 ${textColorMap[journal.color]}`}
-          />
+          <CalendarDays className={`w-4 h-4 ${textColorMap[journal.color]}`} />
           <span>
             Last updated:{" "}
             <span className="font-medium">
@@ -159,9 +156,7 @@ export default function JournalView() {
         </div>
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <ListOrdered
-            className={`w-4 h-4 ${textColorMap[journal.color]}`}
-          />
+          <ListOrdered className={`w-4 h-4 ${textColorMap[journal.color]}`} />
           <span>
             Total entries:{" "}
             <span className="font-medium">

@@ -1,17 +1,17 @@
-import { AlertTriangle, Home } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+import { AlertTriangle, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface ResourceNotFoundProps {
-  label?: string
-  message?: string
+  label?: string;
+  message?: string;
 }
 
 export function ResourceNotFound({
   label = "Resource not found",
   message = "This item might have been deleted or doesn’t exist.",
 }: ResourceNotFoundProps) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col items-center justify-center text-center h-full py-24 px-6">
@@ -23,5 +23,5 @@ export function ResourceNotFound({
         Back to Dashboard
       </Button>
     </div>
-  )
+  );
 }

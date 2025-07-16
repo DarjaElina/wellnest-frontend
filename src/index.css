@@ -46,7 +46,7 @@
   --color-brand-primary: hsl(var(--brand-primary));
   --color-brand-secondary: hsl(var(--brand-secondary));
   --color-brand-accent: hsl(var(--brand-accent));
-  
+
   --color-journal-moss: hsl(var(--journal-moss));
   --color-journal-clay: hsl(var(--journal-clay));
   --color-journal-sky: hsl(var(--journal-sky));
@@ -120,10 +120,10 @@
     --input: 220 20% 94%;
     --ring: 260 70% 60%;
 
-    --chart-1: 280 30% 65%; 
+    --chart-1: 280 30% 65%;
     --chart-2: 40 90% 60%;
     --chart-3: 200 70% 50%;
-    --chart-4: 160 60% 50%; 
+    --chart-4: 160 60% 50%;
     --chart-5: 320 70% 60%;
 
     --brand-primary: 180 80% 40%;
@@ -168,7 +168,7 @@
     --input: 240 6% 24%;
     --ring: 260 70% 70%;
 
-    --chart-1: 280 30% 50%;  
+    --chart-1: 280 30% 50%;
     --chart-2: 50 90% 60%;
     --chart-3: 220 60% 60%;
     --chart-4: 160 60% 45%;

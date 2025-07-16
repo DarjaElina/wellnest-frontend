@@ -16,6 +16,7 @@ export async function login({ username, password }: LoginInput) {
 
 export async function getAuthUser() {
   const response = await api.get("/user/me");
+  console.log("ME IS", response);
   return response.data;
 }
 
