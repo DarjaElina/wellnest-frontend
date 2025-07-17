@@ -19,7 +19,9 @@ import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 
 export default function SettingsDialog() {
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<"general" | "appearance" | "mood" | "affirmation">("general");
+  const [tab, setTab] = useState<
+    "general" | "appearance" | "mood" | "affirmation"
+  >("general");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -59,7 +61,7 @@ export default function SettingsDialog() {
               isActive={tab === "mood"}
               onClick={() => setTab("mood")}
             />
-             <SidebarTabButton
+            <SidebarTabButton
               label="Affirmation"
               isActive={tab === "affirmation"}
               onClick={() => setTab("affirmation")}

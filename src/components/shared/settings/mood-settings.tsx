@@ -12,8 +12,9 @@ import {
 import { useSettings } from "@/context/settingsContext";
 import { Label } from "@/components/ui/label";
 
-const TIME_OPTIONS = Array.from({ length: 24 }, (_, i) =>
-  `${String(i).padStart(2, "0")}:00`
+const TIME_OPTIONS = Array.from(
+  { length: 24 },
+  (_, i) => `${String(i).padStart(2, "0")}:00`,
 );
 
 export default function MoodSettings() {
@@ -43,7 +44,7 @@ export default function MoodSettings() {
           value={settings.moodSet}
           onValueChange={(val: MoodSetName) => updateSetting("moodSet", val)}
         >
-         <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Select emoji set">
               {selectedSet ? (
                 <span className="inline-flex items-center gap-2">
@@ -79,25 +80,25 @@ export default function MoodSettings() {
 
       <div className="space-y-1">
         <div className="flex flex-col gap-3">
-        <Label className="text-base font-medium block" htmlFor="time-picker">
-          Mood Check-in Time
-        </Label>
-        <Select
-          value={settings.checkinTime}
-          onValueChange={(val) => updateSetting("checkinTime", val)}
-        >
-          <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Select time" />
-          </SelectTrigger>
-          <SelectContent>
-            {TIME_OPTIONS.map((time) => (
-              <SelectItem key={time} value={time}>
-                {time}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+          <Label className="text-base font-medium block" htmlFor="time-picker">
+            Mood Check-in Time
+          </Label>
+          <Select
+            value={settings.checkinTime}
+            onValueChange={(val) => updateSetting("checkinTime", val)}
+          >
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Select time" />
+            </SelectTrigger>
+            <SelectContent>
+              {TIME_OPTIONS.map((time) => (
+                <SelectItem key={time} value={time}>
+                  {time}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </div>
   );

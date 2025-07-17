@@ -35,9 +35,9 @@ export function TagsSearch() {
     const entries = await db.journalEntries.toArray();
     const tagSet = new Set<string>();
 
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       if (Array.isArray(entry.tags)) {
-        entry.tags.forEach(tag => tagSet.add(tag));
+        entry.tags.forEach((tag) => tagSet.add(tag));
       }
     });
 
@@ -49,14 +49,14 @@ export function TagsSearch() {
     if (!searchTerm.trim()) return allTags;
 
     const lower = searchTerm.trim().toLowerCase();
-    return allTags.filter(tag => tag.toLowerCase().includes(lower));
+    return allTags.filter((tag) => tag.toLowerCase().includes(lower));
   }, [allTags, searchTerm]);
 
   const handleTagToggle = (checked: boolean, tag: string) => {
     const updatedTags = checked
       ? [...selectedTags, tag]
       : selectedTags.filter((t) => t !== tag);
-  
+
     dispatch({ type: "SET_TAGS", payload: updatedTags });
   };
 
@@ -79,7 +79,9 @@ export function TagsSearch() {
                 <Checkbox
                   id={tag}
                   checked={selectedTags.includes(tag)}
-                  onCheckedChange={(checked: boolean) => handleTagToggle(checked, tag)}
+                  onCheckedChange={(checked: boolean) =>
+                    handleTagToggle(checked, tag)
+                  }
                 />
                 <Label htmlFor={tag} className="text-sm">
                   {tag}
@@ -94,4 +96,3 @@ export function TagsSearch() {
     </div>
   );
 }
-

@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import MoodCalendarContainer from "@/components/shared/mood/mood-calendar/mood-calendar-container";
 
 export default function MoodTrackerPage() {
   return (
@@ -17,12 +18,14 @@ export default function MoodTrackerPage() {
 
       <Card className="bg-card border-muted shadow-sm">
         <CardHeader>
-          <CardTitle>📅 Mood Calendar</CardTitle>
-          <CardDescription>
+          <CardTitle className="sr-only">Mood Calendar</CardTitle>
+          <CardDescription className="sr-only">
             Visualize your moods across the month
           </CardDescription>
         </CardHeader>
-        <CardContent>{/* <MoodCalendar /> */}</CardContent>
+        <CardContent>
+          <MoodCalendarContainer />
+        </CardContent>
       </Card>
     </div>
   );

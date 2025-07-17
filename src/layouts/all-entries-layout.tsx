@@ -52,7 +52,6 @@ export default function AllEntriesLayout() {
         (a, b) =>
           new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
       );
-
     } else {
       result = result.sort(
         (a, b) =>
