@@ -16,13 +16,9 @@ export function RecentSummary() {
         ? current
         : latest;
     });
-  }, []);
+  }, []) ?? {content: ""};
 
-  if (!latestEntry) {
-    return null;
-  }
-
-  const sanitizedHTML = DOMPurify.sanitize(latestEntry.content);
+  const sanitizedHTML = DOMPurify.sanitize(latestEntry?.content) || "";
   const { parsedHeading, parsedParagraph } =
     getJournalPreviewTitle(sanitizedHTML);
 

@@ -22,6 +22,7 @@ import {
 import type { MoodType } from "@/types/mood.types";
 import { getDynamicMessage } from "@/helper/mood";
 import { showErrorToast } from "@/helper/error";
+import { useSettings } from "@/context/settingsContext";
 
 type MoodDialogMode = "manual-checkin" | "auto-checkin";
 
@@ -40,6 +41,7 @@ export default function CreateMoodDialog({
 }: MoodDialogProps) {
   const queryClient = useQueryClient();
   const isAuto = mode === "auto-checkin";
+  const {settings} = useSettings();
 
   const [step, setStep] = useState<1 | 2>(1);
 
@@ -67,10 +69,30 @@ export default function CreateMoodDialog({
   }, [open, initialMoodEntry]);
 
   useEffect(() => {
-    if (isAuto && !initialMoodEntry && !hasDismissedMoodPopupToday()) {
+    const now = new Date();
+    const [hours, minutes] = settings.checkinTime.split(":").map(Number);
+    const targetTime = new Date();
+    targetTime.setHours(hours, minutes, 0, 0);
+  
+    const isAfterTargetTime = now >= targetTime;
+
+    console.log("isAfterTargetTime", isAfterTargetTime)
+
+    console.log("is auto", isAuto)
+
+    console.log("initial mood entry: ", initialMoodEntry)
+
+    console.log("dissmised for today", hasDismissedMoodPopupToday())
+  
+    if (
+      isAuto &&
+      !initialMoodEntry &&
+      isAfterTargetTime &&
+      !hasDismissedMoodPopupToday()
+    ) {
       onOpenChange(true);
     }
-  }, [isAuto, initialMoodEntry, onOpenChange]);
+  }, [isAuto, initialMoodEntry, onOpenChange, settings.checkinTime]);
 
   const handleOpenChange = (isOpen: boolean) => {
     onOpenChange(isOpen);
