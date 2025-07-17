@@ -6,7 +6,8 @@ export const DEFAULT_SETTINGS: UserSettings = {
   showMoodPopup: false,
   moodSet: "Default",
   wallpaperUrl: "/assets/bg/home-bg-nature.avif",
-  checkinTime: "10:00"
+  checkinTime: "10:00",
+  affirmationSet: "Calm"
 };
 
 export async function getSettings(): Promise<UserSettings> {

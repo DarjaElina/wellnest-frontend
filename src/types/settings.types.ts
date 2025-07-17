@@ -4,4 +4,5 @@ export type UserSettings = {
   moodSet: "Default";
   wallpaperUrl: string;
   checkinTime: string;
+  affirmationSet: "Confidence" | "Calm" | "Self-love"
 };
