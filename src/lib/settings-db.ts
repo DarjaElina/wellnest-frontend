@@ -4,8 +4,9 @@ import type { UserSettings } from "@/types/settings.types";
 export const DEFAULT_SETTINGS: UserSettings = {
   key: "user",
   showMoodPopup: false,
-  moodSet: "simple",
+  moodSet: "Default",
   wallpaperUrl: "/assets/bg/home-bg-nature.avif",
+  checkinTime: "10:00"
 };
 
 export async function getSettings(): Promise<UserSettings> {
