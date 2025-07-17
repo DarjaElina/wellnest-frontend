@@ -16,9 +16,9 @@ export function RecentSummary() {
         ? current
         : latest;
     });
-  }, []) ?? { content: "" };
+  }, []);
 
-  const sanitizedHTML = DOMPurify.sanitize(latestEntry?.content) || "";
+  const sanitizedHTML = latestEntry && latestEntry.content ? DOMPurify.sanitize(latestEntry?.content) : "";
   const { parsedHeading, parsedParagraph } =
     getJournalPreviewTitle(sanitizedHTML);
 
@@ -37,7 +37,7 @@ export function RecentSummary() {
           </CardHeader>
 
           <CardContent className="pt-0 space-y-3">
-            {latestEntry ? (
+            {latestEntry && latestEntry.journalId ? (
               <>
                 <h3 className="text-base line-clamp-2">
                   {parsedHeading && parsedHeading}
