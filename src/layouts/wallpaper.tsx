@@ -11,7 +11,7 @@ export default function PageWallpaperWrapper() {
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="bg-white/10 dark:bg-background/40 min-h-screen">
-        <SidebarTrigger className="cursor-pointer m-2" />
+       
         <div className="px-6 py-6 max-w-5xl mx-auto space-y-6">
           <Outlet />
         </div>

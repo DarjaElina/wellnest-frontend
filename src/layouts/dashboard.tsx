@@ -1,4 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/shared/app-sidebar.tsx";
 import { useSettings } from "@/context/settingsContext";
 import MoodDialog from "@/components/shared/mood/create-mood-dialog";
@@ -18,9 +18,11 @@ export default function Dashboard() {
     <SidebarProvider>
       <div className="min-h-screen w-full flex">
         <AppSidebar />
-
+      
         <main className="flex-1 overflow-y-auto">
+        <SidebarTrigger className="cursor-pointer m-2 fixed" />
           <Outlet />
+          
           {settings.showMoodPopup && !data && (
             <MoodDialog
               open={dialogOpen}

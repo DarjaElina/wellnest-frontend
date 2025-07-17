@@ -74,7 +74,7 @@ export default function AllEntriesLayout() {
     <div className="flex w-full h-screen overflow-hidden">
       <aside className="w-96 border-r border-border flex flex-col bg-background">
         <div
-          className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 bg-brand-secondary`}
+          className={`cursor-pointer px-4 py-4 border-b border-border flex items-center justify-center gap-3 bg-brand-secondary`}
         >
           <SquarePen className="text-neutral-100" />
           <h2 className="text-lg font-semibold text-neutral-100 truncate">

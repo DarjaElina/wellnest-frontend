@@ -110,7 +110,7 @@ export default function JournalEntryLayout() {
       <aside className="w-96 border-r border-border flex flex-col bg-background">
         <div
           onClick={navigateToJournalView}
-          className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[journal.color]}`}
+          className={`cursor-pointer px-4 py-4 border-b border-border flex items-center justify-center gap-3 ${bgColorMap[journal.color]}`}
         >
           <SquarePen className="text-neutral-100" />
           <h2 className="text-lg font-semibold text-neutral-100 truncate">
