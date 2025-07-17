@@ -13,6 +13,19 @@ import CreateMoodDialog from "@/components/shared/mood/create-mood-dialog";
 import { useAuthQuery } from "@/hooks/useAuthQuery";
 import { useQuery } from "@tanstack/react-query";
 import { getTodayMoodEntry } from "@/services/moodEntry";
+import { Sparkles } from "lucide-react";
+
+const affirmationSets = {
+  calm: ["You are safe and held.", "You are grounded in the present moment."],
+  confident: ["You are enough.", "You can handle anything that comes your way."],
+  joy: ["Joy flows through you.", "You radiate positivity."],
+};
+
+function getAffirmationOfTheDay() {
+  const all = Object.values(affirmationSets).flat();
+  const index = new Date().getDate() % all.length;
+  return all[index];
+}
 
 export default function HomePage() {
   const { data, isLoading, isError } = useQuery({
@@ -21,6 +34,8 @@ export default function HomePage() {
   });
 
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const affirmation = getAffirmationOfTheDay();
 
   const { data: user } = useAuthQuery();
 
@@ -33,6 +48,25 @@ export default function HomePage() {
             : "Welcome back!"}
         </h1>
       </div>
+
+      <Card className="bg-background/90">
+        <CardHeader className="flex flex-row items-center gap-3">
+          <Sparkles className="w-5 h-5 text-purple-600" />
+          <div>
+            <CardTitle className="text-base font-medium">
+              Affirmation of the Day
+            </CardTitle>
+            <CardDescription className="text-sm text-muted-foreground">
+              A gentle reminder just for you
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <p className="text-base italic text-muted-foreground">
+            “{affirmation}”
+          </p>
+        </CardContent>
+      </Card>
 
       <Card className="bg-background/90">
         <CardHeader>

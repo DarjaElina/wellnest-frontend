@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LogOut, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 export default function GeneralSettings() {
   return (

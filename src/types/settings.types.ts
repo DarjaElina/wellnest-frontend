@@ -1,6 +1,7 @@
 export type UserSettings = {
   key: string;
   showMoodPopup: boolean;
-  moodSet: "simple" | "extended";
+  moodSet: "Default";
   wallpaperUrl: string;
+  checkinTime: string;
 };
