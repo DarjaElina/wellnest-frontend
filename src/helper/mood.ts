@@ -19,7 +19,7 @@ export const getDynamicMessage = (label: string) => {
     case "grateful":
       return "That’s beautiful.";
     case "calm":
-      return "Lovely.";
+      return "That sounds peaceful.";
     case "okay":
       return "Sometimes okay is just right.";
     case "stressed":
