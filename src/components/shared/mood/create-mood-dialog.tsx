@@ -75,14 +75,6 @@ export default function CreateMoodDialog({
     targetTime.setHours(hours, minutes, 0, 0);
   
     const isAfterTargetTime = now >= targetTime;
-
-    console.log("isAfterTargetTime", isAfterTargetTime)
-
-    console.log("is auto", isAuto)
-
-    console.log("initial mood entry: ", initialMoodEntry)
-
-    console.log("dissmised for today", hasDismissedMoodPopupToday())
   
     if (
       isAuto &&

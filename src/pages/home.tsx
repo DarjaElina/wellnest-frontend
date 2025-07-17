@@ -14,30 +14,25 @@ import { useAuthQuery } from "@/hooks/useAuthQuery";
 import { useQuery } from "@tanstack/react-query";
 import { getTodayMoodEntry } from "@/services/moodEntry";
 import { Sparkles } from "lucide-react";
-
-const affirmationSets = {
-  calm: ["You are safe and held.", "You are grounded in the present moment."],
-  confident: ["You are enough.", "You can handle anything that comes your way."],
-  joy: ["Joy flows through you.", "You radiate positivity."],
-};
-
-function getAffirmationOfTheDay() {
-  const all = Object.values(affirmationSets).flat();
-  const index = new Date().getDate() % all.length;
-  return all[index];
-}
+import { useSettings } from "@/context/settingsContext";
+import { getAffirmationOfTheDay } from "@/services/affirmation";
 
 export default function HomePage() {
-  const { data, isLoading, isError } = useQuery({
+  const { data: user } = useAuthQuery();
+
+  const { data, isLoading: moodLoading, isError: moodError } = useQuery({
     queryKey: ["todayMood"],
     queryFn: getTodayMoodEntry,
   });
 
+  const { settings } = useSettings();
+
+  const { data: affirmationOfTheDay, isLoading: affLoading, isError: affError } = useQuery({
+    queryKey: ["affirmationOfTheDay", settings.affirmationSet],
+    queryFn: () => getAffirmationOfTheDay({category: settings.affirmationSet}),
+  });
+
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const affirmation = getAffirmationOfTheDay();
-
-  const { data: user } = useAuthQuery();
 
   return (
     <div className="px-6 py-10 max-w-5xl mx-auto space-y-6">
@@ -62,9 +57,20 @@ export default function HomePage() {
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-base italic text-muted-foreground">
-            “{affirmation}”
-          </p>
+        {affLoading && (
+            <p className="text-muted-foreground text-sm">
+              Loading affirmation of the day...
+            </p>
+          )}
+
+          {affError && (
+            <p className="text-destructive text-sm">
+              Failed to load affirmation.
+            </p>
+          )}
+         { affirmationOfTheDay && <p className="text-base italic text-muted-foreground">
+           “{affirmationOfTheDay?.content}”
+          </p>}
         </CardContent>
       </Card>
 
@@ -75,13 +81,13 @@ export default function HomePage() {
         </CardHeader>
 
         <CardContent className="space-y-3">
-          {isLoading && (
+          {moodLoading && (
             <p className="text-muted-foreground text-sm">
               Loading today’s mood…
             </p>
           )}
 
-          {isError && (
+          {moodError && (
             <p className="text-destructive text-sm">
               Failed to load mood entry.
             </p>

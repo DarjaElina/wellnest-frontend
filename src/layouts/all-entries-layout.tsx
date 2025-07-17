@@ -30,8 +30,6 @@ export default function AllEntriesLayout() {
 
   const allEntries = useLiveQuery(() => db.journalEntries.toArray(), []);
 
-  console.log(state)
-
   const filteredEntries = useMemo(() => {
     if (!allEntries) return [];
 

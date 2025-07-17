@@ -1,4 +1,4 @@
-import { moodSets } from "@/types/mood.types";
+import { moodSets, type MoodSetName } from "@/types/mood.types";
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
@@ -41,7 +41,7 @@ export default function MoodSettings() {
         </p>
         <Select
           value={settings.moodSet}
-          onValueChange={(val) => updateSetting("moodSet", val)}
+          onValueChange={(val: MoodSetName) => updateSetting("moodSet", val)}
         >
          <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Select emoji set">

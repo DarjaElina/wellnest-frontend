@@ -13,12 +13,13 @@ import GeneralSettings from "./settings/general-settings";
 import MoodSettings from "./settings/mood-settings";
 import SidebarTabButton from "./settings/sidebar-tab-button";
 import AppearanceSettings from "./settings/appearance-settings";
+import AffirmationSettings from "./settings/affirmation-settings";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 
 export default function SettingsDialog() {
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<"general" | "appearance" | "mood">("general");
+  const [tab, setTab] = useState<"general" | "appearance" | "mood" | "affirmation">("general");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -58,12 +59,18 @@ export default function SettingsDialog() {
               isActive={tab === "mood"}
               onClick={() => setTab("mood")}
             />
+             <SidebarTabButton
+              label="Affirmation"
+              isActive={tab === "affirmation"}
+              onClick={() => setTab("affirmation")}
+            />
           </aside>
 
           <main className="flex-1 p-6 overflow-y-auto">
             {tab === "general" && <GeneralSettings />}
             {tab === "appearance" && <AppearanceSettings />}
             {tab === "mood" && <MoodSettings />}
+            {tab === "affirmation" && <AffirmationSettings />}
           </main>
         </div>
       </DialogContent>
