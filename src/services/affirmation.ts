@@ -10,7 +10,7 @@ export async function getAffirmationOfTheDay(params?: {
   category?: AffirmationCategory;
 }) {
   const response = await api.get("/affirmations/affirmation-of-the-day", {
-    params
-  })
+    params,
+  });
   return response.data;
 }

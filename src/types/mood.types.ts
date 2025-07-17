@@ -6,7 +6,7 @@ export type MoodType = {
   note?: string;
 };
 
-export type MoodSetName = "Default"
+export type MoodSetName = "Default";
 
 export type MoodSet = {
   name: string;

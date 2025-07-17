@@ -16,7 +16,7 @@ export function RecentSummary() {
         ? current
         : latest;
     });
-  }, []) ?? {content: ""};
+  }, []) ?? { content: "" };
 
   const sanitizedHTML = DOMPurify.sanitize(latestEntry?.content) || "";
   const { parsedHeading, parsedParagraph } =
@@ -66,4 +66,3 @@ export function RecentSummary() {
     </section>
   );
 }
-

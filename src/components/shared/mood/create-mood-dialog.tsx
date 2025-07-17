@@ -41,7 +41,7 @@ export default function CreateMoodDialog({
 }: MoodDialogProps) {
   const queryClient = useQueryClient();
   const isAuto = mode === "auto-checkin";
-  const {settings} = useSettings();
+  const { settings } = useSettings();
 
   const [step, setStep] = useState<1 | 2>(1);
 
@@ -73,9 +73,9 @@ export default function CreateMoodDialog({
     const [hours, minutes] = settings.checkinTime.split(":").map(Number);
     const targetTime = new Date();
     targetTime.setHours(hours, minutes, 0, 0);
-  
+
     const isAfterTargetTime = now >= targetTime;
-  
+
     if (
       isAuto &&
       !initialMoodEntry &&

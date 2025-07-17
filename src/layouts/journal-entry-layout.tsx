@@ -16,7 +16,7 @@ import { useFilter } from "@/context/filterContext";
 export default function JournalEntryLayout() {
   const { journalId } = useParams();
   const navigate = useNavigate();
-    const { state } = useFilter();
+  const { state } = useFilter();
 
   const {
     data: journal,
@@ -76,7 +76,6 @@ export default function JournalEntryLayout() {
         (a, b) =>
           new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
       );
-
     } else {
       result = result.sort(
         (a, b) =>
@@ -91,7 +90,7 @@ export default function JournalEntryLayout() {
   const handleNewEntry = async () => {
     if (journalId && journal) {
       const offlineEntry = await createOfflineEntry(journalId, journal.color);
-      console.log("offline entry is", offlineEntry)
+      console.log("offline entry is", offlineEntry);
       createEntryMutation.mutate(offlineEntry);
     }
   };
@@ -119,9 +118,7 @@ export default function JournalEntryLayout() {
           </h2>
         </div>
 
-        <EntriesSidebar
-          entries={filteredEntries}
-        />
+        <EntriesSidebar entries={filteredEntries} />
       </aside>
 
       <main className="flex-1 flex flex-col bg-background">

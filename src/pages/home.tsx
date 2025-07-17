@@ -20,16 +20,25 @@ import { getAffirmationOfTheDay } from "@/services/affirmation";
 export default function HomePage() {
   const { data: user } = useAuthQuery();
 
-  const { data, isLoading: moodLoading, isError: moodError } = useQuery({
+  const {
+    data,
+    isLoading: moodLoading,
+    isError: moodError,
+  } = useQuery({
     queryKey: ["todayMood"],
     queryFn: getTodayMoodEntry,
   });
 
   const { settings } = useSettings();
 
-  const { data: affirmationOfTheDay, isLoading: affLoading, isError: affError } = useQuery({
+  const {
+    data: affirmationOfTheDay,
+    isLoading: affLoading,
+    isError: affError,
+  } = useQuery({
     queryKey: ["affirmationOfTheDay", settings.affirmationSet],
-    queryFn: () => getAffirmationOfTheDay({category: settings.affirmationSet}),
+    queryFn: () =>
+      getAffirmationOfTheDay({ category: settings.affirmationSet }),
   });
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -57,7 +66,7 @@ export default function HomePage() {
           </div>
         </CardHeader>
         <CardContent>
-        {affLoading && (
+          {affLoading && (
             <p className="text-muted-foreground text-sm">
               Loading affirmation of the day...
             </p>
@@ -68,9 +77,11 @@ export default function HomePage() {
               Failed to load affirmation.
             </p>
           )}
-         { affirmationOfTheDay && <p className="text-base italic text-muted-foreground">
-           “{affirmationOfTheDay?.content}”
-          </p>}
+          {affirmationOfTheDay && (
+            <p className="text-base italic text-muted-foreground">
+              “{affirmationOfTheDay?.content}”
+            </p>
+          )}
         </CardContent>
       </Card>
 

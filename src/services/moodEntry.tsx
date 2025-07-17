@@ -1,8 +1,10 @@
 import api from "./index";
 import type { MoodType } from "@/types/mood.types";
 
-export async function getMoodEntries() {
-  const response = await api.get("/mood-entries");
+export async function getMoodEntries(startDate: Date, endDate: Date) {
+  const response = await api.get("/mood-entries", {
+    params: { startDate, endDate },
+  });
   return response.data;
 }
 export async function createMoodEntry(newEntry: MoodType) {
@@ -25,6 +27,6 @@ export async function getTodayMoodEntry() {
 }
 
 export async function getWeekSummary() {
-  const response = await api.get("/mood-entries/week-summary");
+  const response = await api.get("/mood-entries");
   return response.data;
 }

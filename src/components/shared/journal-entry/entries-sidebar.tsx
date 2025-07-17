@@ -80,8 +80,8 @@ export function EntriesSidebar({ entries }: Props) {
 
           <RadioGroup
             defaultValue="desc"
-            onValueChange={(value: 'asc' | 'desc') => {
-              dispatch({ type: "SET_SORT", payload: value});
+            onValueChange={(value: "asc" | "desc") => {
+              dispatch({ type: "SET_SORT", payload: value });
             }}
           >
             <div className="flex items-center gap-3">
