@@ -18,11 +18,10 @@ export default function Dashboard() {
     <SidebarProvider>
       <div className="min-h-screen w-full flex">
         <AppSidebar />
-      
+
         <main className="flex-1 overflow-y-auto">
-        <SidebarTrigger className="cursor-pointer m-2 fixed" />
           <Outlet />
-          
+
           {settings.showMoodPopup && !data && (
             <MoodDialog
               open={dialogOpen}

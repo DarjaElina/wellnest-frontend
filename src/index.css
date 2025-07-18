@@ -102,7 +102,7 @@
     --radius: 0.6rem;
 
     --background: 240 60% 99%;
-    --foreground: 220 20% 20%;
+    --foreground: 220 25% 15%;
 
     --card: 0 0% 100%;
     --card-foreground: 220 20% 20%;
@@ -116,17 +116,17 @@
     --secondary: 220 40% 96%;
     --secondary-foreground: 220 30% 20%;
 
-    --muted: 210 40% 96%;
+    --muted: 240 5% 92%;
     --muted-foreground: 220 15% 45%;
 
-    --accent: 290 40% 92%;
+    --accent: 290 30% 90%;
     --accent-foreground: 270 50% 30%;
 
     --destructive: 0 72% 58%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 220 20% 88%;
-    --input: 220 20% 94%;
+    --input: 220 10% 90%;
     --ring: 260 70% 60%;
 
     --chart-1: 280 30% 65%;

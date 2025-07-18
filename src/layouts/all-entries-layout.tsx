@@ -71,32 +71,31 @@ export default function AllEntriesLayout() {
   };
 
   return (
-    <div className="flex w-full h-screen overflow-hidden">
-      <aside className="w-96 border-r border-border flex flex-col bg-background">
-        <div
-          className={`cursor-pointer px-4 py-4 border-b border-border flex items-center justify-center gap-3 bg-brand-secondary`}
-        >
-          <SquarePen className="text-neutral-100" />
-          <h2 className="text-lg font-semibold text-neutral-100 truncate">
-            All Entries
-          </h2>
+    <div className="flex w-full h-screen overflow-hidden flex-col md:flex-row">
+      <aside
+        className={`md:w-full lg:w-96 flex-shrink-0 border-r border-border flex-col bg-background hidden xl:flex`}
+      >
+        <div className="px-4 py-4 border-b border-border flex items-center justify-end bg-brand-secondary">
+          <div className="flex items-center gap-3 text-neutral-100">
+            <SquarePen />
+            <h2 className="text-lg font-semibold truncate">All Entries</h2>
+          </div>
         </div>
         <EntriesSidebar entries={filteredEntries} />
       </aside>
 
-      <main className="flex-1 flex flex-col bg-background">
-        <div className="px-6 py-3 border-b border-border flex items-center justify-end bg-card">
-          <CreateEntryDialog
-            open={openDialog}
-            onOpenChange={setOpenDialog}
-            journals={journals ?? []}
-            isLoading={isLoading}
-            isError={isError}
-            onCreate={handleNewEntry}
-          />
-        </div>
-
+      <main className="flex-1 flex-col bg-background flex">
         <div className="flex-1 overflow-y-auto p-6 bg-background">
+          <div className="fixed lg:top-6 bottom-6 right-6 z-50">
+            <CreateEntryDialog
+              open={openDialog}
+              onOpenChange={setOpenDialog}
+              journals={journals ?? []}
+              isLoading={isLoading}
+              isError={isError}
+              onCreate={handleNewEntry}
+            />
+          </div>
           <Outlet />
           <EmptyState />
         </div>
