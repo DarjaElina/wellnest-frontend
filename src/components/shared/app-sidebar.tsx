@@ -48,7 +48,7 @@ const items = [
   { title: "Home", url: "", icon: Home },
   { title: "All Entries", url: "journal-entries/all", icon: BookOpenText },
   { title: "Mood Tracker", url: "mood", icon: SmilePlus },
-  { title: "My Calm Places", url: "places", icon: MapPin },
+  { title: "My Places", url: "places", icon: MapPin },
 ];
 
 export function AppSidebar() {

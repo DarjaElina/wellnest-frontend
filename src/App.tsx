@@ -19,7 +19,7 @@ const AuthLayout = lazy(() => import("@/layouts/auth"));
 const PrivateRoutes = lazy(() => import("@/components/shared/private-routes"));
 const NotFoundPage = lazy(() => import("@/pages/not-found"));
 const AllEntriesLayout = lazy(() => import("@/layouts/all-entries-layout"));
-const CalmPlacesPage = lazy(() => import("@/pages/calm-places"));
+const PlacesPage = lazy(() => import("@/pages/places"));
 
 export default function App() {
   return (
@@ -51,7 +51,7 @@ export default function App() {
             </Route>
             <Route path="journal-entries/all" element={<AllEntriesLayout />} />
 
-            <Route path="places" element={<CalmPlacesPage />} />
+            <Route path="places" element={<PlacesPage />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFoundPage />} />

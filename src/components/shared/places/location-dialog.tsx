@@ -11,25 +11,32 @@ import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { PlaceSchema } from "@/types/places.types";
+import { placeSchema, type Place, type PlaceInput } from "@/types/places.types";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import type z from "zod";
 
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { X } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { createPlace } from "@/services/places";
+import { showErrorToast } from "@/helper/error";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LocationDialogProps {
   dialogOpen: boolean;
   setDialogOpen: (open: boolean) => void;
   onCancel: () => void;
-  onSave: (data: { title: string; note: string; imagePreview?: string }) => void;
+  lat: number;
+  lng: number;
 }
 
-export default function LocationDialog({ dialogOpen, setDialogOpen, onSave, onCancel }: LocationDialogProps) {
+export default function LocationDialog({ dialogOpen, setDialogOpen, onCancel, lat, lng }: LocationDialogProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  const queryClient = useQueryClient();
+
   const form = useForm({
-    resolver: zodResolver(PlaceSchema),
+    resolver: zodResolver(placeSchema),
     defaultValues: {
       title: "",
       note: "",
@@ -50,10 +57,38 @@ export default function LocationDialog({ dialogOpen, setDialogOpen, onSave, onCa
     }
   }, [imageFile]);
 
-  const submitHandler = (data: z.infer<typeof PlaceSchema>) => {
-    onSave({ ...data, imagePreview: imagePreview ?? undefined });
-    form.reset();
+  const placeMutation = useMutation({
+    mutationFn: createPlace,
+    onSuccess: (newPlace: Place) => {
+      toast("Place saved successfully!");
+      const places: Place[] = queryClient.getQueryData(["places"]) ?? [];
+      queryClient.setQueryData(["places"], places.concat(newPlace));
+      form.reset();
+      setDialogOpen(false);
+
+    },
+    onError: (e) => {
+      showErrorToast(e);
+    }
+  })
+
+  const submitHandler = async (data: PlaceInput) => {
+    const formData = new FormData();
+  
+    formData.append("title", data.title);
+    formData.append("note", data.note || "");
+  
+    const file = data.image?.[0];
+    if (file) {
+      formData.append("image", file);
+    }
+  
+    formData.append("lat", lat.toString());
+    formData.append("lng", lng.toString());
+  
+    await placeMutation.mutateAsync(formData);
   };
+  
 
   const handleCancel = () => {
     form.reset();
@@ -158,10 +193,10 @@ export default function LocationDialog({ dialogOpen, setDialogOpen, onSave, onCa
           )}
 
             <DialogFooter className="flex justify-end gap-2 mt-4">
-              <Button variant="ghost" type="button" onClick={handleCancel}>
+              <Button className="cursor-pointer" variant="ghost" type="button" onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button type="submit">Save</Button>
+              <Button className="cursor-pointer" type="submit">Save</Button>
             </DialogFooter>
           </form>
         </Form>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PlaceSchema = z.object({
+export const placeSchema = z.object({
   title: z.string().min(1, "Title is required"),
   note: z.string().optional(),
   image: z
@@ -18,3 +18,11 @@ export const PlaceSchema = z.object({
     )
     .optional(),
 });
+
+export type PlaceInput = z.infer<typeof placeSchema>;
+export type Place = z.infer<typeof placeSchema> & {
+  lat: number;
+  lng: number;
+  id?: string;
+  imageUrl?: string;
+}
