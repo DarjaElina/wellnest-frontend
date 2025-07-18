@@ -17,9 +17,7 @@ import { TagsSearch } from "../tags/tags-search";
 import { useFilter } from "@/context/filterContext";
 import debounce from "lodash.debounce";
 import { cn } from "@/lib/utils";
-import {
-  bgColorMap,
-  hoverColorMap} from '@/lib/journalColor'
+import { bgColorMap, hoverColorMap } from "@/lib/journalColor";
 
 type Props = {
   entries: JournalEntry[];
@@ -61,7 +59,7 @@ export function EntriesSidebar({ entries, color }: Props) {
   return (
     <div className="overflow-y-auto px-4 py-2 flex-1">
       <div className="flex md:w-full items-center gap-1 mb-3">
-       <Input
+        <Input
           placeholder="Search entries..."
           value={inputValue}
           onChange={handleSearchChange}
@@ -70,7 +68,7 @@ export function EntriesSidebar({ entries, color }: Props) {
           className={cn(
             "cursor-pointer",
             color && hoverColor,
-            "transition-colors"
+            "transition-colors",
           )}
           size="icon"
           variant="ghost"
@@ -82,8 +80,7 @@ export function EntriesSidebar({ entries, color }: Props) {
       </div>
 
       <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
-        <DialogContent
-        >
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Filter entries</DialogTitle>
             <DialogDescription>
@@ -112,7 +109,7 @@ export function EntriesSidebar({ entries, color }: Props) {
             className={cn(
               "cursor-pointer",
               color && bgColorMap[color],
-              color && "text-white hover:opacity-90"
+              color && "text-white hover:opacity-90",
             )}
             onClick={handleClearFilter}
           >

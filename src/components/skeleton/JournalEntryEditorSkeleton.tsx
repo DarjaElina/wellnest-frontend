@@ -4,7 +4,6 @@ export function JournalEntryEditorSkeleton() {
     <div className="p-6 max-w-full lg:max-w-3xl xl:max-w-5xl mx-auto bg-card rounded-xl shadow space-y-4">
       <div className="flex justify-between items-center">
         <Skeleton className="h-10 w-40" />
-        
       </div>
       <Skeleton className="h-10 w-full" />
       <Skeleton className="h-[55vh] w-full rounded-xl" />

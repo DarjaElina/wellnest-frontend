@@ -45,7 +45,11 @@ import {
 } from "@/components/ui/form";
 import ColorPicker from "@/components/shared/color-picker";
 import { toast } from "sonner";
-import { bgColorMap, textColorMap, type JournalColor } from "@/lib/journalColor";
+import {
+  bgColorMap,
+  textColorMap,
+  type JournalColor,
+} from "@/lib/journalColor";
 import { JournalViewSkeleton } from "@/components/skeleton/JournalViewSkeleton";
 
 export default function JournalView() {
@@ -66,13 +70,20 @@ export default function JournalView() {
   const updateMutation = useMutation({
     mutationFn: (data: JournalInput) => updateJournal(journal?.id, data),
     onSuccess: (updatedJournal: Journal) => {
-      console.log("updated journal is:",updatedJournal)
+      console.log("updated journal is:", updatedJournal);
       queryClient.setQueryData<Journal[]>(["journals"], (old = []) =>
         old.map((j) => (j.id === updatedJournal.id ? updatedJournal : j)),
       );
-      queryClient.setQueryData(["journal", updatedJournal.id], (old: Journal) => {
-        return {...old, name: updatedJournal.name, color: updatedJournal.color}
-      })
+      queryClient.setQueryData(
+        ["journal", updatedJournal.id],
+        (old: Journal) => {
+          return {
+            ...old,
+            name: updatedJournal.name,
+            color: updatedJournal.color,
+          };
+        },
+      );
       setDialogOpen(false);
     },
   });
@@ -100,6 +111,7 @@ export default function JournalView() {
         label: "Cancel",
         onClick: () => console.log("cancelled"),
       },
+      position: "top-center",
     });
   };
 

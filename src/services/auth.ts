@@ -14,11 +14,6 @@ export async function login({ username, password }: LoginInput) {
   return response.data;
 }
 
-export async function getAuthUser() {
-  const response = await api.get("/user/me");
-  return response.data;
-}
-
 export async function logout() {
   return api.post("/auth/logout", null, { withCredentials: true });
 }

@@ -93,13 +93,19 @@ function parseHtmlToElements(html: string) {
         );
       case "h1":
         return (
-          <Text key={Math.random()} style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>
+          <Text
+            key={Math.random()}
+            style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}
+          >
             {Array.from(el.childNodes).map(renderNode)}
           </Text>
         );
       case "h2":
         return (
-          <Text key={Math.random()} style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}>
+          <Text
+            key={Math.random()}
+            style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}
+          >
             {Array.from(el.childNodes).map(renderNode)}
           </Text>
         );

@@ -59,21 +59,20 @@ export function AppSidebar() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const logoutMutation = useMutation({
     mutationFn: logout,
-    onSuccess: () => {
+    onSuccess: async () => {
       navigate("/login");
       localStorage.clear();
+      await db.delete();
+      await db.open();
+      queryClient.clear();
+    },
+    onError: (e) => {
+      showErrorToast(e);
     },
   });
 
   const handleLogout = async () => {
-    try {
-      await logoutMutation.mutateAsync();
-      await db.delete();
-      await db.open();
-      queryClient.clear();
-    } catch (e) {
-      showErrorToast(e);
-    }
+    await logoutMutation.mutateAsync();
   };
 
   return (
@@ -84,7 +83,11 @@ export function AppSidebar() {
       <SidebarContent className="flex flex-col h-full rounded-r-2xl p-4">
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg flex items-center font-bold tracking-tight text-brand-secondary">
-            <img src="/public/logo.png" className="w-8 h-8 mr-2" alt="lotus flower" />
+            <img
+              src="/public/logo.png"
+              className="w-8 h-8 mr-2"
+              alt="lotus flower"
+            />
             <p>Wellnest</p>
           </SidebarGroupLabel>
 

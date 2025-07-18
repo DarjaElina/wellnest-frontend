@@ -130,9 +130,11 @@ export default function JournalEntryLayout() {
           </div>
         )}
 
-     {isJournalLoading ? (
-      <Skeleton />
-     ) : <EntriesSidebar entries={filteredEntries} color={journal?.color} />}
+        {isJournalLoading ? (
+          <Skeleton />
+        ) : (
+          <EntriesSidebar entries={filteredEntries} color={journal?.color} />
+        )}
 
         <div className="fixed bottom-6 right-6 z-50">
           {isJournalLoading ? (
