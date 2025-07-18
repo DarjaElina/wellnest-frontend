@@ -57,7 +57,7 @@ export default function MoodCalendarToolBar({
   }
 
   return (
-    <div className="flex items-center gap-2 justify-between max-w-md">
+    <div className="flex items-center gap-2 justify-between w-full">
       <Button
         onClick={prevMonth}
         className="cursor-pointer"
