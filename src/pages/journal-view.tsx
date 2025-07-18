@@ -46,7 +46,8 @@ import {
 } from "@/components/ui/form";
 import ColorPicker from "@/components/shared/color-picker";
 import { toast } from "sonner";
-import { bgColorMap, textColorMap } from "@/lib/journalColor";
+import { bgColorMap, textColorMap, type JournalColor } from "@/lib/journalColor";
+import { JournalViewSkeleton } from "@/components/skeleton/JournalViewSkeleton";
 
 export default function JournalView() {
   const { journal } = useOutletContext<{ journal: Journal }>();
@@ -58,13 +59,13 @@ export default function JournalView() {
   const form = useForm<JournalInput>({
     resolver: zodResolver(journalInputSchema),
     defaultValues: {
-      name: journal.name,
-      color: journal.color,
+      name: journal?.name,
+      color: journal?.color,
     },
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: JournalInput) => updateJournal(journal.id, data),
+    mutationFn: (data: JournalInput) => updateJournal(journal?.id, data),
     onSuccess: (updatedJournal: Journal) => {
       queryClient.setQueryData<Journal[]>(["journals"], (old = []) =>
         old.map((j) => (j.id === updatedJournal.id ? updatedJournal : j)),
@@ -98,6 +99,10 @@ export default function JournalView() {
       },
     });
   };
+
+  if (!journal) {
+    return <JournalViewSkeleton />;
+  }
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -194,7 +199,7 @@ export default function JournalView() {
               <FormLabel>Journal Color</FormLabel>
               <ColorPicker
                 value={form.watch("color")}
-                onChange={(val) => form.setValue("color", val)}
+                onChange={(val) => form.setValue("color", val as JournalColor)}
               />
 
               <DialogFooter>

@@ -18,7 +18,10 @@ export function RecentSummary() {
     });
   }, []);
 
-  const sanitizedHTML = latestEntry && latestEntry.content ? DOMPurify.sanitize(latestEntry?.content) : "";
+  const sanitizedHTML =
+    latestEntry && latestEntry.content
+      ? DOMPurify.sanitize(latestEntry?.content)
+      : "";
   const { parsedHeading, parsedParagraph } =
     getJournalPreviewTitle(sanitizedHTML);
 

@@ -41,6 +41,7 @@ import { NewJournalForm } from "./journal/new-journal-form";
 
 import SettingsDialog from "./settings-dialog";
 import { db } from "@/lib/db";
+import { Skeleton } from "../ui/skeleton";
 
 const items = [
   { title: "All Entries", url: "journal-entries/all", icon: BookOpenText },
@@ -76,7 +77,10 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className="bg-sidebar text-foreground border-r border-border shadow-sm">
+    <Sidebar
+      variant="inset"
+      className="bg-sidebar text-foreground border-r border-border shadow-sm"
+    >
       <SidebarContent className="flex flex-col h-full rounded-r-2xl p-4">
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold tracking-tight text-brand-secondary">
@@ -98,17 +102,13 @@ export function AppSidebar() {
 
                 <CollapsibleContent>
                   <SidebarMenuSub className="ml-2 space-y-1">
-                    {isLoading && (
-                      <SidebarMenuSubItem className="text-muted-foreground text-sm italic">
-                        Loading journals…
-                      </SidebarMenuSubItem>
-                    )}
-                    {isError && (
+                    {isLoading ? (
+                      <Skeleton />
+                    ) : isError ? (
                       <SidebarMenuSubItem className="text-destructive text-sm">
                         Error loading journals
                       </SidebarMenuSubItem>
-                    )}
-                    {data && data.length > 0 ? (
+                    ) : data && data.length > 0 ? (
                       data.map((journal: Journal) => (
                         <SidebarMenuSubItem key={journal.id}>
                           <Link
