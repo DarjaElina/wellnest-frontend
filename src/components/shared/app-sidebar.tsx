@@ -6,6 +6,7 @@ import {
   Home,
   LogOut,
   BookOpenText,
+  MapPin,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -44,9 +45,10 @@ import { db } from "@/lib/db";
 import { Skeleton } from "../ui/skeleton";
 
 const items = [
-  { title: "All Entries", url: "journal-entries/all", icon: BookOpenText },
   { title: "Home", url: "", icon: Home },
+  { title: "All Entries", url: "journal-entries/all", icon: BookOpenText },
   { title: "Mood Tracker", url: "mood", icon: SmilePlus },
+  { title: "My Places", url: "places", icon: MapPin },
 ];
 
 export function AppSidebar() {

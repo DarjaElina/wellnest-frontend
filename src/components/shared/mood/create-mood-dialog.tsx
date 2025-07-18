@@ -141,7 +141,7 @@ export default function CreateMoodDialog({
           </DialogHeader>
         </motion.div>
 
-        <div className="flex-1 overflow-y-auto space-y-4 px-1">
+        <div className="min-h-[12vh] flex-1 overflow-y-auto space-y-4 px-1">
           <AnimatePresence mode="wait" initial={false}>
             {step === 2 && (
               <motion.div

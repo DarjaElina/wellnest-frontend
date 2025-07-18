@@ -14,7 +14,11 @@ export default function NotFoundPage() {
       <p className="text-muted-foreground mb-6">
         Oops! The page you're looking for doesn't exist.
       </p>
-      <Button onClick={() => navigate(-1)} variant="outline">
+      <Button
+        className="cursor-pointer"
+        onClick={() => navigate(-1)}
+        variant="outline"
+      >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Go Back
       </Button>
