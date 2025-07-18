@@ -3,7 +3,6 @@ import { useOutletContext, useNavigate } from "react-router-dom";
 import {
   BookOpenText,
   CalendarDays,
-  Download,
   ListOrdered,
   MoreHorizontal,
   Settings,
@@ -133,13 +132,6 @@ export default function JournalView() {
             >
               <Settings className="mr-2 w-4 h-4" />
               Journal Settings
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => console.log("Exporting...")}
-              className="cursor-pointer"
-            >
-              <Download className="mr-2 w-4 h-4" />
-              Export as PDF
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
