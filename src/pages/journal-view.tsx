@@ -46,7 +46,7 @@ import {
 } from "@/components/ui/form";
 import ColorPicker from "@/components/shared/color-picker";
 import { toast } from "sonner";
-import { bgColorMap, textColorMap } from "@/lib/journalColor";
+import { bgColorMap, textColorMap, type JournalColor } from "@/lib/journalColor";
 import { JournalViewSkeleton } from "@/components/skeleton/JournalViewSkeleton";
 
 export default function JournalView() {
@@ -199,7 +199,7 @@ export default function JournalView() {
               <FormLabel>Journal Color</FormLabel>
               <ColorPicker
                 value={form.watch("color")}
-                onChange={(val) => form.setValue("color", val)}
+                onChange={(val) => form.setValue("color", val as JournalColor)}
               />
 
               <DialogFooter>

@@ -23,7 +23,7 @@ const AllEntriesLayout = lazy(() => import("@/layouts/all-entries-layout"));
 export default function App() {
   return (
     <Suspense fallback={<AppLoader />}>
-      <Toaster />
+      <Toaster richColors position="top-right" />
       <Routes>
         <Route element={<AuthLayout />}>
           <Route index element={<WelcomePage />} />
