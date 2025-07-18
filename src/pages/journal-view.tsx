@@ -44,14 +44,23 @@ import {
   Form,
 } from "@/components/ui/form";
 import ColorPicker from "@/components/shared/color-picker";
-import { toast } from "sonner";
 import {
   bgColorMap,
   textColorMap,
   type JournalColor,
 } from "@/lib/journalColor";
 import { JournalViewSkeleton } from "@/components/skeleton/JournalViewSkeleton";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function JournalView() {
   const { journal } = useOutletContext<{ journal: Journal }>();
@@ -138,28 +147,36 @@ export default function JournalView() {
               Journal Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-                <AlertDialog>
-                 <AlertDialogTrigger asChild>
-                   <Button
-                     className="w-full justify-start cursor-pointer"
-                     variant="destructive"
-                   >
-                     <Trash2 className="w-4 h-4 mr-2" /> Delete journal
-                   </Button>
-                 </AlertDialogTrigger>
-                 <AlertDialogContent>
-                   <AlertDialogHeader>
-                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                     <AlertDialogDescription>
-                       This action cannot be undone.
-                     </AlertDialogDescription>
-                   </AlertDialogHeader>
-                   <AlertDialogFooter>
-                     <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
-                     <AlertDialogAction className="cursor-pointer" onClick={handleDelete}>Continue</AlertDialogAction>
-                   </AlertDialogFooter>
-                 </AlertDialogContent>
-               </AlertDialog>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  className="w-full justify-start cursor-pointer"
+                  variant="ghost"
+                >
+                  <Trash2 className="w-4 h-4 mr-2 text-destructive" /> Delete
+                  journal
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="cursor-pointer">
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    className="cursor-pointer"
+                    onClick={handleDelete}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

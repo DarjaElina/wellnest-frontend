@@ -5,6 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu.tsx";
 import { FormattingButtons } from "./formatting-buttons";
 import type { Editor } from "@tiptap/react";
@@ -14,11 +15,21 @@ import { showErrorToast } from "@/helper/error";
 import { useNavigate, useParams } from "react-router";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import type { RouteParams } from "@/types/shared.types";
-import { toast } from "sonner";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { JournalEntryPdf } from "../journal-entry-pdf";
 import { db } from "@/lib/db";
 import { formatISO9075 } from "date-fns";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export function JournalEntryEditorToolbar({
   editor,
@@ -67,22 +78,11 @@ export function JournalEntryEditorToolbar({
   });
 
   const handleDelete = async () => {
-    toast("Are you sure you want to delete?", {
-      action: {
-        label: "Yes, Delete",
-        onClick: async () => {
-          await db.journalEntries.delete(entryId);
+    await db.journalEntries.delete(entryId);
 
-          navigate(`/dashboard/journals/${journalId}`);
+    navigate(`/dashboard/journals/${journalId}`);
 
-          deleteMutation.mutate();
-        },
-      },
-      cancel: {
-        label: "Cancel",
-        onClick: () => console.log("cancelled"),
-      },
-    });
+    deleteMutation.mutate();
   };
 
   const handleToggleFavorite = async () => {
@@ -101,17 +101,19 @@ export function JournalEntryEditorToolbar({
         tags={entry.tags}
         color={entry.color}
       />
+
       <DropdownMenu>
-        <DropdownMenuTrigger asChild className="cursor-pointer">
-          <Button variant="ghost" size="icon">
-            <MoreVerticalIcon />
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="cursor-pointer">
+            <MoreVerticalIcon className="w-7 h-7 text-neutral-100" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-44">
+
+        <DropdownMenuContent align="end">
           <PDFDownloadLink
             document={
               <JournalEntryPdf
-                title={"Journal Entry"}
+                title="Journal Entry"
                 date={new Date(entry.entryDate).toLocaleDateString()}
                 content={entry.content}
               />
@@ -124,34 +126,59 @@ export function JournalEntryEditorToolbar({
                   Preparing PDF…
                 </span>
               ) : (
-                <DropdownMenuItem className="flex items-center gap-2 text-muted-foreground cursor-pointer">
-                  <Download className="w-4 h-4" />
-                  <span>Export as PDF</span>
+                <DropdownMenuItem className="cursor-pointer">
+                  <Download className="mr-2 w-4 h-4" />
+                  Export as PDF
                 </DropdownMenuItem>
               )
             }
           </PDFDownloadLink>
-          <DropdownMenuItem
-            onClick={handleDelete}
-            className="flex items-center gap-2 text-destructive cursor-pointer"
-          >
-            <Trash2 className="w-4 h-4" />
-            <span>Delete</span>
-          </DropdownMenuItem>
+
           <DropdownMenuItem
             onClick={handleToggleFavorite}
-            className="flex items-center gap-2 text-foreground cursor-pointer"
+            className="cursor-pointer"
           >
             {entry.isFavorite ? (
               <>
-                <Star className="w-4 h-4 mr-1 text-yellow-400" /> Unfavorite
+                <Star className="mr-2 w-4 h-4 text-yellow-400" /> Unfavorite
               </>
             ) : (
               <>
-                <Star className="w-4 h-4 mr-1" /> Mark Favorite
+                <Star className="mr-2 w-4 h-4 text-foreground" /> Mark Favorite
               </>
             )}
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                className="w-full justify-start cursor-pointer"
+                variant="ghost"
+              >
+                <Trash2 className="w-4 h-4 mr-2 text-destructive" /> Delete
+                entry
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="cursor-pointer">
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className="cursor-pointer"
+                  onClick={handleDelete}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

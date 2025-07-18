@@ -40,7 +40,7 @@ export default function GeneralSettings() {
 
   const handleDeleteAccount = async () => {
     await deleteAccountMutation.mutateAsync();
-  }
+  };
   return (
     <div className="space-y-6 mt-6">
       {user.firstName && user.lastName && user.email && (
@@ -62,32 +62,37 @@ export default function GeneralSettings() {
           Disconnect Google Account
         </Button>
         <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button
-            className="w-full justify-start cursor-pointer"
-            variant="destructive"
-          >
-            {" "}
-            <Trash2 className="w-4 h-4 mr-2" /> Delete account
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
-            <AlertDialogAction className="cursor-pointer" onClick={handleDeleteAccount}>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-        
+          <AlertDialogTrigger asChild>
+            <Button
+              className="w-full justify-start cursor-pointer"
+              variant="destructive"
+            >
+              {" "}
+              <Trash2 className="w-4 h-4 mr-2" /> Delete account
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="cursor-pointer">
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="cursor-pointer"
+                onClick={handleDeleteAccount}
+              >
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
-     
     </div>
   );
 }
