@@ -51,6 +51,7 @@ import {
   type JournalColor,
 } from "@/lib/journalColor";
 import { JournalViewSkeleton } from "@/components/skeleton/JournalViewSkeleton";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export default function JournalView() {
   const { journal } = useOutletContext<{ journal: Journal }>();
@@ -97,22 +98,13 @@ export default function JournalView() {
       navigate("/dashboard");
     },
   });
+
   const onSubmit = (data: JournalInput) => {
     updateMutation.mutate(data);
   };
 
-  const handleDelete = () => {
-    toast("Are you sure you want to delete?", {
-      action: {
-        label: "Yes, Delete",
-        onClick: () => deleteMutation.mutate(),
-      },
-      cancel: {
-        label: "Cancel",
-        onClick: () => console.log("cancelled"),
-      },
-      position: "top-center",
-    });
+  const handleDelete = async () => {
+    deleteMutation.mutateAsync();
   };
 
   if (!journal) {
@@ -146,13 +138,28 @@ export default function JournalView() {
               Journal Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={handleDelete}
-              className="text-destructive cursor-pointer"
-            >
-              <Trash2 className="mr-2 w-4 h-4 text-destructive" />
-              Delete Journal
-            </DropdownMenuItem>
+                <AlertDialog>
+                 <AlertDialogTrigger asChild>
+                   <Button
+                     className="w-full justify-start cursor-pointer"
+                     variant="destructive"
+                   >
+                     <Trash2 className="w-4 h-4 mr-2" /> Delete journal
+                   </Button>
+                 </AlertDialogTrigger>
+                 <AlertDialogContent>
+                   <AlertDialogHeader>
+                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                     <AlertDialogDescription>
+                       This action cannot be undone.
+                     </AlertDialogDescription>
+                   </AlertDialogHeader>
+                   <AlertDialogFooter>
+                     <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
+                     <AlertDialogAction className="cursor-pointer" onClick={handleDelete}>Continue</AlertDialogAction>
+                   </AlertDialogFooter>
+                 </AlertDialogContent>
+               </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
