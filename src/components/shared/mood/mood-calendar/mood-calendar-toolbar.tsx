@@ -30,7 +30,13 @@ const months = [
   "December",
 ];
 
-const yearOptions = Array.from({ length: 15 }, (_, i) => 2018 + i);
+const currentYear = new Date().getFullYear();
+const startYear = 2018; 
+
+const yearOptions = Array.from(
+  { length: currentYear - startYear + 2 },
+  (_, i) => startYear + i
+);
 
 export default function MoodCalendarToolBar({
   year,
@@ -57,7 +63,7 @@ export default function MoodCalendarToolBar({
   }
 
   return (
-    <div className="flex items-center gap-2 justify-between max-w-md">
+    <div className="flex items-center gap-2 justify-between w-full">
       <Button
         onClick={prevMonth}
         className="cursor-pointer"

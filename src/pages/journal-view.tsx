@@ -3,7 +3,6 @@ import { useOutletContext, useNavigate } from "react-router-dom";
 import {
   BookOpenText,
   CalendarDays,
-  Download,
   ListOrdered,
   MoreHorizontal,
   Settings,
@@ -59,17 +58,21 @@ export default function JournalView() {
   const form = useForm<JournalInput>({
     resolver: zodResolver(journalInputSchema),
     defaultValues: {
-      name: journal?.name,
-      color: journal?.color,
+      name: journal?.name ?? "",
+      color: journal?.color ?? "rose",
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: (data: JournalInput) => updateJournal(journal?.id, data),
     onSuccess: (updatedJournal: Journal) => {
+      console.log("updated journal is:",updatedJournal)
       queryClient.setQueryData<Journal[]>(["journals"], (old = []) =>
         old.map((j) => (j.id === updatedJournal.id ? updatedJournal : j)),
       );
+      queryClient.setQueryData(["journal", updatedJournal.id], (old: Journal) => {
+        return {...old, name: updatedJournal.name, color: updatedJournal.color}
+      })
       setDialogOpen(false);
     },
   });
@@ -129,13 +132,6 @@ export default function JournalView() {
             >
               <Settings className="mr-2 w-4 h-4" />
               Journal Settings
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => console.log("Exporting...")}
-              className="cursor-pointer"
-            >
-              <Download className="mr-2 w-4 h-4" />
-              Export as PDF
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem

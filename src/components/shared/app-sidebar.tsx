@@ -83,8 +83,9 @@ export function AppSidebar() {
     >
       <SidebarContent className="flex flex-col h-full rounded-r-2xl p-4">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg font-bold tracking-tight text-brand-secondary">
-            Wellnest
+          <SidebarGroupLabel className="text-lg flex items-center font-bold tracking-tight text-brand-secondary">
+            <img src="/public/logo.png" className="w-8 h-8 mr-2" alt="lotus flower" />
+            <p>Wellnest</p>
           </SidebarGroupLabel>
 
           <SidebarGroupContent className="mt-4">
