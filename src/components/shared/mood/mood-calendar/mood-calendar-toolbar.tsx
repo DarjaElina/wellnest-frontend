@@ -31,11 +31,11 @@ const months = [
 ];
 
 const currentYear = new Date().getFullYear();
-const startYear = 2018; 
+const startYear = 2018;
 
 const yearOptions = Array.from(
   { length: currentYear - startYear + 2 },
-  (_, i) => startYear + i
+  (_, i) => startYear + i,
 );
 
 export default function MoodCalendarToolBar({
