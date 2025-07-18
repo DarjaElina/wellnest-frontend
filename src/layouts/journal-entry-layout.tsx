@@ -1,6 +1,6 @@
 import { Outlet, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Menu, Plus, SquarePen } from "lucide-react";
+import { ListTree, Plus, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getJournalById } from "@/services/journal";
 import { db } from "@/lib/db";
@@ -121,7 +121,7 @@ export default function JournalEntryLayout() {
         ) : (
           <div
             onClick={navigateToJournalView}
-            className={`cursor-pointer px-4 py-4 border-b border-border flex items-center justify-center gap-3 ${bgColorMap[journal?.color]}`}
+            className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[journal?.color]}`}
           >
             <SquarePen className="text-neutral-100" />
             <h2 className="text-lg font-semibold text-neutral-100 truncate">
@@ -130,7 +130,9 @@ export default function JournalEntryLayout() {
           </div>
         )}
 
-        <EntriesSidebar entries={filteredEntries} />
+     {isJournalLoading ? (
+      <Skeleton />
+     ) : <EntriesSidebar entries={filteredEntries} color={journal?.color} />}
 
         <div className="fixed bottom-6 right-6 z-50">
           {isJournalLoading ? (
@@ -152,7 +154,7 @@ export default function JournalEntryLayout() {
           <Sheet>
             <SheetTrigger className="fixed right-2 top-0 m-2" asChild>
               <Button size="icon" variant="ghost">
-                <Menu />
+                <ListTree />
               </Button>
             </SheetTrigger>
 
@@ -165,7 +167,7 @@ export default function JournalEntryLayout() {
               </SheetHeader>
               <div
                 onClick={navigateToJournalView}
-                className={`cursor-pointer px-4 py-4 border-b border-border flex items-center justify-center gap-3 ${bgColorMap[journal?.color]}`}
+                className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[journal?.color]}`}
               >
                 <SquarePen className="text-neutral-100" />
                 <h2 className="text-lg font-semibold text-neutral-100 truncate">

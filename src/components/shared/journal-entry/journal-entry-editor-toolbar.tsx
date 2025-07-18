@@ -95,7 +95,7 @@ export function JournalEntryEditorToolbar({
   };
 
   return (
-    <div className="flex justify-between items-center px-4 py-3 rounded-md bg-card border shadow-sm mb-4">
+    <div className="flex flex-wrap justify-between items-center px-4 py-3 rounded-md bg-card border shadow-sm mb-4">
       <FormattingButtons
         editor={editor}
         tags={entry.tags}

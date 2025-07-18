@@ -23,8 +23,6 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarFooter,
-  SidebarRail,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
@@ -105,13 +103,7 @@ export function AppSidebar() {
                 <CollapsibleContent>
                   <SidebarMenuSub className="ml-2 space-y-1">
                     {isLoading ? (
-                      <>
-                        {[...Array(2)].map((_, i) => (
-                          <SidebarMenuSubItem key={i}>
-                            <Skeleton className="h-5 w-32 rounded" />
-                          </SidebarMenuSubItem>
-                        ))}
-                      </>
+                      <Skeleton />
                     ) : isError ? (
                       <SidebarMenuSubItem className="text-destructive text-sm">
                         Error loading journals
@@ -190,7 +182,6 @@ export function AppSidebar() {
           </SidebarFooter>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
   );
 }

@@ -172,7 +172,7 @@ export function JournalEntryEditor({
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-card rounded-xl shadow space-y-4">
+    <div className="p-6 max-w-full lg:max-w-3xl xl:max-w-5xl mx-auto bg-card rounded-xl shadow space-y-4">
       <div className="flex justify-between items-center">
         <DateTimePicker
           entryDate={new Date(entry.entryDate)}

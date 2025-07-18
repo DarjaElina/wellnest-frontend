@@ -1,11 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
-
 export function JournalEntryEditorSkeleton() {
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-card rounded-xl shadow space-y-4">
+    <div className="p-6 max-w-full lg:max-w-3xl xl:max-w-5xl mx-auto bg-card rounded-xl shadow space-y-4">
       <div className="flex justify-between items-center">
         <Skeleton className="h-10 w-40" />
-        <Skeleton className="h-6 w-24" />
+        
       </div>
       <Skeleton className="h-10 w-full" />
       <Skeleton className="h-[55vh] w-full rounded-xl" />
