@@ -17,6 +17,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { showErrorToast } from "@/helper/error";
 import { useLoginMutation } from "@/hooks/useLoginMutation";
+import { BACKEND_URL } from "@/config";
 
 export default function LoginForm() {
   const form = useForm<LoginInput>({
@@ -112,7 +113,7 @@ export default function LoginForm() {
           className="w-full flex items-center justify-center gap-2 mt-4 hover:shadow-md transition cursor-pointer"
           onClick={() => {
             window.location.href =
-              "http://localhost:8080/api/oauth2/authorization/google";
+              `${BACKEND_URL}/oauth2/authorization/google`;
           }}
         >
           <img
