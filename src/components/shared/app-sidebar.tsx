@@ -86,7 +86,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg flex items-center font-bold tracking-tight text-brand-secondary">
             <img
-              src="/public/logo.png"
+              src="/logo.png"
               className="w-8 h-8 mr-2"
               alt="lotus flower"
             />
