@@ -16,12 +16,10 @@ export type JournalEntry = z.infer<typeof journalEntrySchema> & {
   color: string;
   journalId: string;
   updatedAt: string;
+  clientId: string;
 };
 
 export type LocalJournalEntry = JournalEntry & {
-  clientId?: string;
-  journalId: string;
-  updatedAt: string;
   needsSync: boolean;
   markedForDeletion?: boolean;
   color: string;

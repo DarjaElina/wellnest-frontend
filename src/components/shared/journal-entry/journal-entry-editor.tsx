@@ -40,6 +40,7 @@ export function JournalEntryEditor({
     color: "",
     journalId: "",
     updatedAt: formatISO9075(new Date()),
+    clientId: ""
   });
 
   const queryClient = useQueryClient();
