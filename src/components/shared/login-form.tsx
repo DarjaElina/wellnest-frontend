@@ -16,8 +16,9 @@ import {
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
 import { showErrorToast } from "@/helper/error";
-import { useLoginMutation } from "@/hooks/useLoginMutation";
 import { BACKEND_URL } from "@/config";
+import { login } from "@/services/auth";
+import { useMutation } from "@tanstack/react-query";
 
 export default function LoginForm() {
   const form = useForm<LoginInput>({
@@ -28,18 +29,30 @@ export default function LoginForm() {
     },
   });
   const navigate = useNavigate();
+ 
 
-  const [mutateAsync] = useLoginMutation();
+
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      console.log("response from login mutation", response);
+    },
+    onError: (res) => {
+      console.log("error from login mutation", res);
+    },
+  });
 
   const onSubmit = async (data: LoginInput) => {
     const { username, password } = data;
     try {
-      await mutateAsync({ username, password });
+      await loginMutation.mutateAsync({ username, password });
       navigate("/dashboard");
     } catch (error) {
       showErrorToast(error);
     }
   };
+
+
   return (
     <Card className="w-full max-w-md shadow-xl rounded-2xl">
       <CardHeader className="text-center pb-0">
@@ -86,8 +99,12 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button className="w-full mt-2 hover:shadow-md transition cursor-pointer">
-              Log In
+           <Button
+              className="w-full mt-2 hover:shadow-md transition cursor-pointer"
+              type="submit"
+              disabled={loginMutation.isPending}
+            >
+              {loginMutation.isPending ? "Logging in..." : "Log In"}
             </Button>
           </form>
         </Form>

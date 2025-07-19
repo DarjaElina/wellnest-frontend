@@ -31,29 +31,21 @@ export default function RegisterForm() {
       confirmPassword: "",
     },
   });
+  const navigate = useNavigate();
 
   const newUserMutation = useMutation({
     mutationFn: signUp,
-    onSuccess: (response) => {
-      console.log(response);
+    onSuccess: () => {
+      navigate("/dashboard");
     },
+    onError: (e) => {
+      showErrorToast(e);
+    }
   });
-  const navigate = useNavigate();
+
 
   const onSubmit = async (data: RegisterFormValues) => {
-    const { email, password, firstName, lastName } = data;
-    try {
-      await newUserMutation.mutateAsync({
-        firstName,
-        lastName,
-        email,
-        password,
-      });
-
-      navigate("/dashboard");
-    } catch (error) {
-      showErrorToast(error);
-    }
+   await newUserMutation.mutateAsync(data);
   };
 
   return (
@@ -138,11 +130,11 @@ export default function RegisterForm() {
 
             <Button
               type="submit"
+              disabled={newUserMutation.isPending}
               className="w-full mt-2 hover:shadow-md transition cursor-pointer"
             >
-              Sign Up
+              {newUserMutation.isPending ? "Creating account..." : "Sign Up"}
             </Button>
-
             <p className="text-center text-sm text-muted-foreground mt-4">
               <span>Already have an account? </span>
               <Link
