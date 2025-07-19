@@ -19,20 +19,20 @@ export const moodSets: MoodSet[] = [
     moods: [
       {
         label: "calm",
-        iconUrl: "/src/assets/moods/default/calm.png",
+        iconUrl: "/assets/moods/default/calm.png",
       },
       {
         label: "grateful",
-        iconUrl: "/src/assets/moods/default/grateful.png",
+        iconUrl: "/assets/moods/default/grateful.png",
       },
       {
         label: "okay",
-        iconUrl: "/src/assets/moods/default/okay.png",
+        iconUrl: "/assets/moods/default/okay.png",
       },
-      { label: "low", iconUrl: "/src/assets/moods/default/low.png" },
+      { label: "low", iconUrl: "/assets/moods/default/low.png" },
       {
         label: "stressed",
-        iconUrl: "/src/assets/moods/default/stressed.png",
+        iconUrl: "/assets/moods/default/stressed.png",
       },
     ],
   },

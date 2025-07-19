@@ -130,7 +130,7 @@ export default function LoginForm() {
           className="w-full flex items-center justify-center gap-2 mt-4 hover:shadow-md transition cursor-pointer"
           onClick={() => {
             window.location.href =
-              `${BACKEND_URL}/oauth2/authorization/google`;
+              `${BACKEND_URL}/login/oauth2/authorization/google`;
           }}
         >
           <img
