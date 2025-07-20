@@ -205,7 +205,7 @@ export function JournalEntryEditor({
             </motion.div>
           )}
 
-          {!isDemo && syncStatus === "saved" && (
+          {syncStatus === "saved" && (
             <motion.div
               key="saved"
               initial={{ opacity: 0, scale: 0.9 }}

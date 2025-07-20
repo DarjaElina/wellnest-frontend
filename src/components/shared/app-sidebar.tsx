@@ -86,6 +86,14 @@ export function AppSidebar() {
     await logoutMutation.mutateAsync();
   };
 
+  const handleLeaveDemo = async () => {
+    navigate("/login");
+    localStorage.clear();
+    await db.delete();
+    await db.open();
+    queryClient.clear();
+  };
+
   return (
     <Sidebar
       variant="inset"
@@ -205,9 +213,12 @@ export function AppSidebar() {
                 )}
 
                 {isDemo && (
-                  <Button className="w-full justify-start cursor-pointer">
+                  <Button
+                    onClick={handleLeaveDemo}
+                    className="w-full justify-start cursor-pointer"
+                  >
                     <DoorOpen className="mr-2 h-4 w-4" />
-                    <Link to="/">Leave Demo Mode</Link>
+                    Leave Demo Mode
                   </Button>
                 )}
               </SidebarMenuItem>

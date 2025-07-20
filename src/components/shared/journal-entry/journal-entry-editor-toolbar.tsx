@@ -34,6 +34,7 @@ import {
 export function JournalEntryEditorToolbar({
   editor,
   entry,
+  syncStatuc,
 }: {
   editor: Editor | null;
   entry: JournalEntry;
@@ -110,29 +111,31 @@ export function JournalEntryEditorToolbar({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
-          <PDFDownloadLink
-            document={
-              <JournalEntryPdf
-                title="Journal Entry"
-                date={new Date(entry.entryDate).toLocaleDateString()}
-                content={entry.content}
-              />
-            }
-            fileName="journal-entry.pdf"
-          >
-            {({ loading }) =>
-              loading ? (
-                <span className="text-sm text-muted-foreground">
-                  Preparing PDF…
-                </span>
-              ) : (
-                <DropdownMenuItem className="cursor-pointer">
-                  <Download className="mr-2 w-4 h-4" />
-                  Export as PDF
-                </DropdownMenuItem>
-              )
-            }
-          </PDFDownloadLink>
+          {entry && (
+            <PDFDownloadLink
+              document={
+                <JournalEntryPdf
+                  title="Journal Entry"
+                  date={new Date(entry.entryDate).toLocaleDateString()}
+                  content={entry.content}
+                />
+              }
+              fileName="journal-entry.pdf"
+            >
+              {({ loading }) =>
+                loading ? (
+                  <span className="text-sm text-muted-foreground">
+                    Preparing PDF…
+                  </span>
+                ) : (
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Download className="mr-2 w-4 h-4" />
+                    Export as PDF
+                  </DropdownMenuItem>
+                )
+              }
+            </PDFDownloadLink>
+          )}
 
           <DropdownMenuItem
             onClick={handleToggleFavorite}
