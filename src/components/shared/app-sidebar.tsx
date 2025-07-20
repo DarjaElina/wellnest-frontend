@@ -194,13 +194,13 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 {!isDemo && (
                   <Button
-                    disabled={isDemo}
+                    disabled={isDemo || logoutMutation.isPending}
                     variant="ghost"
                     className="w-full justify-start cursor-pointer"
                     onClick={handleLogout}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    Logout
+                    {logoutMutation.isPending ? "Signing out..." : "Log Out"}
                   </Button>
                 )}
 

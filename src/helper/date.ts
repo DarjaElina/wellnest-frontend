@@ -5,7 +5,7 @@ export const formatDate = (date: string) => {
     const parsedDate = parseISO(date);
     return format(parsedDate, "MMMM d, yyyy 'at' h:mm a");
   } catch (e) {
-    console.error(e)
+    console.error(e);
     return date;
   }
 };

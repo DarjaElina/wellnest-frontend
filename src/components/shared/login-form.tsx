@@ -19,6 +19,8 @@ import { showErrorToast } from "@/helper/error";
 import { BACKEND_URL } from "@/config";
 import { login } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 export default function LoginForm() {
   const form = useForm<LoginInput>({
@@ -29,6 +31,7 @@ export default function LoginForm() {
     },
   });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const loginMutation = useMutation({
     mutationFn: login,
@@ -39,6 +42,13 @@ export default function LoginForm() {
       console.log("error from login mutation", res);
     },
   });
+
+  const handleLogin = () => {
+    setLoading(true);
+    setTimeout(() => {
+      window.location.href = `${BACKEND_URL}/oauth2/authorization/google`;
+    }, 100);
+  };
 
   const onSubmit = async (data: LoginInput) => {
     const { username, password } = data;
@@ -125,16 +135,24 @@ export default function LoginForm() {
         <Button
           variant="outline"
           className="w-full flex items-center justify-center gap-2 mt-4 hover:shadow-md transition cursor-pointer"
-          onClick={() => {
-            window.location.href = `${BACKEND_URL}/oauth2/authorization/google`;
-          }}
+          disabled={loading}
+          onClick={handleLogin}
         >
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="Google"
-            className="h-5 w-5"
-          />
-          Continue with Google
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin h-5 w-5" />
+              Redirecting...
+            </>
+          ) : (
+            <>
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="h-5 w-5"
+              />
+              Continue with Google
+            </>
+          )}
         </Button>
       </CardContent>
     </Card>
