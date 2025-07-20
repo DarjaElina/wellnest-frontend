@@ -1,10 +1,11 @@
-import { format, parse } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 export const formatDate = (date: string) => {
-  const formattedDate = format(
-    parse(date, "yyyy-MM-dd HH:mm:ss", new Date()),
-    "MMMM d, yyyy 'at' h:mm a",
-  );
-
-  return formattedDate;
+  try {
+    const parsedDate = parseISO(date);
+    return format(parsedDate, "MMMM d, yyyy 'at' h:mm a");
+  } catch (e) {
+    console.error(e)
+    return date;
+  }
 };
