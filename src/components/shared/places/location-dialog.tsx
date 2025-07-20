@@ -14,13 +14,21 @@ import { useEffect, useState } from "react";
 import { placeSchema, type Place, type PlaceInput } from "@/types/places.types";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import { X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { createPlace } from "@/services/places";
 import { showErrorToast } from "@/helper/error";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { useIsDemo } from "@/context/demoContext";
 
 interface LocationDialogProps {
   dialogOpen: boolean;
@@ -30,8 +38,15 @@ interface LocationDialogProps {
   lng: number;
 }
 
-export default function LocationDialog({ dialogOpen, setDialogOpen, onCancel, lat, lng }: LocationDialogProps) {
+export default function LocationDialog({
+  dialogOpen,
+  setDialogOpen,
+  onCancel,
+  lat,
+  lng,
+}: LocationDialogProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const isDemo = useIsDemo();
 
   const queryClient = useQueryClient();
 
@@ -65,30 +80,28 @@ export default function LocationDialog({ dialogOpen, setDialogOpen, onCancel, la
       queryClient.setQueryData(["places"], places.concat(newPlace));
       form.reset();
       setDialogOpen(false);
-
     },
     onError: (e) => {
       showErrorToast(e);
-    }
-  })
+    },
+  });
 
   const submitHandler = async (data: PlaceInput) => {
     const formData = new FormData();
-  
+
     formData.append("title", data.title);
     formData.append("note", data.note || "");
-  
+
     const file = data.image?.[0];
     if (file) {
       formData.append("image", file);
     }
-  
+
     formData.append("lat", lat.toString());
     formData.append("lng", lng.toString());
-  
+
     await placeMutation.mutateAsync(formData);
   };
-  
 
   const handleCancel = () => {
     form.reset();
@@ -100,11 +113,16 @@ export default function LocationDialog({ dialogOpen, setDialogOpen, onCancel, la
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add a Place</DialogTitle>
-          <DialogDescription className="sr-only">Create place with photo, title and note</DialogDescription>
+          <DialogDescription className="sr-only">
+            Create place with photo, title and note
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(submitHandler)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="title"
@@ -161,9 +179,12 @@ export default function LocationDialog({ dialogOpen, setDialogOpen, onCancel, la
                           />
                         </svg>
                         <p className="mb-2 text-sm text-foreground">
-                          <span className="font-semibold">Click to upload</span> or drag and drop
+                          <span className="font-semibold">Click to upload</span>{" "}
+                          or drag and drop
                         </p>
-                        <p className="text-xs text-foreground">SVG, PNG, JPG (MAX. 800x400px)</p>
+                        <p className="text-xs text-foreground">
+                          SVG, PNG, JPG (MAX. 800x400px)
+                        </p>
                       </div>
                       <input
                         id="dropzone-file"
@@ -178,25 +199,40 @@ export default function LocationDialog({ dialogOpen, setDialogOpen, onCancel, la
                 </FormItem>
               )}
             />
-            
-          {imagePreview && (
-            <div className="relative inline-block bg-card rounded-lg max-w-40 p-5">
-                <Button className="absolute top-1 right-1 cursor-pointer" variant="ghost" onClick={() => setImagePreview(null)}>
-                  <X/>
+
+            {imagePreview && (
+              <div className="relative inline-block bg-card rounded-lg max-w-40 p-5">
+                <Button
+                  className="absolute top-1 right-1 cursor-pointer"
+                  variant="ghost"
+                  onClick={() => setImagePreview(null)}
+                >
+                  <X />
                 </Button>
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="w-full object-contain rounded-md"
-              />
-            </div>
-          )}
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full object-contain rounded-md"
+                />
+              </div>
+            )}
 
             <DialogFooter className="flex justify-end gap-2 mt-4">
-              <Button className="cursor-pointer" variant="ghost" type="button" onClick={handleCancel}>
+              <Button
+                className="cursor-pointer"
+                variant="ghost"
+                type="button"
+                onClick={handleCancel}
+              >
                 Cancel
               </Button>
-              <Button className="cursor-pointer" type="submit">Save</Button>
+              <Button
+                className="cursor-pointer"
+                type="submit"
+                disabled={isDemo}
+              >
+                {isDemo ? "Save (disabled in demo)" : "Save"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

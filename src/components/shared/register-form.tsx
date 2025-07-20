@@ -40,12 +40,11 @@ export default function RegisterForm() {
     },
     onError: (e) => {
       showErrorToast(e);
-    }
+    },
   });
 
-
   const onSubmit = async (data: RegisterFormValues) => {
-   await newUserMutation.mutateAsync(data);
+    await newUserMutation.mutateAsync(data);
   };
 
   return (

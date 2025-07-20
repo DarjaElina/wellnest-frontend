@@ -22,37 +22,42 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsDemo } from "@/context/demoContext";
+import { demoJournals, demoJournalEntries } from "@/data/demo/journal";
 
 export default function JournalEntryLayout() {
   const { journalId } = useParams();
   const navigate = useNavigate();
   const { state } = useFilter();
+  const isDemo = useIsDemo();
 
-  const {
-    data: journal,
-    isLoading: isJournalLoading,
-    isError: isJournalError,
-  } = useQuery({
+  const { data: journal, isLoading: isJournalLoading } = useQuery({
     queryKey: ["journal", journalId],
     queryFn: () => getJournalById(journalId!),
-    enabled: !!journalId,
+    enabled: !isDemo && !!journalId,
   });
 
-  const { data, isSuccess } = useQuery({
+  const { data: fetchedEntries, isSuccess } = useQuery({
     queryKey: ["journalEntries", journalId],
     queryFn: () =>
       getEntries({
         journalId: journalId!,
         limit: 50,
       }),
-    enabled: !!journalId,
+    enabled: !isDemo && !!journalId,
   });
 
   useEffect(() => {
-    if (isSuccess && data) {
-      db.journalEntries.bulkPut(data);
+    if (!isDemo && isSuccess && fetchedEntries) {
+      db.journalEntries.bulkPut(fetchedEntries);
     }
-  }, [data, isSuccess]);
+  }, [fetchedEntries, isSuccess, isDemo]);
+
+  useEffect(() => {
+    if (isDemo && journalId === demoJournals[0].id) {
+      db.journalEntries.bulkPut(demoJournalEntries);
+    }
+  }, [isDemo, journalId]);
 
   const entries = useLiveQuery(
     () =>
@@ -81,26 +86,24 @@ export default function JournalEntryLayout() {
       );
     }
 
-    if (state.sortOrder === "asc") {
-      result = result.sort(
-        (a, b) =>
-          new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
-      );
-    } else {
-      result = result.sort(
-        (a, b) =>
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-      );
-    }
-    return result;
+    return state.sortOrder === "asc"
+      ? result.sort(
+          (a, b) =>
+            new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
+        )
+      : result.sort(
+          (a, b) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+        );
   }, [entries, state]);
 
   const createEntryMutation = useCreateEntry();
 
   const handleNewEntry = async () => {
+    if (isDemo) return;
+
     if (journalId && journal) {
       const offlineEntry = await createOfflineEntry(journalId, journal.color);
-      console.log("offline entry is", offlineEntry);
       createEntryMutation.mutate(offlineEntry);
     }
   };
@@ -109,9 +112,8 @@ export default function JournalEntryLayout() {
     navigate(`/dashboard/journals/${journalId}`);
   };
 
-  if (isJournalError) {
-    return <p>Error</p>;
-  }
+  const activeJournal = isDemo ? demoJournals[0] : journal;
+  const activeColor = activeJournal?.color ?? "purple";
 
   return (
     <div className="flex w-full h-screen overflow-hidden flex-col md:flex-row">
@@ -121,28 +123,36 @@ export default function JournalEntryLayout() {
         ) : (
           <div
             onClick={navigateToJournalView}
-            className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[journal?.color]}`}
+            className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
           >
             <SquarePen className="text-neutral-100" />
             <h2 className="text-lg font-semibold text-neutral-100 truncate">
-              {journal?.name || "Journal"}
+              {activeJournal?.name || "Journal"}
             </h2>
           </div>
         )}
 
         {isJournalLoading ? (
-          <Skeleton />
+          <Skeleton className="h-[300px] w-full" />
         ) : (
-          <EntriesSidebar entries={filteredEntries} color={journal?.color} />
+          <EntriesSidebar entries={filteredEntries} color={activeColor} />
         )}
 
         <div className="fixed bottom-6 right-6 z-50">
           {isJournalLoading ? (
             <Skeleton className="h-10 w-32 rounded" />
+          ) : isDemo ? (
+            <Button
+              disabled
+              className={`opacity-50 cursor-not-allowed$ ${bgColorMap[activeColor]} text-neutral-100`}
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              New Entry (demo)
+            </Button>
           ) : (
             <Button
               onClick={handleNewEntry}
-              className={`text-neutral-100 cursor-pointer ${bgColorMap[journal?.color]} ${hoverColorMap[journal?.color]}`}
+              className={`text-neutral-100 cursor-pointer ${bgColorMap[activeColor]} ${hoverColorMap[activeColor]}`}
             >
               <Plus className="w-4 h-4 mr-1" />
               New Entry
@@ -169,11 +179,11 @@ export default function JournalEntryLayout() {
               </SheetHeader>
               <div
                 onClick={navigateToJournalView}
-                className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[journal?.color]}`}
+                className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
               >
                 <SquarePen className="text-neutral-100" />
                 <h2 className="text-lg font-semibold text-neutral-100 truncate">
-                  {journal?.name || "Journal"}
+                  {activeJournal?.name || "Journal"}
                 </h2>
               </div>
 
@@ -184,7 +194,7 @@ export default function JournalEntryLayout() {
         </div>
 
         <div className="flex-1 overflow-y-auto px-6 bg-background">
-          <Outlet context={{ journal }} />
+          <Outlet context={{ journal: activeJournal }} />
         </div>
       </main>
     </div>

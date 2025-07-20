@@ -21,6 +21,7 @@ import type { RouteParams } from "@/types/shared.types";
 import { db } from "@/lib/db";
 import { saveToLocal } from "@/lib/utils";
 import { textColorMap } from "@/lib/journalColor";
+import { useIsDemo } from "@/context/demoContext";
 
 export function JournalEntryEditor({
   journalEntry,
@@ -30,6 +31,7 @@ export function JournalEntryEditor({
   const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "saved">(
     "idle",
   );
+  const isDemo = useIsDemo();
 
   const [entry, setEntry] = useState<JournalEntry>({
     content: "<h2></h2><p></p>",
@@ -40,7 +42,7 @@ export function JournalEntryEditor({
     color: "",
     journalId: "",
     updatedAt: formatISO9075(new Date()),
-    clientId: ""
+    clientId: "",
   });
 
   const queryClient = useQueryClient();
@@ -48,6 +50,7 @@ export function JournalEntryEditor({
   const { journalId } = useParams<RouteParams>() as RouteParams;
 
   const mutateAndTrack = (updatedEntry: JournalEntry) => {
+    if (isDemo) return;
     updatedEntryMutation.mutate(updatedEntry, {
       onSuccess: (updatedEntry) => {
         setSyncStatus("saved");
@@ -183,7 +186,7 @@ export function JournalEntryEditor({
         />
 
         <AnimatePresence mode="wait">
-          {syncStatus === "syncing" && (
+          {!isDemo && syncStatus === "syncing" && (
             <motion.div
               key="syncing"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -202,7 +205,7 @@ export function JournalEntryEditor({
             </motion.div>
           )}
 
-          {syncStatus === "saved" && (
+          {!isDemo && syncStatus === "saved" && (
             <motion.div
               key="saved"
               initial={{ opacity: 0, scale: 0.9 }}

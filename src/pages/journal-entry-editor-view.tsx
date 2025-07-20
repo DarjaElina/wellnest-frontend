@@ -1,15 +1,24 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { getJournalEntry } from "@/services/journalEntry";
+import { useIsDemo } from "@/context/demoContext";
+import { db } from "@/lib/db";
+
+import { JournalEntryEditor } from "@/components/shared/journal-entry/journal-entry-editor";
 import { JournalEntryEditorSkeleton } from "@/components/skeleton/JournalEntryEditorSkeleton";
 import { AppError } from "@/components/ui/app-error";
-import { getJournalEntry } from "@/services/journalEntry";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
-import { JournalEntryEditor } from "@/components/shared/journal-entry/journal-entry-editor";
+import type { JournalEntry } from "@/types/journalEntry.types";
 
 export default function JournalEntryEditorView() {
-  const { journalId, entryId } = useParams() as {
+  const isDemo = useIsDemo();
+  const { entryId } = useParams() as {
     journalId: string;
     entryId: string;
   };
+
+  const [demoEntry, setDemoEntry] = useState<JournalEntry | null>(null);
+  const [loadingDemoEntry, setLoadingDemoEntry] = useState(false);
 
   const {
     data: journalEntry,
@@ -18,12 +27,27 @@ export default function JournalEntryEditorView() {
   } = useQuery({
     queryKey: ["journalEntry", entryId],
     queryFn: () => getJournalEntry(entryId),
-    enabled: !!journalId && !!entryId,
+    enabled: !!entryId && !isDemo,
   });
 
-  if (isLoading) return <JournalEntryEditorSkeleton />;
-  if (isError || !journalEntry)
-    return <AppError errorMessage="Error loading editor." />;
+  useEffect(() => {
+    if (isDemo && entryId) {
+      setLoadingDemoEntry(true);
+      db.journalEntries.get(entryId).then((entry) => {
+        setDemoEntry(entry ?? null);
+        setLoadingDemoEntry(false);
+      });
+    }
+  }, [isDemo, entryId]);
 
-  return <JournalEntryEditor journalEntry={journalEntry} />;
+  if (isDemo && loadingDemoEntry) return <JournalEntryEditorSkeleton />;
+  if (isDemo && !demoEntry)
+    return <AppError errorMessage="Demo entry not found." />;
+  if (!isDemo && isLoading) return <JournalEntryEditorSkeleton />;
+  if (!isDemo && (isError || !journalEntry))
+    return <AppError errorMessage="Error loading entry." />;
+
+  return (
+    <JournalEntryEditor journalEntry={isDemo ? demoEntry! : journalEntry!} />
+  );
 }

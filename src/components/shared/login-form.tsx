@@ -29,8 +29,6 @@ export default function LoginForm() {
     },
   });
   const navigate = useNavigate();
- 
-
 
   const loginMutation = useMutation({
     mutationFn: login,
@@ -51,7 +49,6 @@ export default function LoginForm() {
       showErrorToast(error);
     }
   };
-
 
   return (
     <Card className="w-full max-w-md shadow-xl rounded-2xl">
@@ -99,7 +96,7 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-           <Button
+            <Button
               className="w-full mt-2 hover:shadow-md transition cursor-pointer"
               type="submit"
               disabled={loginMutation.isPending}
@@ -129,8 +126,7 @@ export default function LoginForm() {
           variant="outline"
           className="w-full flex items-center justify-center gap-2 mt-4 hover:shadow-md transition cursor-pointer"
           onClick={() => {
-            window.location.href =
-              `${BACKEND_URL}/oauth2/authorization/google`;
+            window.location.href = `${BACKEND_URL}/oauth2/authorization/google`;
           }}
         >
           <img

@@ -1,0 +1,51 @@
+export const demoChartData = [
+  {
+    day: "Monday",
+    scale: 3,
+    mood: "Okay",
+    note: "Managed the day just fine. Nothing special, but steady.",
+    iconUrl: "/assets/moods/default/okay.png",
+  },
+  {
+    day: "Tuesday",
+    scale: 4,
+    mood: "Grateful",
+    note: "Had a meaningful chat with a friend — reminded me how lucky I am.",
+    iconUrl: "/assets/moods/default/grateful.png",
+  },
+  {
+    day: "Wednesday",
+    scale: 2,
+    mood: "Low",
+    note: "Woke up tired and unmotivated. Took a nap and tried to rest.",
+    iconUrl: "/assets/moods/default/low.png",
+  },
+  {
+    day: "Thursday",
+    scale: 5,
+    mood: "Calm",
+    note: "Felt balanced and relaxed all day. No rush, just peace.",
+    iconUrl: "/assets/moods/default/calm.png",
+  },
+  {
+    day: "Friday",
+    scale: 1,
+    mood: "Stressed",
+    note: "Deadlines everywhere. My brain is soup. 😩",
+    iconUrl: "/assets/moods/default/stressed.png",
+  },
+  {
+    day: "Saturday",
+    scale: 4,
+    mood: "Grateful",
+    note: "Nature walk + music = perfect afternoon.",
+    iconUrl: "/assets/moods/default/grateful.png",
+  },
+  {
+    day: "Sunday",
+    scale: 3,
+    mood: "Okay",
+    note: "Rested, did chores, and prepared for the week ahead.",
+    iconUrl: "/assets/moods/default/okay.png",
+  },
+];

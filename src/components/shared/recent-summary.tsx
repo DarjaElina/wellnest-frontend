@@ -4,26 +4,35 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { MoodWeekSummary } from "./mood/mood-week-summary";
 import { getJournalPreviewTitle } from "@/helper/journal";
+import { useIsDemo } from "@/context/demoContext";
 import DOMPurify from "dompurify";
 
 export function RecentSummary() {
+  const isDemo = useIsDemo();
+
   const latestEntry = useLiveQuery(async () => {
+    if (isDemo) return null;
     const all = await db.journalEntries.toArray();
     if (!all.length) return null;
 
-    return all.reduce((latest, current) => {
-      return new Date(current.updatedAt) > new Date(latest.updatedAt)
+    return all.reduce((latest, current) =>
+      new Date(current.updatedAt) > new Date(latest.updatedAt)
         ? current
-        : latest;
-    });
-  }, []);
+        : latest,
+    );
+  }, [isDemo]);
+
+  const demoEntry = {
+    journalId: "exampleJournal",
+    content: `<h1>A Grateful Walk</h1><p>I took a walk after journaling today and noticed how much calmer I felt. Writing helps.</p>`,
+  };
 
   const sanitizedHTML =
-    latestEntry && latestEntry.content
-      ? DOMPurify.sanitize(latestEntry?.content)
-      : "";
-  const { parsedHeading, parsedParagraph } =
-    getJournalPreviewTitle(sanitizedHTML);
+    (isDemo ? demoEntry.content : latestEntry?.content) || "";
+
+  const { parsedHeading, parsedParagraph } = getJournalPreviewTitle(
+    DOMPurify.sanitize(sanitizedHTML),
+  );
 
   return (
     <section className="space-y-4">
@@ -40,17 +49,17 @@ export function RecentSummary() {
           </CardHeader>
 
           <CardContent className="pt-0 space-y-3">
-            {latestEntry && latestEntry.journalId ? (
+            {isDemo || (latestEntry && latestEntry.journalId) ? (
               <>
-                <h3 className="text-base line-clamp-2">
-                  {parsedHeading && parsedHeading}
-                </h3>
+                <h3 className="text-base line-clamp-2">{parsedHeading}</h3>
 
-                <p className="text-base line-clamp-2">
-                  {parsedParagraph && parsedParagraph}
-                </p>
+                <p className="text-base line-clamp-2">{parsedParagraph}</p>
                 <Link
-                  to={`/dashboard/journals/${latestEntry.journalId}`}
+                  to={
+                    isDemo
+                      ? "/demo/dashboard/journals/exampleJournal"
+                      : `/dashboard/journals/${latestEntry?.journalId}`
+                  }
                   className="text-sm text-brand-primary hover:underline font-medium"
                 >
                   View full entry →

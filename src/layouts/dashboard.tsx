@@ -6,13 +6,16 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { getTodayMoodEntry } from "@/services/moodEntry";
 import { useQuery } from "@tanstack/react-query";
+import { useIsDemo } from "@/context/demoContext";
 
 export default function Dashboard() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { settings } = useSettings();
+  const isDemo = useIsDemo();
   const { data } = useQuery({
     queryKey: ["todayMood"],
     queryFn: getTodayMoodEntry,
+    enabled: !isDemo,
   });
   return (
     <SidebarProvider>

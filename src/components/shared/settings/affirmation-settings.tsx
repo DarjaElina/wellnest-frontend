@@ -25,9 +25,13 @@ import type {
   AffirmationCategory,
   AffirmationSetPreview,
 } from "@/types/affirmation.types";
+import { useIsDemo } from "@/context/demoContext";
+import { demoSets } from "@/data/demo/affirmation";
 
 export default function AffirmationSettings() {
   const { settings, updateSetting } = useSettings();
+
+  const isDemo = useIsDemo();
 
   const {
     data: affirmationSets,
@@ -36,6 +40,7 @@ export default function AffirmationSettings() {
   } = useQuery({
     queryKey: ["affirmationSets"],
     queryFn: getAffirmationsPreview,
+    enabled: !isDemo,
   });
 
   if (isLoading) {
@@ -46,7 +51,8 @@ export default function AffirmationSettings() {
     return <p>Error loading affirmation sets.</p>;
   }
 
-  console.log(affirmationSets);
+  const setsToShow = isDemo ? demoSets : affirmationSets;
+
   return (
     <div className="space-y-6 mt-6">
       <div className="space-y-1">
@@ -68,7 +74,7 @@ export default function AffirmationSettings() {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Available Sets</SelectLabel>
-                {affirmationSets.map((set: AffirmationSetPreview) => (
+                {setsToShow.map((set: AffirmationSetPreview) => (
                   <SelectItem key={set.category} value={set.category}>
                     {set.category}
                   </SelectItem>
@@ -91,7 +97,7 @@ export default function AffirmationSettings() {
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 max-h-[400px] overflow-y-auto">
-                {affirmationSets.map((set: AffirmationSetPreview) => (
+                {setsToShow.map((set: AffirmationSetPreview) => (
                   <div key={set.category} className="border rounded p-3">
                     <h4 className="font-semibold mb-1">{set.category}</h4>
                     <ul className="list-disc list-inside text-sm text-muted-foreground">

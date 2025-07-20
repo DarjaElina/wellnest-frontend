@@ -14,7 +14,7 @@ export const placeSchema = z.object({
         ["image/jpeg", "image/png", "image/jpg"].includes(files?.[0]?.type),
       {
         message: "File format must be jpg, jpeg or png.",
-      }
+      },
     )
     .optional(),
 });
@@ -25,4 +25,4 @@ export type Place = z.infer<typeof placeSchema> & {
   lng: number;
   id?: string;
   imageUrl?: string;
-}
+};

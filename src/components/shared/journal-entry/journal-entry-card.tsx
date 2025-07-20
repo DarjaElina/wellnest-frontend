@@ -11,8 +11,9 @@ import { StickyNote } from "lucide-react";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
 import type { JournalEntry } from "@/types/journalEntry.types";
-import { parse, format } from "date-fns";
 import { ringColorMap, textColorMap } from "@/lib/journalColor";
+import { formatDate } from "@/helper/date";
+import { useIsDemo } from "@/context/demoContext";
 
 export function JournalEntryCard({
   entry,
@@ -22,15 +23,19 @@ export function JournalEntryCard({
   isActive: boolean;
 }) {
   const { journalId, id, color, content, entryDate } = entry;
-  const formattedDate = format(
-    parse(entryDate, "yyyy-MM-dd HH:mm:ss", new Date()),
-    "MMMM d, yyyy 'at' h:mm a",
-  );
+
+  const formattedDate = formatDate(entryDate);
+  const isDemo = useIsDemo();
+
   const navigate = useNavigate();
 
   const handleSelect = () => {
-    navigate(`/dashboard/journals/${journalId}/${id}`);
+    const url = isDemo
+      ? `/demo/dashboard/journals/${journalId}/${id}`
+      : `/dashboard/journals/${journalId}/${id}`;
+    navigate(url);
   };
+
   const sanitizedHTML = DOMPurify.sanitize(content);
   const { parsedHeading, parsedParagraph } =
     getJournalPreviewTitle(sanitizedHTML);

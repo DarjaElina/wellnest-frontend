@@ -59,20 +59,11 @@ export default function WelcomePage() {
           />
         </FadeIn>
       </div>
-      <div className="w-full max-w-5xl grid sm:grid-cols-2 gap-6 z-10">
-        <Card className="aspect-video bg-muted/30 animate-pulse">
-          <CardContent className="flex items-center justify-center h-full text-muted-foreground">
-            Screenshot: Journal Entry
-          </CardContent>
-        </Card>
-        <Card className="aspect-video bg-muted/30 animate-pulse">
-          <CardContent className="flex items-center justify-center h-full text-muted-foreground">
-            Screenshot: Mood Tracker
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="text-center mt-20 max-w-3xl z-10">
+      <div className="w-full max-w-5xl grid sm:grid-cols-2 gap-6 z-10"></div>
+      <Button className="hover:scale-105 hover:shadow-lg transition" asChild>
+        <Link to="demo/dashboard">Try Demo</Link>
+      </Button>
+      <div className="text-center mt-16 sm:mt-20 max-w-3xl z-10">
         <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center gap-2">
           <Sparkles className="text-brand-primary w-6 h-6" />
           Why choose Wellnest?

@@ -58,7 +58,7 @@ export function EntriesSidebar({ entries, color }: Props) {
 
   return (
     <div className="overflow-y-auto px-4 py-2 flex-1">
-      <div className="flex md:w-full items-center gap-1 mb-3">
+      <div className="flex md:w-full items-center gap-1 my-3">
         <Input
           placeholder="Search entries..."
           value={inputValue}

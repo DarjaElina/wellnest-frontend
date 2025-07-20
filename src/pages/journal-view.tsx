@@ -61,9 +61,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { formatDate } from "@/helper/date";
+import { useIsDemo } from "@/context/demoContext";
 
 export default function JournalView() {
   const { journal } = useOutletContext<{ journal: Journal }>();
+  const isDemo = useIsDemo();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -80,7 +83,6 @@ export default function JournalView() {
   const updateMutation = useMutation({
     mutationFn: (data: JournalInput) => updateJournal(journal?.id, data),
     onSuccess: (updatedJournal: Journal) => {
-      console.log("updated journal is:", updatedJournal);
       queryClient.setQueryData<Journal[]>(["journals"], (old = []) =>
         old.map((j) => (j.id === updatedJournal.id ? updatedJournal : j)),
       );
@@ -186,9 +188,7 @@ export default function JournalView() {
           <CalendarDays className={`w-4 h-4 ${textColorMap[journal.color]}`} />
           <span>
             Last updated:{" "}
-            <span className="font-medium">
-              {new Date(journal.updatedAt).toLocaleString()}
-            </span>
+            <span className="font-medium">{formatDate(journal.updatedAt)}</span>
           </span>
         </div>
 
@@ -240,7 +240,10 @@ export default function JournalView() {
                     Cancel
                   </Button>
                 </DialogClose>
-                <Button type="submit" disabled={updateMutation.isPending}>
+                <Button
+                  type="submit"
+                  disabled={updateMutation.isPending || isDemo}
+                >
                   {updateMutation.isPending ? "Saving..." : "Save changes"}
                 </Button>
               </DialogFooter>

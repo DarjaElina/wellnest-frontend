@@ -7,6 +7,7 @@ import {
   LogOut,
   BookOpenText,
   MapPin,
+  DoorOpen,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -43,6 +44,8 @@ import { NewJournalForm } from "./journal/new-journal-form";
 import SettingsDialog from "./settings-dialog";
 import { db } from "@/lib/db";
 import { Skeleton } from "../ui/skeleton";
+import { useIsDemo } from "@/context/demoContext";
+import { demoJournals } from "@/data/demo/journal";
 
 const items = [
   { title: "Home", url: "", icon: Home },
@@ -52,13 +55,19 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const isDemo = useIsDemo();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const { data, isError, isLoading } = useQuery({
     queryKey: ["journals"],
     queryFn: getJournals,
+    enabled: !isDemo,
   });
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const journals = isDemo ? demoJournals : data;
+
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: async () => {
@@ -85,11 +94,7 @@ export function AppSidebar() {
       <SidebarContent className="flex flex-col h-full rounded-r-2xl p-4">
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg flex items-center font-bold tracking-tight text-brand-secondary">
-            <img
-              src="/logo.png"
-              className="w-8 h-8 mr-2"
-              alt="lotus flower"
-            />
+            <img src="/logo.png" className="w-8 h-8 mr-2" alt="lotus flower" />
             <p>Wellnest</p>
           </SidebarGroupLabel>
 
@@ -114,8 +119,8 @@ export function AppSidebar() {
                       <SidebarMenuSubItem className="text-destructive text-sm">
                         Error loading journals
                       </SidebarMenuSubItem>
-                    ) : data && data.length > 0 ? (
-                      data.map((journal: Journal) => (
+                    ) : journals && journals.length > 0 ? (
+                      journals.map((journal: Journal) => (
                         <SidebarMenuSubItem key={journal.id}>
                           <Link
                             to={`./journals/${journal.id}`}
@@ -132,22 +137,33 @@ export function AppSidebar() {
                     )}
 
                     <SidebarMenuSubItem>
-                      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            className="h-8 w-full justify-start text-sm px-2 cursor-pointer hover:bg-muted/30 transition"
-                          >
-                            <Plus className="h-4 w-4 mr-2" />
-                            Create Journal
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <NewJournalForm
-                            closeDialog={() => setDialogOpen(false)}
-                          />
-                        </DialogContent>
-                      </Dialog>
+                      {isDemo ? (
+                        <Button
+                          disabled
+                          variant="ghost"
+                          className="h-8 w-full justify-start text-sm px-2 cursor-not-allowed opacity-50"
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Create Journal (demo)
+                        </Button>
+                      ) : (
+                        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              className="h-8 w-full justify-start text-sm px-2 cursor-pointer hover:bg-muted/30 transition"
+                            >
+                              <Plus className="h-4 w-4 mr-2" />
+                              Create Journal
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <NewJournalForm
+                              closeDialog={() => setDialogOpen(false)}
+                            />
+                          </DialogContent>
+                        </Dialog>
+                      )}
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>
@@ -171,18 +187,29 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
         <SidebarGroup>
           <SidebarFooter className="mt-auto pt-4 border-t border-border">
             <SidebarMenu className="space-y-1">
               <SidebarMenuItem>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start cursor-pointer"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </Button>
+                {!isDemo && (
+                  <Button
+                    disabled={isDemo}
+                    variant="ghost"
+                    className="w-full justify-start cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </Button>
+                )}
+
+                {isDemo && (
+                  <Button className="w-full justify-start cursor-pointer">
+                    <DoorOpen className="mr-2 h-4 w-4" />
+                    <Link to="/">Leave Demo Mode</Link>
+                  </Button>
+                )}
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarFooter>

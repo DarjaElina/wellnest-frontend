@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useMap } from "react-leaflet/hooks";
 
 export default function MyLocationButton({
-  setMarker
+  setMarker,
 }: {
   setMarker: (pos: [number, number]) => void;
 }) {
@@ -16,7 +16,7 @@ export default function MyLocationButton({
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        console.log("POS IS", pos)
+        console.log("POS IS", pos);
         const coords: [number, number] = [
           pos.coords.latitude,
           pos.coords.longitude,
@@ -38,4 +38,3 @@ export default function MyLocationButton({
     </div>
   );
 }
-

@@ -16,9 +16,11 @@ import { getTodayMoodEntry } from "@/services/moodEntry";
 import { Sparkles } from "lucide-react";
 import { useSettings } from "@/context/settingsContext";
 import { getAffirmationOfTheDay } from "@/services/affirmation";
+import { useIsDemo } from "@/context/demoContext";
 
 export default function HomePage() {
   const { data: user } = useAuthQuery();
+  const isDemo = useIsDemo();
 
   const {
     data,
@@ -27,6 +29,7 @@ export default function HomePage() {
   } = useQuery({
     queryKey: ["todayMood"],
     queryFn: getTodayMoodEntry,
+    enabled: !isDemo,
   });
 
   const { settings } = useSettings();
@@ -39,9 +42,19 @@ export default function HomePage() {
     queryKey: ["affirmationOfTheDay", settings.affirmationSet],
     queryFn: () =>
       getAffirmationOfTheDay({ category: settings.affirmationSet }),
+    enabled: !isDemo,
   });
 
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const demoAffirmation = {
+    content: "You are exactly where you need to be 🧘‍♀️",
+  };
+
+  const demoMood = {
+    label: "Grateful",
+    iconUrl: "/assets/moods/default/grateful.png",
+  };
 
   return (
     <div className="px-6 py-10 max-w-5xl mx-auto space-y-6">
@@ -51,6 +64,11 @@ export default function HomePage() {
             ? `Welcome back, ${user?.firstName}!`
             : "Welcome back!"}
         </h1>
+        {isDemo && (
+          <p className="text-sm">
+            You’re currently viewing the demo ✨ Some features are disabled.
+          </p>
+        )}
       </div>
 
       <Card className="bg-background/90">
@@ -66,18 +84,19 @@ export default function HomePage() {
           </div>
         </CardHeader>
         <CardContent>
-          {affLoading && (
+          {isDemo ? (
+            <p className="text-base italic text-muted-foreground">
+              “{demoAffirmation.content}”
+            </p>
+          ) : affLoading ? (
             <p className="text-muted-foreground text-sm">
               Loading affirmation of the day...
             </p>
-          )}
-
-          {affError && (
+          ) : affError ? (
             <p className="text-destructive text-sm">
               Failed to load affirmation.
             </p>
-          )}
-          {affirmationOfTheDay && (
+          ) : (
             <p className="text-base italic text-muted-foreground">
               “{affirmationOfTheDay?.content}”
             </p>
@@ -92,19 +111,35 @@ export default function HomePage() {
         </CardHeader>
 
         <CardContent className="space-y-3">
-          {moodLoading && (
+          {isDemo ? (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-2">
+              <div className="text-base sm:text-lg">
+                <p className="mb-1 text-muted-foreground text-sm sm:text-base">
+                  You checked in today:
+                </p>
+                <span className="font-semibold inline-flex items-center gap-2">
+                  Feeling {demoMood.label}
+                  <img
+                    src={demoMood.iconUrl}
+                    className="w-8 h-8"
+                    alt="Mood icon"
+                  />
+                </span>
+              </div>
+
+              <Button disabled variant="outline">
+                Update check-in (disabled in demo)
+              </Button>
+            </div>
+          ) : moodLoading ? (
             <p className="text-muted-foreground text-sm">
               Loading today’s mood…
             </p>
-          )}
-
-          {moodError && (
+          ) : moodError ? (
             <p className="text-destructive text-sm">
               Failed to load mood entry.
             </p>
-          )}
-
-          {data ? (
+          ) : data ? (
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-2">
               <div className="text-base sm:text-lg">
                 <p className="mb-1 text-muted-foreground text-sm sm:text-base">
@@ -120,10 +155,7 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <Button
-                onClick={() => setDialogOpen(true)}
-                className="cursor-pointer"
-              >
+              <Button onClick={() => setDialogOpen(true)}>
                 Update check-in
               </Button>
             </div>
@@ -132,12 +164,7 @@ export default function HomePage() {
               <p className="text-base sm:text-lg text-muted-foreground">
                 You haven’t checked in yet today.
               </p>
-              <Button
-                onClick={() => setDialogOpen(true)}
-                className="cursor-pointer"
-              >
-                Check in
-              </Button>
+              <Button onClick={() => setDialogOpen(true)}>Check in</Button>
             </div>
           )}
         </CardContent>
@@ -145,15 +172,15 @@ export default function HomePage() {
 
       <RecentSummary />
 
-      {data ? (
+      {!isDemo && data ? (
         <EditMoodDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
           initialEntry={data}
         />
-      ) : (
+      ) : !isDemo ? (
         <CreateMoodDialog open={dialogOpen} onOpenChange={setDialogOpen} />
-      )}
+      ) : null}
     </div>
   );
 }

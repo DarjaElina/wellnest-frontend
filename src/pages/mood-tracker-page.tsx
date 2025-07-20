@@ -20,7 +20,7 @@ export default function MoodTrackerPage() {
         <CardHeader>
           <CardTitle className="sr-only">Mood Calendar</CardTitle>
           <CardDescription className="sr-only">
-            Visualize your moods across the month
+            Visualize your moods across the time
           </CardDescription>
         </CardHeader>
         <CardContent>
