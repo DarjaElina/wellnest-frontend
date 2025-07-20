@@ -171,6 +171,7 @@ export function JournalEntryEditorToolbar({
                   Cancel
                 </AlertDialogCancel>
                 <AlertDialogAction
+                  disabled={deleteMutation.isPending}
                   className="cursor-pointer"
                   onClick={handleDelete}
                 >

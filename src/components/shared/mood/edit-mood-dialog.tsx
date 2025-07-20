@@ -128,10 +128,10 @@ export default function EditMoodDialog({
         <DialogFooter>
           <Button
             className="cursor-pointer"
-            disabled={!entry.label}
+            disabled={!entry.label || mutation.isPending}
             onClick={handleSubmit}
           >
-            Save
+            {mutation.isPending ? "Saving..." : "Save"}
           </Button>
         </DialogFooter>
       </DialogContent>

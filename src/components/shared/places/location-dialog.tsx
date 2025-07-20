@@ -110,7 +110,7 @@ export default function LocationDialog({
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add a Place</DialogTitle>
           <DialogDescription className="sr-only">
@@ -229,9 +229,13 @@ export default function LocationDialog({
               <Button
                 className="cursor-pointer"
                 type="submit"
-                disabled={isDemo}
+                disabled={isDemo || placeMutation.isPending}
               >
-                {isDemo ? "Save (disabled in demo)" : "Save"}
+                {isDemo
+                  ? "Save (disabled in demo)"
+                  : placeMutation.isPending
+                    ? "Saving..."
+                    : "Save"}
               </Button>
             </DialogFooter>
           </form>

@@ -97,8 +97,12 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
               Cancel
             </Button>
           </DialogClose>
-          <Button className="cursor-pointer" type="submit">
-            Create
+          <Button
+            className="cursor-pointer"
+            type="submit"
+            disabled={newJournalMutation.isPending}
+          >
+            {newJournalMutation.isPending ? "Creating..." : "Create"}
           </Button>
         </DialogFooter>
       </form>

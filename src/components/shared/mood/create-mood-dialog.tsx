@@ -198,10 +198,14 @@ export default function CreateMoodDialog({
           )}
           <Button
             className="cursor-pointer"
-            disabled={!entry.label}
+            disabled={!entry.label || mutation.isPending}
             onClick={step === 2 ? handleSubmit : () => setStep(2)}
           >
-            {step === 2 ? "Save" : "Continue"}
+            {step === 2 && mutation.isPending
+              ? "Saving..."
+              : step === 2
+                ? "Save"
+                : "Continue"}
           </Button>
         </DialogFooter>
       </DialogContent>

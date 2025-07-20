@@ -98,8 +98,12 @@ export function TagsDialog({
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" className="cursor-pointer">
-              Save changes
+            <Button
+              type="submit"
+              className="cursor-pointer"
+              disabled={tagsMutation.isPending}
+            >
+              {tagsMutation.isPending ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>
         </form>

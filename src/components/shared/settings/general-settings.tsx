@@ -98,8 +98,11 @@ export default function GeneralSettings() {
               <AlertDialogAction
                 className="cursor-pointer"
                 onClick={handleDeleteAccount}
+                disabled={deleteAccountMutation.isPending}
               >
-                Continue
+                {deleteAccountMutation.isPending
+                  ? "Proccessing..."
+                  : "Continue"}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
