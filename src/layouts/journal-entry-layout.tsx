@@ -9,7 +9,7 @@ import { useCreateEntry } from "@/hooks/useCreateEntry";
 import { createOfflineEntry } from "@/helper/journal-entry";
 import { bgColorMap, hoverColorMap } from "@/lib/journalColor";
 import { getEntries } from "@/services/journalEntry";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { EntriesSidebar } from "@/components/shared/journal-entry/entries-sidebar";
 import { useFilter } from "@/context/filterContext";
 import {
@@ -30,6 +30,7 @@ export default function JournalEntryLayout() {
   const navigate = useNavigate();
   const { state } = useFilter();
   const isDemo = useIsDemo();
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const { data: journal, isLoading: isJournalLoading } = useQuery({
     queryKey: ["journal", journalId],
@@ -135,7 +136,11 @@ export default function JournalEntryLayout() {
         {isJournalLoading ? (
           <Skeleton className="h-[300px] w-full" />
         ) : (
-          <EntriesSidebar entries={filteredEntries} color={activeColor} />
+          <EntriesSidebar
+            setSheetOpen={setSheetOpen}
+            entries={filteredEntries}
+            color={activeColor}
+          />
         )}
 
         <div className="fixed bottom-6 right-6 z-50">
@@ -163,14 +168,14 @@ export default function JournalEntryLayout() {
 
       <main className="flex-1 flex-col bg-background relative">
         <div className="xl:hidden">
-          <Sheet>
+          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger className="fixed right-2 top-0 m-2" asChild>
               <Button size="icon" variant="ghost">
                 <ListTree />
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="right" className="w-80 p-0">
+            <SheetContent side="right" className="w-85 p-0">
               <SheetHeader>
                 <SheetTitle className="sr-only">Entries List</SheetTitle>
                 <SheetDescription className="sr-only">
@@ -187,13 +192,16 @@ export default function JournalEntryLayout() {
                 </h2>
               </div>
 
-              <EntriesSidebar entries={filteredEntries} />
+              <EntriesSidebar
+                entries={filteredEntries}
+                setSheetOpen={setSheetOpen}
+              />
               <SheetClose asChild></SheetClose>
             </SheetContent>
           </Sheet>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 bg-background">
+        <div className="flex-1 overflow-y-auto px-2 md:px-6 bg-background">
           <Outlet context={{ journal: activeJournal }} />
         </div>
       </main>

@@ -46,6 +46,7 @@ import { db } from "@/lib/db";
 import { Skeleton } from "../ui/skeleton";
 import { useIsDemo } from "@/context/demoContext";
 import { demoJournals } from "@/data/demo/journal";
+import { useSidebar } from "@/components/ui/sidebar";
 
 const items = [
   { title: "Home", url: "", icon: Home },
@@ -59,6 +60,7 @@ export function AppSidebar() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { setOpenMobile } = useSidebar();
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ["journals"],
@@ -71,6 +73,7 @@ export function AppSidebar() {
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: async () => {
+      setOpenMobile(false);
       navigate("/login");
       localStorage.clear();
       await db.delete();
@@ -87,11 +90,17 @@ export function AppSidebar() {
   };
 
   const handleLeaveDemo = async () => {
-    navigate("/login");
+    setOpenMobile(false);
+    navigate("/");
     localStorage.clear();
     await db.delete();
     await db.open();
     queryClient.clear();
+  };
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+    setOpenMobile(false);
   };
 
   return (
@@ -131,6 +140,7 @@ export function AppSidebar() {
                       journals.map((journal: Journal) => (
                         <SidebarMenuSubItem key={journal.id}>
                           <Link
+                            onClick={() => setOpenMobile(false)}
                             to={`./journals/${journal.id}`}
                             className="block px-3 py-1.5 rounded-md hover:bg-muted/30 transition"
                           >
@@ -155,9 +165,10 @@ export function AppSidebar() {
                           Create Journal (demo)
                         </Button>
                       ) : (
-                        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                        <Dialog open={dialogOpen}>
                           <DialogTrigger asChild>
                             <Button
+                              onClick={handleOpenDialog}
                               variant="ghost"
                               className="h-8 w-full justify-start text-sm px-2 cursor-pointer hover:bg-muted/30 transition"
                             >
@@ -183,7 +194,7 @@ export function AppSidebar() {
                     asChild
                     className="hover:bg-muted/40 transition-all rounded-lg px-3 py-2"
                   >
-                    <Link to={item.url}>
+                    <Link to={item.url} onClick={() => setOpenMobile(false)}>
                       <item.icon className="mr-2 h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>

@@ -12,7 +12,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Settings2 } from "lucide-react";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import { JournalEntryList } from "./journal-entry-list";
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { TagsSearch } from "../tags/tags-search";
 import { useFilter } from "@/context/filterContext";
 import debounce from "lodash.debounce";
@@ -22,9 +28,10 @@ import { bgColorMap, hoverColorMap } from "@/lib/journalColor";
 type Props = {
   entries: JournalEntry[];
   color?: string;
+  setSheetOpen?: Dispatch<SetStateAction<boolean>>;
 };
 
-export function EntriesSidebar({ entries, color }: Props) {
+export function EntriesSidebar({ entries, color, setSheetOpen }: Props) {
   const { dispatch } = useFilter();
   const [filterOpen, setFilterOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -118,7 +125,7 @@ export function EntriesSidebar({ entries, color }: Props) {
         </DialogContent>
       </Dialog>
 
-      <JournalEntryList entries={entries} />
+      <JournalEntryList entries={entries} setSheetOpen={setSheetOpen} />
     </div>
   );
 }

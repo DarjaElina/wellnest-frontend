@@ -14,13 +14,16 @@ import type { JournalEntry } from "@/types/journalEntry.types";
 import { ringColorMap, textColorMap } from "@/lib/journalColor";
 import { formatDate } from "@/helper/date";
 import { useIsDemo } from "@/context/demoContext";
+import type { Dispatch, SetStateAction } from "react";
 
 export function JournalEntryCard({
   entry,
   isActive,
+  setSheetOpen,
 }: {
   entry: JournalEntry;
   isActive: boolean;
+  setSheetOpen?: Dispatch<SetStateAction<boolean>>;
 }) {
   const { journalId, id, color, content, entryDate } = entry;
 
@@ -30,6 +33,9 @@ export function JournalEntryCard({
   const navigate = useNavigate();
 
   const handleSelect = () => {
+    if (setSheetOpen) {
+      setSheetOpen(false);
+    }
     const url = isDemo
       ? `/demo/dashboard/journals/${journalId}/${id}`
       : `/dashboard/journals/${journalId}/${id}`;

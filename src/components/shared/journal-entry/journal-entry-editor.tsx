@@ -176,7 +176,7 @@ export function JournalEntryEditor({
   };
 
   return (
-    <div className="p-6 max-w-full lg:max-w-3xl xl:max-w-5xl mx-auto bg-card rounded-xl shadow space-y-4">
+    <div className="px-2 py-4 md:py-6 md:px-6 max-w-full lg:max-w-3xl xl:max-w-5xl mx-auto bg-card rounded-xl shadow space-y-4">
       <div className="flex justify-between items-center">
         <DateTimePicker
           entryDate={new Date(entry.entryDate)}
@@ -230,7 +230,7 @@ export function JournalEntryEditor({
       <JournalEntryEditorToolbar editor={editor} entry={entry} />
 
       <div
-        className={`border bg-card rounded-xl shadow-sm p-4 transition-shadow focus-within:shadow-md`}
+        className={`border bg-card rounded-xl shadow-sm p-2 md:p-4 transition-shadow focus-within:shadow-md`}
       >
         <EditorContent editor={editor} className="min-h-[55vh]" />
       </div>

@@ -33,6 +33,12 @@ export default function WelcomePage() {
           >
             <Link to="/register">Register</Link>
           </Button>
+          <Button
+            className="hover:scale-105 hover:shadow-lg transition bg-brand-primary hover:bg-brand-primary/90"
+            asChild
+          >
+            <Link to="demo/dashboard">Try Demo</Link>
+          </Button>
         </div>
       </div>
 
@@ -60,9 +66,7 @@ export default function WelcomePage() {
         </FadeIn>
       </div>
       <div className="w-full max-w-5xl grid sm:grid-cols-2 gap-6 z-10"></div>
-      <Button className="hover:scale-105 hover:shadow-lg transition" asChild>
-        <Link to="demo/dashboard">Try Demo</Link>
-      </Button>
+
       <div className="text-center mt-16 sm:mt-20 max-w-3xl z-10">
         <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center gap-2">
           <Sparkles className="text-brand-primary w-6 h-6" />

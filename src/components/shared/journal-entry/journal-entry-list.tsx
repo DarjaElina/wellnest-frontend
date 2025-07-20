@@ -1,7 +1,14 @@
 import { JournalEntryCard } from "@/components/shared/journal-entry/journal-entry-card";
 import type { JournalEntry } from "@/types/journalEntry.types";
+import type { Dispatch, SetStateAction } from "react";
 import { useParams } from "react-router-dom";
-export function JournalEntryList({ entries }: { entries: JournalEntry[] }) {
+export function JournalEntryList({
+  entries,
+  setSheetOpen,
+}: {
+  entries: JournalEntry[];
+  setSheetOpen?: Dispatch<SetStateAction<boolean>>;
+}) {
   const { entryId } = useParams();
   if (!entries) {
     return <div className="text-muted-foreground m-4">Loading entries...</div>;
@@ -16,6 +23,7 @@ export function JournalEntryList({ entries }: { entries: JournalEntry[] }) {
           key={entry.id}
           entry={entry}
           isActive={entry.id === entryId}
+          setSheetOpen={setSheetOpen}
         />
       ))}
     </div>

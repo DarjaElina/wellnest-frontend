@@ -61,7 +61,7 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-md shadow-xl rounded-2xl">
+    <Card className="w-full max-w-md">
       <CardHeader className="text-center pb-0">
         <h1 className="text-3xl font-bold text-foreground">
           Log In to Wellnest

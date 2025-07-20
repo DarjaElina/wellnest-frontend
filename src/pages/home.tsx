@@ -57,12 +57,10 @@ export default function HomePage() {
   };
 
   return (
-    <div className="px-6 py-10 max-w-5xl mx-auto space-y-6">
+    <div className="px-0 sm:px-6 py-6 sm:py-10 max-w-5xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight mb-1">
-          {user?.firstName
-            ? `Welcome back, ${user?.firstName}!`
-            : "Welcome back!"}
+          {user?.firstName ? `Welcome back, ${user?.firstName}!` : "Welcome!"}
         </h1>
         {isDemo && (
           <p className="text-sm">

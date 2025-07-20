@@ -56,7 +56,7 @@ export default function AffirmationSettings() {
   return (
     <div className="space-y-6 mt-6">
       <div className="space-y-1">
-        <Label className="text-base font-medium block">Affirmation Set</Label>
+        <Label>Affirmation Set</Label>
         <p className="text-sm text-muted-foreground mb-1">
           Choose your preferred affirmation set
         </p>
@@ -68,7 +68,7 @@ export default function AffirmationSettings() {
               updateSetting("affirmationSet", val)
             }
           >
-            <SelectTrigger className="w-[160px]">
+            <SelectTrigger>
               <SelectValue placeholder="Select affirmation set" />
             </SelectTrigger>
             <SelectContent>

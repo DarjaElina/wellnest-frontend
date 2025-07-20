@@ -14,6 +14,7 @@ import {
 } from "date-fns";
 import type { MoodType } from "@/types/mood.types";
 import { useIsDemo } from "@/context/demoContext";
+import { cn } from "@/lib/utils";
 
 interface Props {
   year: number;
@@ -48,7 +49,7 @@ export default function MoodCalendar({ year, monthIndex }: Props) {
     {
       date: format(new Date(year, monthIndex, 14), "yyyy-MM-dd"),
       label: "Okay",
-      note: "Just okay :/",
+      note: "just okay :/",
       iconUrl: "/assets/moods/default/okay.png",
     },
     {
@@ -69,48 +70,52 @@ export default function MoodCalendar({ year, monthIndex }: Props) {
   const days = eachDayOfInterval({ start, end });
 
   return (
-    <div className="grid grid-cols-7 gap-1 text-center">
-      {days.map((date) => {
-        const mood = getMoodForDate(date);
+    <div className="overflow-x-auto">
+      <div className="grid grid-cols-7 gap-1 min-w-[420px] sm:min-w-0 text-center">
+        {days.map((date) => {
+          const mood = getMoodForDate(date);
 
-        return (
-          <Tooltip key={date.toISOString()}>
-            <TooltipTrigger asChild>
-              <div
-                className={`aspect-square rounded-md flex items-center justify-center text-xl transition-all
-                  ${
+          return (
+            <Tooltip key={date.toISOString()}>
+              <TooltipTrigger asChild>
+                <div
+                  className={cn(
+                    "aspect-square rounded-md flex items-center justify-center transition-all text-xl",
                     isLoading && !isDemo
                       ? "animate-pulse bg-muted/10"
                       : mood
                         ? "bg-muted hover:bg-muted/80 cursor-pointer"
-                        : "bg-muted/20 text-muted-foreground"
-                  }`}
-              >
-                {isLoading && !isDemo ? (
-                  <span className="w-5 h-5 rounded-full bg-muted-foreground/20" />
-                ) : mood ? (
-                  <img
-                    src={mood.iconUrl}
-                    alt={mood.label}
-                    className="w-10 h-10"
-                  />
-                ) : (
-                  format(date, "d")
-                )}
-              </div>
-            </TooltipTrigger>
-            {!isLoading && mood && (
-              <TooltipContent className="text-sm">
-                <p>
-                  <strong>{mood.label}</strong>
-                </p>
-                {mood.note && <p>“{mood.note}”</p>}
-                <p>{format(date, "PP")}</p>
-              </TooltipContent>
-            )}
-          </Tooltip>
-        );
-      })}
+                        : "bg-muted/20 text-muted-foreground",
+                    "text-base sm:text-xl",
+                    "w-10 sm:w-full h-auto",
+                  )}
+                >
+                  {isLoading && !isDemo ? (
+                    <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-muted-foreground/20" />
+                  ) : mood ? (
+                    <img
+                      src={mood.iconUrl}
+                      alt={mood.label}
+                      className="w-6 h-6 sm:w-10 sm:h-10"
+                    />
+                  ) : (
+                    format(date, "d")
+                  )}
+                </div>
+              </TooltipTrigger>
+              {!isLoading && mood && (
+                <TooltipContent className="text-sm">
+                  <p>
+                    <strong>{mood.label}</strong>
+                  </p>
+                  {mood.note && <p>“{mood.note}”</p>}
+                  <p>{format(date, "PP")}</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          );
+        })}
+      </div>
     </div>
   );
 }

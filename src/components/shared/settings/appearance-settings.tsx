@@ -34,7 +34,7 @@ export default function AppearanceSettings() {
           value={settings.wallpaperUrl}
           onValueChange={(val) => updateSetting("wallpaperUrl", val)}
         >
-          <SelectTrigger id="wallpaper-select" className="w-full">
+          <SelectTrigger id="wallpaper-select">
             <SelectValue placeholder="Select wallpaper" />
           </SelectTrigger>
           <SelectContent>

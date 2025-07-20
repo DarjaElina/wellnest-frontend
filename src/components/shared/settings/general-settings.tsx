@@ -65,18 +65,11 @@ export default function GeneralSettings() {
         </div>
       </div>
       <div className="space-y-2">
-        <Button
-          variant="ghost"
-          disabled={isDemo}
-          className="w-full justify-start cursor-pointer"
-        >
-          Disconnect Google Account
-        </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
               disabled={isDemo}
-              className="w-full justify-start cursor-pointer"
+              className="justify-start cursor-pointer"
               variant="destructive"
             >
               {" "}

@@ -63,21 +63,22 @@ export default function MoodCalendarToolBar({
   }
 
   return (
-    <div className="flex items-center gap-2 justify-between w-full">
+    <div className="flex justify-between items-center gap-2">
       <Button
         onClick={prevMonth}
         className="cursor-pointer"
         aria-label="Previous Month"
+        size="icon"
       >
         <ChevronLeft size={18} />
       </Button>
 
-      <div className="flex gap-2 items-center">
+      <div className="flex flex-wrap gap-2">
         <Select
           value={monthIndex.toString()}
           onValueChange={(val) => setMonthIndex(Number(val))}
         >
-          <SelectTrigger className="w-[130px]">
+          <SelectTrigger>
             <SelectValue placeholder="Month" />
           </SelectTrigger>
           <SelectContent>
@@ -93,7 +94,7 @@ export default function MoodCalendarToolBar({
           value={year.toString()}
           onValueChange={(val) => setYear(Number(val))}
         >
-          <SelectTrigger className="w-[100px]">
+          <SelectTrigger>
             <SelectValue placeholder="Year" />
           </SelectTrigger>
           <SelectContent>
@@ -105,11 +106,11 @@ export default function MoodCalendarToolBar({
           </SelectContent>
         </Select>
       </div>
-
       <Button
         onClick={nextMonth}
-        className="cursor-pointer"
+        className="cursor-pointer "
         aria-label="Next Month"
+        size="icon"
       >
         <ChevronRight size={18} />
       </Button>

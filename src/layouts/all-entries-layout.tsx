@@ -94,21 +94,19 @@ export default function AllEntriesLayout() {
       </aside>
 
       <main className="flex-1 flex-col bg-background flex">
-        <div className="flex-1 overflow-y-auto p-6 bg-background">
-          <div className="fixed bottom-6 right-6 z-50">
-            <CreateEntryDialog
-              open={openDialog}
-              onOpenChange={setOpenDialog}
-              journals={journalList}
-              isLoading={isLoading}
-              isError={isError}
-              onCreate={handleNewEntry}
-            />
-          </div>
-
-          <Outlet />
-          <EmptyState />
+        <div className="fixed bottom-6 right-6 z-50">
+          <CreateEntryDialog
+            open={openDialog}
+            onOpenChange={setOpenDialog}
+            journals={journalList}
+            isLoading={isLoading}
+            isError={isError}
+            onCreate={handleNewEntry}
+          />
         </div>
+
+        <Outlet />
+        <EmptyState />
       </main>
     </div>
   );

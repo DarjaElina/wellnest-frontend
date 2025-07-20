@@ -36,7 +36,7 @@ export default function MoodSettings() {
       </div>
 
       <div className="space-y-1">
-        <Label className="text-base font-medium block">Mood Emoji Set</Label>
+        <Label>Mood Emoji Set</Label>
         <p className="text-sm text-muted-foreground mb-1">
           Choose your preferred style of mood icons
         </p>
@@ -80,9 +80,7 @@ export default function MoodSettings() {
 
       <div className="space-y-1">
         <div className="flex flex-col gap-3">
-          <Label className="text-base font-medium block" htmlFor="time-picker">
-            Mood Check-in Time
-          </Label>
+          <Label htmlFor="time-picker">Mood Check-in Time</Label>
           <Select
             value={settings.checkinTime}
             onValueChange={(val) => updateSetting("checkinTime", val)}

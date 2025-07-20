@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Dialog,
   DialogContent,
@@ -39,13 +37,13 @@ export default function SettingsDialog() {
         </DialogTrigger>
       </SidebarMenuItem>
 
-      <DialogContent className="max-w-4xl w-full p-0 overflow-hidden rounded-xl">
+      <DialogContent className="p-0">
         <DialogHeader className="sr-only">
           <DialogTitle>Settings</DialogTitle>
           <DialogDescription>User Settings</DialogDescription>
         </DialogHeader>
         <div className="flex h-[60vh] w-full">
-          <aside className="w-48 bg-muted/40 border-r p-4 space-y-2">
+          <aside className="max-w-30 md:max-w-48 bg-muted/40 border-r p-2 md:p-4 space-y-2">
             <SidebarTabButton
               label="General"
               isActive={tab === "general"}
@@ -68,7 +66,7 @@ export default function SettingsDialog() {
             />
           </aside>
 
-          <main className="flex-1 p-6 overflow-y-auto">
+          <main className="flex-1 p-3 md:p-6 overflow-y-auto">
             {tab === "general" && <GeneralSettings />}
             {tab === "appearance" && <AppearanceSettings />}
             {tab === "mood" && <MoodSettings />}

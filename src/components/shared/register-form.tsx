@@ -48,7 +48,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <Card className="w-full max-w-md shadow-xl rounded-2xl">
+    <Card className="w-full max-w-md">
       <CardHeader className="text-center pb-0">
         <h1 className="text-3xl font-bold text-foreground">Create Account</h1>
         <p className="text-muted-foreground text-sm mt-1">
