@@ -34,7 +34,6 @@ import {
 export function JournalEntryEditorToolbar({
   editor,
   entry,
-  syncStatuc,
 }: {
   editor: Editor | null;
   entry: JournalEntry;
