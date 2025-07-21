@@ -20,6 +20,7 @@ import { showErrorToast } from "@/helper/error";
 import { formatISO9075 } from "date-fns";
 import { db } from "@/lib/db";
 import { TagSelector } from "./tags-selector";
+import { useIsDemo } from "@/context/demoContext";
 
 export function TagsDialog({
   initialTags,
@@ -32,6 +33,7 @@ export function TagsDialog({
   const { entryId } = useParams<RouteParams>() as RouteParams;
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const isDemo = useIsDemo();
 
   const tagsMutation = useMutation({
     mutationFn: () => updateEntryTags(entryId, selectedTags),
@@ -101,9 +103,9 @@ export function TagsDialog({
             <Button
               type="submit"
               className="cursor-pointer"
-              disabled={tagsMutation.isPending}
+              disabled={tagsMutation.isPending || isDemo}
             >
-              {tagsMutation.isPending ? "Saving..." : "Save"}
+              {tagsMutation.isPending ? "Saving..." : isDemo ? "Save (demo)" : "Save"}
             </Button>
           </DialogFooter>
         </form>

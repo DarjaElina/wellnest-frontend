@@ -63,6 +63,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { formatDate } from "@/helper/date";
 import { useIsDemo } from "@/context/demoContext";
+import { demoJournalEntries } from "@/data/demo/journal";
 
 export default function JournalView() {
   const { journal } = useOutletContext<{ journal: Journal }>();
@@ -198,7 +199,8 @@ export default function JournalView() {
           <span>
             Total entries:{" "}
             <span className="font-medium">
-              {journal.journalEntries?.length ?? "0"}
+              {!isDemo && journal.journalEntries?.length}
+              {isDemo && demoJournalEntries?.length}
             </span>
           </span>
         </div>
