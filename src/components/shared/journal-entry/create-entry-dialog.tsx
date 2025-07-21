@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import type { Journal } from "@/types/journal.types";
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { useIsDemo } from "@/context/demoContext";
 
 type Props = {
   open: boolean;
@@ -40,13 +41,14 @@ export function CreateEntryDialog({
   );
 
   const selectedJournal = journals.find((j) => j.id === selectedJournalId);
+  const isDemo = useIsDemo();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button className="text-neutral-100 bg-brand-secondary cursor-pointer">
+        <Button disabled={isDemo} className="text-neutral-100 bg-brand-secondary cursor-pointer">
           <Plus className="w-4 h-4 mr-1" />
-          New Entry
+          New Entry (demo)
         </Button>
       </DialogTrigger>
 

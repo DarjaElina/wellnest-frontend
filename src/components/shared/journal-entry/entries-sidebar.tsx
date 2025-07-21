@@ -64,8 +64,8 @@ export function EntriesSidebar({ entries, color, setSheetOpen }: Props) {
   const hoverColor = color ? hoverColorMap[color] : "";
 
   return (
-    <div className="overflow-y-auto px-4 py-2 flex-1">
-      <div className="flex md:w-full items-center gap-1 my-3">
+    <div className="overflow-y-auto px-2 md:px-4 py-1 md:py-3 flex-1">
+      <div className="flex md:w-full items-center gap-1 mb-3">
         <Input
           placeholder="Search entries..."
           value={inputValue}

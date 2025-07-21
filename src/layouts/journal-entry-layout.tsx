@@ -127,9 +127,6 @@ export default function JournalEntryLayout() {
             className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
           >
             <SquarePen className="text-neutral-100" />
-            <h2 className="text-lg font-semibold text-neutral-100 truncate">
-              {activeJournal?.name || "Journal"}
-            </h2>
           </div>
         )}
 
@@ -143,6 +140,10 @@ export default function JournalEntryLayout() {
           />
         )}
 
+        
+      </aside>
+
+      <main className="flex-1 flex-col bg-background relative">
         <div className="fixed bottom-6 right-6 z-50">
           {isJournalLoading ? (
             <Skeleton className="h-10 w-32 rounded" />
@@ -164,33 +165,28 @@ export default function JournalEntryLayout() {
             </Button>
           )}
         </div>
-      </aside>
-
-      <main className="flex-1 flex-col bg-background relative">
         <div className="xl:hidden">
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-            <SheetTrigger className="fixed right-2 top-0 m-2" asChild>
-              <Button size="icon" variant="ghost">
-                <ListTree />
+            <SheetTrigger className="fixed right-0 top-0" asChild>
+              <Button className="size-7 m-2" variant="ghost">
+                <ListTree/>
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="right" className="w-85 p-0">
-              <SheetHeader>
+            <SheetContent side="right" className="w-85 p-0 gap-2" >
+              <SheetHeader className="p-0 ">
                 <SheetTitle className="sr-only">Entries List</SheetTitle>
                 <SheetDescription className="sr-only">
                   Show entries list
                 </SheetDescription>
-              </SheetHeader>
-              <div
+                <div
                 onClick={navigateToJournalView}
-                className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
+                className={`cursor-pointer px-3 py-3 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
               >
                 <SquarePen className="text-neutral-100" />
-                <h2 className="text-lg font-semibold text-neutral-100 truncate">
-                  {activeJournal?.name || "Journal"}
-                </h2>
               </div>
+              </SheetHeader>
+             
 
               <EntriesSidebar
                 entries={filteredEntries}

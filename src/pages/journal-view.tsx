@@ -125,14 +125,15 @@ export default function JournalView() {
   return (
     <div className="max-w-3xl mx-auto">
       <div
-        className={`flex items-center justify-between rounded-xl shadow-md overflow-hidden mb-6 px-6 py-4 ${bgColorMap[journal.color]}`}
+        className={`flex items-center justify-between rounded-sm px-4 py-4 border-b border-border gap-3 bg-journal-moss mb-3 ${bgColorMap[journal.color]}`}
       >
         <div className="flex items-center gap-3">
-          <BookOpenText className="w-6 h-6 text-neutral-100" />
+          <BookOpenText className="text-neutral-100" />
           <h2 className="text-xl font-semibold text-neutral-100">
             {journal.name}
           </h2>
         </div>
+
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

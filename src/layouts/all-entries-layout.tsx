@@ -87,7 +87,6 @@ export default function AllEntriesLayout() {
         <div className="px-4 py-4 border-b border-border flex items-center bg-brand-secondary">
           <div className="flex items-center gap-3 text-neutral-100">
             <SquarePen />
-            <h2 className="text-lg font-semibold truncate">All Entries</h2>
           </div>
         </div>
         <EntriesSidebar entries={filteredEntries} />
