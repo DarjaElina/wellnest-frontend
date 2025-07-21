@@ -110,7 +110,7 @@ export default function LocationDialog({
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[425px]">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Add a Place</DialogTitle>
           <DialogDescription className="sr-only">
@@ -160,7 +160,7 @@ export default function LocationDialog({
                   <FormControl>
                     <label
                       htmlFor="dropzone-file"
-                      className="flex flex-col items-center justify-center w-full h-64 border-2 border-border border-dashed rounded-lg cursor-pointer"
+                      className="flex flex-col items-center justify-center w-full h-40 md:h-64 border-2 border-border border-dashed rounded-lg cursor-pointer"
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
@@ -217,7 +217,7 @@ export default function LocationDialog({
               </div>
             )}
 
-            <DialogFooter className="flex justify-end gap-2 mt-4">
+            <DialogFooter>
               <Button
                 className="cursor-pointer"
                 variant="ghost"

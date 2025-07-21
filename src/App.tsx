@@ -39,6 +39,7 @@ export default function App() {
             <Route element={<PageWallpaperWrapper />}>
               <Route index element={<Home />} />
               <Route path="mood" element={<MoodTrackerPage />} />
+              <Route path="places" element={<PlacesPage />} />
             </Route>
 
             <Route path="journals" element={<JournalEntryLayout />}>
@@ -62,6 +63,7 @@ export default function App() {
             <Route element={<PageWallpaperWrapper />}>
               <Route index element={<Home />} />
               <Route path="mood" element={<MoodTrackerPage />} />
+              <Route path="places" element={<PlacesPage />} />
             </Route>
 
             <Route path="journals" element={<JournalEntryLayout />}>
@@ -76,7 +78,7 @@ export default function App() {
             </Route>
             <Route path="journal-entries/all" element={<AllEntriesLayout />} />
 
-            <Route path="places" element={<PlacesPage />} />
+           
           </Route>
         </Route>
 
