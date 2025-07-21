@@ -123,8 +123,8 @@ export default function JournalEntryLayout() {
           <Skeleton className="w-full h-15 rounded" />
         ) : (
           <div
-            onClick={navigateToJournalView}
-            className={`cursor-pointer px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
+            onClick={!isDemo? navigateToJournalView : () => {}}
+            className={`${!isDemo && "cursor-pointer"} px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
           >
             <SquarePen className="text-neutral-100" />
           </div>
@@ -180,8 +180,8 @@ export default function JournalEntryLayout() {
                   Show entries list
                 </SheetDescription>
                 <div
-                onClick={navigateToJournalView}
-                className={`cursor-pointer px-3 py-3 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
+                onClick={!isDemo? navigateToJournalView : () => {}}
+                className={`px-3 py-3 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
               >
                 <SquarePen className="text-neutral-100" />
               </div>

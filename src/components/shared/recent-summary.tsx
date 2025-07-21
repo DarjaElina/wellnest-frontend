@@ -6,6 +6,7 @@ import { MoodWeekSummary } from "./mood/mood-week-summary";
 import { getJournalPreviewTitle } from "@/helper/journal";
 import { useIsDemo } from "@/context/demoContext";
 import DOMPurify from "dompurify";
+import { demoJournalEntries } from "@/data/demo/journal";
 
 export function RecentSummary() {
   const isDemo = useIsDemo();
@@ -22,10 +23,7 @@ export function RecentSummary() {
     );
   }, [isDemo]);
 
-  const demoEntry = {
-    journalId: "exampleJournal",
-    content: `<h1>A Grateful Walk</h1><p>I took a walk after journaling today and noticed how much calmer I felt. Writing helps.</p>`,
-  };
+  const demoEntry = demoJournalEntries[0];
 
   const sanitizedHTML =
     (isDemo ? demoEntry.content : latestEntry?.content) || "";
@@ -57,7 +55,7 @@ export function RecentSummary() {
                 <Link
                   to={
                     isDemo
-                      ? "/demo/dashboard/journals/exampleJournal"
+                      ? "/demo/dashboard/journals/demo-journal/demo-entry-1"
                       : `/dashboard/journals/${latestEntry?.journalId}`
                   }
                   className="text-sm text-brand-primary hover:underline font-medium"
