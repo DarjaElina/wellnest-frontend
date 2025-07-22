@@ -1,6 +1,5 @@
 import type { MoodType } from "@/types/mood.types";
-import { format, parseISO } from "date-fns";
-import { enUS } from "date-fns/locale";
+import { addDays, format, isSameDay, parseISO, startOfWeek } from "date-fns";
 
 const KEY = "moodPopupDismissedAt";
 
@@ -39,66 +38,40 @@ const moodScaleMap: Record<string, number> = {
   low: 1,
 };
 
-const defaultMoodWeekData = [
-  {
-    day: "Monday",
-    mood: "No mood available",
-    note: "",
-    scale: 0,
-  },
-  {
-    day: "Tuesday",
-    mood: "No mood available",
-    note: "",
-    scale: 0,
-  },
-  {
-    day: "Wednesday",
-    mood: "No mood available",
-    note: "",
-    scale: 0,
-  },
-  {
-    day: "Thursday",
-    mood: "No mood available",
-    note: "",
-    scale: 0,
-  },
-  {
-    day: "Friday",
-    mood: "No mood available",
-    note: "",
-    scale: 0,
-  },
-  {
-    day: "Saturday",
-    mood: "No mood available",
-    note: "",
-    scale: 0,
-  },
-  {
-    day: "Sunday",
-    mood: "No mod available",
-    note: "",
-    scale: 0,
-  },
-];
+export function getDefaultMoodWeekData() {
+  const start = startOfWeek(new Date(), { weekStartsOn: 1 });
 
-export function transformMoodEntriesToChart(entries: MoodType[]) {
-  const mappedEntries = entries.map((entry) => {
-    const date = entry.date ? parseISO(entry.date) : new Date();
+  return Array.from({ length: 7 }).map((_, index) => {
+    const date = addDays(start, index);
     return {
-      day: format(date, "EEEE", { locale: enUS }),
-      scale: moodScaleMap[entry.label.toLowerCase()] ?? 3,
-      mood: capitalize(entry.label),
-      note: entry.note,
-      iconUrl: entry.iconUrl,
+      date: format(date, "yyyy-MM-dd"),
+      day: format(date, "EEEE"),
+      mood: "No mood available",
+      note: "",
+      scale: 0,
     };
   });
+}
 
-  return defaultMoodWeekData.map((defaultEntry) => {
-    const exist = mappedEntries.find((e) => e.day === defaultEntry.day);
-    return exist ?? defaultEntry;
+export function transformMoodEntriesToChart(entries: MoodType[]) {
+  const defaultWeek = getDefaultMoodWeekData();
+
+  return defaultWeek.map((dayEntry) => {
+    const found = entries.find((entry) =>{ 
+      if (entry.date) {
+        return isSameDay(parseISO(entry.date), parseISO(dayEntry.date))
+      }
+    });
+
+    if (!found) return dayEntry;
+
+    return {
+      ...dayEntry,
+      mood: capitalize(found.label),
+      note: found.note,
+      scale: moodScaleMap[found.label.toLowerCase()] ?? 3,
+      iconUrl: found.iconUrl,
+    };
   });
 }
 
