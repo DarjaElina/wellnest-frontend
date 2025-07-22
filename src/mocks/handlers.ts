@@ -18,4 +18,23 @@ export const handlers = [
       headers: { 'Content-Type': 'application/json' },
     });
   }),
+
+  http.post(`${BACKEND_URL}/auth/sign-up`, async ({ request }) => {
+    const { password, email, firstName, lastName } = await request.json();
+
+    if (password === "password" && email === "test@example.com" && firstName === "Jane" && lastName === "Doe") {
+      return HttpResponse.json({ message: 'Sign up successful' }, {
+        headers: {
+          'set-cookie': 'authToken=mock-token; Path=/; HttpOnly',
+        },
+      });
+    }
+
+    if (email === "alreadyInUse@example.com") {
+      return new HttpResponse(JSON.stringify({ message: 'Email is already in use!' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+  }),
 ];
