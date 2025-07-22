@@ -46,9 +46,12 @@ export function CreateEntryDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button disabled={isDemo} className="text-neutral-100 bg-brand-secondary cursor-pointer">
+        <Button
+          disabled={isDemo}
+          className="text-neutral-100 bg-brand-secondary cursor-pointer"
+        >
           <Plus className="w-4 h-4 mr-1" />
-          New Entry (demo)
+          {isDemo ? "New Entry (demo)" : "New Entry"}
         </Button>
       </DialogTrigger>
 

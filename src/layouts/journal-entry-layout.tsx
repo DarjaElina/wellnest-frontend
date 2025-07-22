@@ -123,7 +123,7 @@ export default function JournalEntryLayout() {
           <Skeleton className="w-full h-15 rounded" />
         ) : (
           <div
-            onClick={!isDemo? navigateToJournalView : () => {}}
+            onClick={!isDemo ? navigateToJournalView : () => {}}
             className={`${!isDemo && "cursor-pointer"} px-4 py-4 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
           >
             <SquarePen className="text-neutral-100" />
@@ -139,8 +139,6 @@ export default function JournalEntryLayout() {
             color={activeColor}
           />
         )}
-
-        
       </aside>
 
       <main className="flex-1 flex-col bg-background relative">
@@ -169,24 +167,23 @@ export default function JournalEntryLayout() {
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger className="fixed right-0 top-0" asChild>
               <Button className="size-7 m-2" variant="ghost">
-                <ListTree/>
+                <ListTree />
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="right" className="w-85 p-0 gap-2" >
+            <SheetContent side="right" className="w-85 p-0 gap-2">
               <SheetHeader className="p-0 ">
                 <SheetTitle className="sr-only">Entries List</SheetTitle>
                 <SheetDescription className="sr-only">
                   Show entries list
                 </SheetDescription>
                 <div
-                onClick={!isDemo? navigateToJournalView : () => {}}
-                className={`px-3 py-3 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
-              >
-                <SquarePen className="text-neutral-100" />
-              </div>
+                  onClick={!isDemo ? navigateToJournalView : () => {}}
+                  className={`px-3 py-3 border-b border-border flex items-center gap-3 ${bgColorMap[activeColor]}`}
+                >
+                  <SquarePen className="text-neutral-100" />
+                </div>
               </SheetHeader>
-             
 
               <EntriesSidebar
                 entries={filteredEntries}
