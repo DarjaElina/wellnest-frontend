@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const placeSchema = z.object({
-  title: z.string().min(1, "Title is required"),
+  name: z.string().min(1, "Name is required"),
   note: z.string().optional(),
   image: z
     .any()

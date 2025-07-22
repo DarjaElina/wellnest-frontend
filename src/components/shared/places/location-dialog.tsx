@@ -53,7 +53,7 @@ export default function LocationDialog({
   const form = useForm({
     resolver: zodResolver(placeSchema),
     defaultValues: {
-      title: "",
+      name: "",
       note: "",
       image: undefined,
     },
@@ -89,7 +89,7 @@ export default function LocationDialog({
   const submitHandler = async (data: PlaceInput) => {
     const formData = new FormData();
 
-    formData.append("title", data.title);
+    formData.append("name", data.name);
     formData.append("note", data.note || "");
 
     const file = data.image?.[0];
@@ -114,7 +114,7 @@ export default function LocationDialog({
         <DialogHeader>
           <DialogTitle>Add a Place</DialogTitle>
           <DialogDescription className="sr-only">
-            Create place with photo, title and note
+            Create place with photo, name and note
           </DialogDescription>
         </DialogHeader>
 
@@ -125,10 +125,10 @@ export default function LocationDialog({
           >
             <FormField
               control={form.control}
-              name="title"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input {...field} autoFocus />
                   </FormControl>

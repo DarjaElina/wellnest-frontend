@@ -29,7 +29,7 @@ export default function PlacesMap() {
   const demoPlaces: Place[] = [
     {
       id: "1",
-      title: "Peaceful Park",
+      name: "Peaceful Park",
       note: "Sat under a tree and meditated 🌳",
       imageUrl: "/assets/demo/park.avif",
       lat: 60.1708,
@@ -37,7 +37,7 @@ export default function PlacesMap() {
     },
     {
       id: "2",
-      title: "Seaside Bench",
+      name: "Seaside Bench",
       note: "Watched the waves, felt calm 🌊",
       imageUrl: "/assets/demo/bench.avif",
       lat: 60.1679,
@@ -71,13 +71,13 @@ export default function PlacesMap() {
         />
         <LocationPicker onSelect={handleSelectLocation} />
 
-        {visiblePlaces.map(({ id, lat, lng, title, note, imageUrl }) => (
+        {visiblePlaces.map(({ id, lat, lng, name, note, imageUrl }) => (
           <Marker key={id} position={[lat, lng]} icon={MeditationIcon}>
             <Popup>
-              <strong>{title}</strong>
+              <strong>{name}</strong>
               <p>{note}</p>
               {imageUrl && (
-                <img src={imageUrl} alt={title} className="mt-2 rounded-md" />
+                <img src={imageUrl} alt={name} className="mt-2 rounded-md" />
               )}
             </Popup>
           </Marker>

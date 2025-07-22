@@ -153,10 +153,11 @@ export default function JournalView() {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
+                  disabled={deleteMutation.isPending}
                   className="w-full justify-start cursor-pointer"
                   variant="ghost"
                 >
-                  <Trash2 className="w-4 h-4 mr-2 text-destructive" /> Delete
+                  <Trash2 className="w-4 h-4 mr-2 text-destructive" /> {deleteMutation.isPending ? "Deleting..." : "Delete"}
                   journal
                 </Button>
               </AlertDialogTrigger>

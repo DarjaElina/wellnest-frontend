@@ -6,6 +6,7 @@ type DemoContextValue = {
 
 const DemoContext = createContext<DemoContextValue | undefined>(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useIsDemo(): boolean {
   const ctx = useContext(DemoContext);
   if (!ctx) return false;
