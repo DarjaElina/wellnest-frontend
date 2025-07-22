@@ -23,7 +23,7 @@ export const handlers = [
     const { password, email, firstName, lastName } = await request.json();
 
     if (password === "password" && email === "test@example.com" && firstName === "Jane" && lastName === "Doe") {
-      return HttpResponse.json({ message: 'Sign up successful' }, {
+      return HttpResponse.json({ message: 'User registered successfully!' }, {
         headers: {
           'set-cookie': 'authToken=mock-token; Path=/; HttpOnly',
         },
@@ -37,4 +37,27 @@ export const handlers = [
       });
     }
   }),
+
+
+  http.post(`${BACKEND_URL}/journals`, async ({ request }) => {
+    const { name, color } = await request.json();
+  
+    if (name === "fail" || !name || !color) {
+      return new HttpResponse(
+        JSON.stringify({ message: "Invalid journal data" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+  
+    return HttpResponse.json({
+      id: "mock-journal-id",
+      name,
+      color,
+      createdAt: new Date().toISOString(),
+    });
+  }),
+  
 ];

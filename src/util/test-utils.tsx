@@ -5,8 +5,22 @@ import { SettingsProvider } from '@/context/settingsContext'
 import { FilterProvider } from '@/context/filterContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SidebarProvider } from '@/components/ui/sidebar'
-import { MemoryRouter } from 'react-router-dom'
+
 import * as ReactRouterDom from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom'
+import { vi } from 'vitest';
+import { Toaster } from 'sonner'
+
+
+export const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof ReactRouterDom>('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,20 +33,20 @@ const queryClient = new QueryClient({
 const AllTheProviders = ({children}: {children: React.ReactNode}) => {
   return (
     
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <MemoryRouter>
-        <QueryClientProvider client={queryClient}>
-          <SettingsProvider>
-            <FilterProvider>
-             <SidebarProvider>
-              <Toaster/>
-               {children}
-             </SidebarProvider>
-            </FilterProvider>
-          </SettingsProvider>
-        </QueryClientProvider>
-      </MemoryRouter>
-    </ThemeProvider>
+    <MemoryRouter>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <QueryClientProvider client={queryClient}>
+            <SettingsProvider>
+              <FilterProvider>
+              <SidebarProvider>
+                <Toaster/>
+                {children}
+              </SidebarProvider>
+              </FilterProvider>
+            </SettingsProvider>
+          </QueryClientProvider>
+      </ThemeProvider>
+    </MemoryRouter>
   )
 }
 
@@ -45,31 +59,4 @@ const customRender = (
 export * from '@testing-library/react'
 export {customRender as render}
 
-import { vi, type Mock } from 'vitest';
-import { useMutation } from '@tanstack/react-query';
-import { Toaster } from 'sonner'
-
-export const mockMutateAsync = vi.fn();
-
-export const mockUseMutation = () => {
-  (useMutation as unknown as Mock).mockReturnValue({
-    mutateAsync: mockMutateAsync,
-    isPending: false,
-    isSuccess: false,
-    isError: false,
-  });
-};
-
-export const resetUseMutationMock = () => {
-  mockMutateAsync.mockReset();
-};
-
-export const mockNavigate = vi.fn();
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual<typeof ReactRouterDom>('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
-});
 

@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import ColorPicker from "../color-picker";
 import { journalInputSchema } from "@/types/journal.types.ts";
 import type { JournalInput } from "@/types/journal.types.ts";
@@ -26,6 +26,7 @@ import { createJournal } from "@/services/journal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Journal } from "@/types/journal.types";
 import type { JournalColor } from "@/lib/journalColor";
+import { showErrorToast } from "@/helper/error";
 
 export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
   const form = useForm<JournalInput>({
@@ -43,21 +44,20 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
     onSuccess: (newJournal) => {
       const journals: Journal[] = queryClient.getQueryData(["journals"]) ?? [];
       queryClient.setQueryData(["journals"], journals.concat(newJournal));
+      closeDialog?.();
+      navigate(`journals/${newJournal.id}`);
     },
+    onError: (e) => {
+      showErrorToast(e);
+    }
   });
 
   const onSubmit = async (values: JournalInput) => {
     const { name, color } = values;
-    try {
-      const journal = await newJournalMutation.mutateAsync({
-        name: name ?? "New Journal",
-        color,
-      });
-      closeDialog?.();
-      navigate(`journals/${journal.id}`);
-    } catch (error) {
-      console.log(error);
-    }
+    await newJournalMutation.mutateAsync({
+      name: name ?? "New Journal",
+      color,
+    });
   };
 
   return (
