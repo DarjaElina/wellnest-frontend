@@ -13,7 +13,7 @@ export async function createOfflineEntry(journalId: string, color: string) {
     content: "<h2></h2><p></p>",
     tags: [],
     entryDate: now,
-    isFavorite: false,
+    favorite: false,
     updatedAt: now,
     needsSync: true,
     id: newId,

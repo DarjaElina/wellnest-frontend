@@ -4,7 +4,7 @@ export const journalEntryCreateSchema = z.object({
   content: z.string(),
   tags: z.array(z.string()),
   entryDate: z.string(),
-  isFavorite: z.boolean(),
+  favorite: z.boolean(),
 });
 
 export const journalEntrySchema = journalEntryCreateSchema.extend({

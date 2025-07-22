@@ -63,7 +63,7 @@ export function JournalEntryEditorToolbar({
         (entries = []) =>
           entries.map((entry) =>
             entry.id === updatedEntry.id
-              ? { ...entry, isFavorite: updatedEntry.isFavorite }
+              ? { ...entry, favorite: updatedEntry.favorite }
               : entry,
           ),
       );
@@ -87,7 +87,7 @@ export function JournalEntryEditorToolbar({
 
   const handleToggleFavorite = async () => {
     await db.journalEntries.update(entryId, {
-      isFavorite: !entry.isFavorite,
+      favorite: !entry.favorite,
       needsSync: true,
       updatedAt: formatISO9075(new Date()),
     });
@@ -140,7 +140,7 @@ export function JournalEntryEditorToolbar({
             onClick={handleToggleFavorite}
             className="cursor-pointer"
           >
-            {entry.isFavorite ? (
+            {entry.favorite ? (
               <>
                 <Star className="mr-2 w-4 h-4 text-yellow-400" /> Unfavorite
               </>
