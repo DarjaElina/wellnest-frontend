@@ -19,10 +19,10 @@ const mockEntry = {
 };
 
 describe("JournalEntryCard", () => {
-  it("renders entry content and date", () => {
+  it("renders entry content and date", async () => {
     render(<JournalEntryCard entry={mockEntry} isActive={false} />);
-    expect(screen.getByText(/my entry/i)).toBeDefined();
-    expect(screen.getByText(/details/i)).toBeDefined();
-    expect(screen.getByText(/january/i)).toBeDefined();
+    expect(await screen.findByText(/my entry/i)).toBeDefined();
+    expect(await screen.findByText(/details/i)).toBeDefined();
+    expect(await screen.findByText(/january/i)).toBeDefined();
   });
 });

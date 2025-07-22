@@ -8,7 +8,7 @@ const mockJournals: Journal[] = [
 ];
 
 describe("CreateEntryDialog", () => {
-  it("renders dialog content when open", () => {
+  it("renders dialog content when open", async () => {
     render(
       <CreateEntryDialog
         open={true}
@@ -20,11 +20,11 @@ describe("CreateEntryDialog", () => {
       />,
     );
 
-    expect(screen.getByText("Select a journal")).toBeDefined();
-    expect(screen.getByText("Choose where to add the new entry")).toBeDefined();
+    expect(await screen.findByText("Select a journal")).toBeDefined();
+    expect(await screen.findByText("Choose where to add the new entry")).toBeDefined();
   });
 
-  it("renders loading and error states", () => {
+  it("renders loading and error states", async () => {
     const { rerender } = render(
       <CreateEntryDialog
         open={true}
@@ -36,7 +36,7 @@ describe("CreateEntryDialog", () => {
       />,
     );
 
-    expect(screen.getByText(/loading journals/i)).toBeDefined();
+    expect(await screen.findByText(/loading journals/i)).toBeDefined();
 
     rerender(
       <CreateEntryDialog
@@ -49,10 +49,10 @@ describe("CreateEntryDialog", () => {
       />,
     );
 
-    expect(screen.getByText(/error loading journals/i)).toBeDefined();
+    expect(await screen.findByText(/error loading journals/i)).toBeDefined();
   });
 
-  it("disables create button until a journal is selected", () => {
+  it("disables create button until a journal is selected", async () => {
     render(
       <CreateEntryDialog
         open={true}
@@ -64,7 +64,7 @@ describe("CreateEntryDialog", () => {
       />,
     );
 
-    const button = screen.getByRole("button", { name: /create entry/i });
+    const button = await screen.findByRole("button", { name: /create entry/i });
     expect(button).toBeDisabled();
   });
 });

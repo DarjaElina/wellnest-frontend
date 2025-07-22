@@ -42,3 +42,15 @@ Object.defineProperty(window, "location", {
   },
   writable: true,
 });
+
+process.on("unhandledRejection", (reason) => {
+  if (
+    reason instanceof Error &&
+    reason.name === "AxiosError" &&
+    reason.response?.status === 400
+  ) {
+    return
+  }
+
+  console.error("Unhandled Rejection:", reason)
+})
