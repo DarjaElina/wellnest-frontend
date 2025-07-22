@@ -77,8 +77,6 @@ export default function App() {
               />
             </Route>
             <Route path="journal-entries/all" element={<AllEntriesLayout />} />
-
-           
           </Route>
         </Route>
 

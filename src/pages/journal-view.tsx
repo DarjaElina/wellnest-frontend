@@ -135,7 +135,6 @@ export default function JournalView() {
           </h2>
         </div>
 
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="cursor-pointer">

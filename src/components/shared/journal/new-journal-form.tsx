@@ -49,7 +49,7 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
     },
     onError: (e) => {
       showErrorToast(e);
-    }
+    },
   });
 
   const onSubmit = async (values: JournalInput) => {

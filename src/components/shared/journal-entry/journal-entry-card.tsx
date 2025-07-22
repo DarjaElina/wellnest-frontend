@@ -9,7 +9,7 @@ import DOMPurify from "dompurify";
 import { getJournalPreviewTitle } from "@/helper/journal";
 import { StickyNote } from "lucide-react";
 import clsx from "clsx";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import { ringColorMap, textColorMap } from "@/lib/journalColor";
 import { formatDate } from "@/helper/date";

@@ -105,7 +105,11 @@ export function TagsDialog({
               className="cursor-pointer"
               disabled={tagsMutation.isPending || isDemo}
             >
-              {tagsMutation.isPending ? "Saving..." : isDemo ? "Save (demo)" : "Save"}
+              {tagsMutation.isPending
+                ? "Saving..."
+                : isDemo
+                  ? "Save (demo)"
+                  : "Save"}
             </Button>
           </DialogFooter>
         </form>

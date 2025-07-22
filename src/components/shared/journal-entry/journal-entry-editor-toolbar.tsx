@@ -12,7 +12,7 @@ import type { Editor } from "@tiptap/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteJournalEntry, toggleFavorite } from "@/services/journalEntry";
 import { showErrorToast } from "@/helper/error";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import type { JournalEntry } from "@/types/journalEntry.types";
 import type { RouteParams } from "@/types/shared.types";
 import { PDFDownloadLink } from "@react-pdf/renderer";

@@ -187,6 +187,7 @@ export default function LocationDialog({
                         </p>
                       </div>
                       <input
+                        data-testid="file-input"
                         id="dropzone-file"
                         type="file"
                         accept="image/*"
