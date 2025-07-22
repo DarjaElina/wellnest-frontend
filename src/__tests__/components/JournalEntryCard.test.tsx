@@ -13,7 +13,7 @@ const mockEntry = {
   content: "<h1>My Entry</h1><p>Details</p>",
   entryDate: "2023-01-01T00:00:00Z",
   tags: [],
-  isFavorite: false,
+  favorite: false,
   updatedAt: "2023-02-01T00:00:00Z",
   clientId: "offline-1",
 };
