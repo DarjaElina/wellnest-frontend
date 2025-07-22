@@ -21,7 +21,7 @@ const NotFoundPage = lazy(() => import("@/pages/not-found"));
 const AllEntriesLayout = lazy(() => import("@/layouts/all-entries-layout"));
 const PlacesPage = lazy(() => import("@/pages/places"));
 
-const DemoRoutes = lazy(() => import("@/components/demo/demo-routes"));
+const DemoRoutes = lazy(() => import("@/components/shared/demo/demo-routes"));
 
 export default function App() {
   return (

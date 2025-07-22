@@ -49,7 +49,7 @@ import {
   textColorMap,
   type JournalColor,
 } from "@/lib/journalColor";
-import { JournalViewSkeleton } from "@/components/skeleton/JournalViewSkeleton";
+import { JournalViewSkeleton } from "@/components/shared/skeleton/JournalViewSkeleton";
 import {
   AlertDialog,
   AlertDialogAction,

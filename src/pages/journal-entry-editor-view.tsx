@@ -6,7 +6,7 @@ import { useIsDemo } from "@/context/demoContext";
 import { db } from "@/lib/db";
 
 import { JournalEntryEditor } from "@/components/shared/journal-entry/journal-entry-editor";
-import { JournalEntryEditorSkeleton } from "@/components/skeleton/JournalEntryEditorSkeleton";
+import { JournalEntryEditorSkeleton } from "@/components/shared/skeleton/JournalEntryEditorSkeleton";
 import { AppError } from "@/components/ui/app-error";
 import type { JournalEntry } from "@/types/journalEntry.types";
 
