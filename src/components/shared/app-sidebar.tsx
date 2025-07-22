@@ -165,7 +165,7 @@ export function AppSidebar() {
                           Create Journal (demo)
                         </Button>
                       ) : (
-                        <Dialog open={dialogOpen}>
+                        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                           <DialogTrigger asChild>
                             <Button
                               onClick={handleOpenDialog}
