@@ -78,6 +78,136 @@ export default function WelcomePage() {
           mental wellbeing.
         </p>
       </div>
+
+      <footer className="w-full max-w-3xl mt-20 px-4 text-muted-foreground text-sm text-center space-y-6 z-10">
+  <div>
+    <h2 className="text-lg font-semibold mb-2 text-foreground">Attributions 💚</h2>
+    <div className="space-y-4">
+      <div>
+        <h3 className="font-medium text-foreground mb-1">Icons</h3>
+        <ul className="space-y-1">
+          <li>
+            <a
+              href="https://www.flaticon.com/free-icons/lotus"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Lotus icons created by Freepik - Flaticon
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.flaticon.com/free-icons/mood"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Mood icons created by Naiting - Flaticon
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.flaticon.com/free-icons/meditation"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Meditation icons created by HAJICON - Flaticon
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="font-medium text-foreground mb-1">Images</h3>
+        <ul className="space-y-1">
+          <li>
+            <a
+              href="https://unsplash.com/photos/green-forest-trees-R4bsmYIc6FI"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Trees background
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://unsplash.com/photos/gray-rocks-on-seashore-during-daytime-KBn4-lyqRgQ"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Sea background
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://unsplash.com/photos/green-plant-HNx4QLRgy2k"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Rain background
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://unsplash.com/photos/blue-sky-with-clouds-viNPa2F7fnw"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Sky background
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://unsplash.com/photos/lake-between-trees-and-mountains-HtUBBdNDxpQ"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              River background
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://unsplash.com/photos/body-of-water-surrounded-by-trees-NRQV-hBF10M"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Nature background
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://unsplash.com/photos/a-bench-sits-by-the-water-H8OZNQIr2Hc"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Bench by the sea
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://unsplash.com/photos/woman-sitting-on-bench-cjrULwnJKhI"
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Park
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
     </motion.section>
   );
 }
