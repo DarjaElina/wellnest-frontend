@@ -1,69 +1,37 @@
-# React + TypeScript + Vite
+## 🌿 Wellnest
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Wellnest is a mindfulness and journaling web app, inspired by Day One and Insight Timer. This is a portfolio project showcasing a modern frontend built with TypeScript, React, and Vite.
 
-Currently, two official plugins are available:
+- ✨ Features
+- 📝 Rich journaling experience using TipTap editor
+- 📊 Mood tracking with daily check-ins
+- 🌅 Daily affirmations from your preferred set
+- 🎨 Personalization options: wallpapers, themes, and emoji mood sets
+- 🗺️ Save your favorite places on a map, complete with pictures
+- 📄 Export journal entries as PDFs
+- ⏰ Set daily reminders to track your mood via customizable popups
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+### Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- TypeScript, React, Vite
+- Tailwind CSS with beautiful shadcn/ui components
+- Framer Motion for smooth animations
+- React Hook Form + Zod for robust forms
+- React Query and Redux for state management
+- React Router for routing
+- React Leaflet for maps
+- Dexie.js (IndexedDB wrapper) for offline-first experience
+- Vitest + React Testing Library for testing
+- ESLint for code quality
+- Lucide-react for stylish icons
+- Google Authentication with OAuth2
 
-```js
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+### 🌱 What I Learned
+I discovered in-memory/local databases like Dexie, which allow building smooth and responsive user experiences even before syncing with the backend.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+One of the biggest technical challenges was syncing data between IndexedDB (used for fast local interaction) and the remote backend.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+I also explored and implemented social authentication, including Google Sign-In, which was an exciting area to learn.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
