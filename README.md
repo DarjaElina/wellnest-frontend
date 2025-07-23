@@ -1,37 +1,69 @@
-## 🌿 Wellnest
+## 🌿 🧘 Wellnest
 
-Wellnest is a mindfulness and journaling web app, inspired by Day One and Insight Timer. This is a portfolio project showcasing a modern frontend built with TypeScript, React, and Vite.
+Wellnest is a mindfulness and journaling web app, inspired by [Day One](https://dayoneapp.com/) and [Insight Timer](https://insighttimer.com/).
 
-- ✨ Features
-- 📝 Rich journaling experience using TipTap editor
-- 📊 Mood tracking with daily check-ins
-- 🌅 Daily affirmations from your preferred set
-- 🎨 Personalization options: wallpapers, themes, and emoji mood sets
-- 🗺️ Save your favorite places on a map, complete with pictures
-- 📄 Export journal entries as PDFs
-- ⏰ Set daily reminders to track your mood via customizable popups
+This repository contains frontend part of the application.
 
+### 🔗 Link to the backend repo
+You can check the backend repo [here](https://github.com/DarjaElina/wellnest-backend)
+
+### ✨ Features
+- Rich journaling experience using [TipTap](https://tiptap.dev/) editor
+- Mood tracking with daily check-ins
+- Daily affirmations from your preferred set
+- Personalization options: wallpapers, themes, and emoji mood sets
+- Save your favorite places on a map, complete with pictures
+- Export journal entries as PDFs
+- Set daily reminders to track your mood via customizable popups
+
+### 💡 About the Project
+
+I originally started building Wellnest as a medical journaling app to help users track symptoms and health data. But as the project evolved, I felt more drawn to creating a space that supports mental wellbeing and mindfulness. It gradually transformed into a softer, more personal tool — a calm, responsive, and user-friendly space where people can reflect, feel grounded, and track their emotional journey. Along the way, I deepened my skills as a full-stack developer and explored how technology can support emotional health in thoughtful, accessible ways.
+
+### 🌐 Live Demo
+
+You can try the app [here](https://wellnest.delina.me/) ✨
+
+> Want to explore quickly? Use the demo mode to try journaling without registering!
 
 ### Tech Stack
+- **Core:** [TypeScript](https://www.typescriptlang.org/), [React](https://react.dev/), [Vite](https://vite.dev/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
+- **Forms:** [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/)
+- **State Management:** [TanStack Query](https://tanstack.com/query/), [Redux](https://redux.js.org/)
+- **Routing:** [React Router](https://reactrouter.com/)
+- **Maps:** [React Leaflet](https://react-leaflet.js.org/)
+- **Offline DB:** [Dexie.js](https://dexie.org/)
+- **Animations:** [Motion](https://motion.dev/)
+- **Testing:** [Vitest](https://vitest.dev/), [MSW](https://mswjs.io/), [React Testing Library](https://testing-library.com/)
+- **Code Quality:** [ESLint](https://eslint.org/)
+- **Icons:** [Lucide-react](https://lucide.dev/guide/packages/lucide-react)
+- **Auth:** Google Authentication with OAuth2
+- **Delpoyment:** [Vercel](https://vercel.com/)
 
-- TypeScript, React, Vite
-- Tailwind CSS with beautiful shadcn/ui components
-- Framer Motion for smooth animations
-- React Hook Form + Zod for robust forms
-- React Query and Redux for state management
-- React Router for routing
-- React Leaflet for maps
-- Dexie.js (IndexedDB wrapper) for offline-first experience
-- Vitest + React Testing Library for testing
-- ESLint for code quality
-- Lucide-react for stylish icons
-- Google Authentication with OAuth2
+### 🖼️ Screenshots
 
-### 🌱 What I Learned
-I discovered in-memory/local databases like Dexie, which allow building smooth and responsive user experiences even before syncing with the backend.
+### Screenshots
 
-One of the biggest technical challenges was syncing data between IndexedDB (used for fast local interaction) and the remote backend.
+#### Dashboard
+<img src="screenshots/dashboardpng" alt="Dashboard" width="600"/>
 
-I also explored and implemented social authentication, including Google Sign-In, which was an exciting area to learn.
+---
+
+#### Create Journal
+<img src="screenshots/create-journal.png" alt="Create Journal" width="600"/>
+
+---
+
+#### Create Place
+<img src="screenshots/new-place-form.png" alt="Create Place" width="400"/>
+
+---
+
+#### Entry Editor
+<img src="screenshots/entry.png" alt="Entry Editor" width="400"/>
+
+### Thank you for checking out Wellnest 🌸💙
+
 
 
