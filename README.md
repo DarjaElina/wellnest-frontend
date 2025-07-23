@@ -46,7 +46,7 @@ You can try the app [here](https://wellnest.delina.me/) ✨
 ### Screenshots
 
 #### Dashboard
-<img src="screenshots/dashboardpng" alt="Dashboard" width="600"/>
+<img src="screenshots/dashboard.png" alt="Dashboard" width="600"/>
 
 ---
 
@@ -56,12 +56,12 @@ You can try the app [here](https://wellnest.delina.me/) ✨
 ---
 
 #### Create Place
-<img src="screenshots/new-place-form.png" alt="Create Place" width="400"/>
+<img src="screenshots/new-place-form.png" alt="Create Place" width="600"/>
 
 ---
 
 #### Entry Editor
-<img src="screenshots/entry.png" alt="Entry Editor" width="400"/>
+<img src="screenshots/entry.png" alt="Entry Editor" width="600"/>
 
 ### Thank you for checking out Wellnest 🌸💙
 
