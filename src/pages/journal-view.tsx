@@ -158,8 +158,7 @@ export default function JournalView() {
                   variant="ghost"
                 >
                   <Trash2 className="w-4 h-4 mr-2 text-destructive" />{" "}
-                  {deleteMutation.isPending ? "Deleting..." : "Delete"}
-                  journal
+                  {deleteMutation.isPending ? "Deleting..." : "Delete journal"}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
