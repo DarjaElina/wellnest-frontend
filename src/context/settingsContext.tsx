@@ -9,7 +9,7 @@ import { useIsDemo } from "./demoContext";
 type SettingsContextType = {
   settings: UserSettings;
   updateSettings: (newSettings: UserSettings) => Promise<void>;
-  isBooting: boolean; // 🆕
+  isBooting: boolean;
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(
@@ -18,13 +18,11 @@ const SettingsContext = createContext<SettingsContextType | undefined>(
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
-  const [isBooting, setIsBooting] = useState(true); // 🆕
+  const [isBooting, setIsBooting] = useState(true);
   const isDemo = useIsDemo();
 
   const {
-    data: remoteSettings,
-    isLoading: settingsLoading,
-    isError,
+    data: remoteSettings
   } = useQuery({
     queryKey: ["settings"],
     queryFn: getRemoteSettings,
