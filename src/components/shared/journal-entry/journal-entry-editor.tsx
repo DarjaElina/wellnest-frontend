@@ -15,7 +15,7 @@ import debounce from "lodash.debounce";
 import { type JournalEntry } from "@/types/journalEntry.types";
 import { updateJournalEntry } from "@/services/journalEntry";
 import { useParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Cloud, Check, Hash } from "lucide-react";
 import type { RouteParams } from "@/types/shared.types";
 import { db } from "@/lib/db";
