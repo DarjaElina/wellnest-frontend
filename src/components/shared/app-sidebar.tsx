@@ -157,16 +157,6 @@ export function AppSidebar() {
                     )}
 
                     <SidebarMenuSubItem>
-                      {isDemo ? (
-                        <Button
-                          disabled
-                          variant="ghost"
-                          className="h-8 w-full justify-start text-sm px-2 cursor-not-allowed opacity-50"
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Create Journal (demo)
-                        </Button>
-                      ) : (
                         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                           <DialogTrigger asChild>
                             <Button
@@ -184,7 +174,6 @@ export function AppSidebar() {
                             />
                           </DialogContent>
                         </Dialog>
-                      )}
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>

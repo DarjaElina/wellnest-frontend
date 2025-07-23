@@ -27,8 +27,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Journal } from "@/types/journal.types";
 import type { JournalColor } from "@/lib/journalColor";
 import { showErrorToast } from "@/helper/error";
+import { useIsDemo } from "@/context/demoContext";
 
 export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
+  const isDemo = useIsDemo();
+
   const form = useForm<JournalInput>({
     resolver: zodResolver(journalInputSchema),
     defaultValues: {
@@ -104,9 +107,9 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
           <Button
             className="cursor-pointer"
             type="submit"
-            disabled={newJournalMutation.isPending}
+            disabled={newJournalMutation.isPending || isDemo}
           >
-            {newJournalMutation.isPending ? "Creating..." : "Create"}
+            {newJournalMutation.isPending ? "Creating..." : isDemo ? "Create (demo)" : "Create"}
           </Button>
         </DialogFooter>
       </form>
