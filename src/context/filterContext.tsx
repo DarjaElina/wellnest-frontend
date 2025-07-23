@@ -20,6 +20,7 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useFilter = () => {
   const ctx = useContext(FilterContext);
   if (!ctx) throw new Error("useFilter must be used within FilterProvider");

@@ -8,11 +8,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSettings } from "@/context/settingsContext";
 import { wallpapers } from "@/types/wallpaper.types";
+import { useIsDemo } from "@/context/demoContext";
+import { useUpdateRemoteSettings } from "@/hooks/useUpdateRemoteSettings";
+import type { UserSettings } from "@/types/settings.types";
+import { useSettings } from "@/context/settingsContext";
 
 export default function AppearanceSettings() {
-  const { settings, updateSetting } = useSettings();
+  const isDemo = useIsDemo();
+  const updateRemoteSettings = useUpdateRemoteSettings();
+  const { settings, updateSettings } = useSettings();
+
+  const handleUpdateSettings = async (
+    key: keyof UserSettings,
+    value: unknown,
+  ) => {
+    const newSettings = { ...settings, [key]: value };
+    if (!isDemo) {
+      await updateRemoteSettings.mutateAsync(newSettings);
+    }
+
+    updateSettings(newSettings);
+  };
 
   return (
     <div className="space-y-6 mt-6">
@@ -32,7 +49,7 @@ export default function AppearanceSettings() {
         </label>
         <Select
           value={settings.wallpaperUrl}
-          onValueChange={(val) => updateSetting("wallpaperUrl", val)}
+          onValueChange={(val) => handleUpdateSettings("wallpaperUrl", val)}
         >
           <SelectTrigger id="wallpaper-select">
             <SelectValue placeholder="Select wallpaper" />

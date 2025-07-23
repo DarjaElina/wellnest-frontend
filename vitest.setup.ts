@@ -49,8 +49,8 @@ process.on("unhandledRejection", (reason) => {
     reason.name === "AxiosError" &&
     reason.response?.status === 400
   ) {
-    return
+    return;
   }
 
-  console.error("Unhandled Rejection:", reason)
-})
+  console.error("Unhandled Rejection:", reason);
+});

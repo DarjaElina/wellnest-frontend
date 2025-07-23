@@ -17,6 +17,7 @@ export default function Dashboard() {
     queryFn: getTodayMoodEntry,
     enabled: !isDemo,
   });
+
   return (
     <SidebarProvider>
       <div className="min-h-screen w-full flex">

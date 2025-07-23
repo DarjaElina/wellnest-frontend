@@ -93,7 +93,11 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="cursor-pointer" variant="outline" onClick={closeDialog}>
+            <Button
+              className="cursor-pointer"
+              variant="outline"
+              onClick={closeDialog}
+            >
               Cancel
             </Button>
           </DialogClose>

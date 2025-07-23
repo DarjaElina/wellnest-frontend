@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/select";
 import { useSettings } from "@/context/settingsContext";
 import { Label } from "@/components/ui/label";
+import { useIsDemo } from "@/context/demoContext";
+import { useUpdateRemoteSettings } from "@/hooks/useUpdateRemoteSettings";
+import type { UserSettings } from "@/types/settings.types";
 
 const TIME_OPTIONS = Array.from(
   { length: 24 },
@@ -18,10 +21,23 @@ const TIME_OPTIONS = Array.from(
 );
 
 export default function MoodSettings() {
-  const { settings, updateSetting } = useSettings();
-  const selectedSet = moodSets.find((s) => s.name === settings.moodSet);
+  const isDemo = useIsDemo();
+  const updateRemoteSettings = useUpdateRemoteSettings();
+  const { settings, updateSettings } = useSettings();
+
+  const handleUpdateSettings = async (
+    key: keyof UserSettings,
+    value: unknown,
+  ) => {
+    const newSettings = { ...settings, [key]: value };
+    if (!isDemo) {
+      await updateRemoteSettings.mutateAsync(newSettings);
+    }
+    updateSettings(newSettings);
+  };
+
   return (
-    <div className="space-y-6 mt-6">
+    <div className="space-y-7 mt-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-base font-medium">Mood Check-In Popup</p>
@@ -31,32 +47,25 @@ export default function MoodSettings() {
         </div>
         <Switch
           checked={settings.showMoodPopup}
-          onCheckedChange={(val) => updateSetting("showMoodPopup", val)}
+          onCheckedChange={(val) => handleUpdateSettings("showMoodPopup", val)}
+          disabled={isDemo}
         />
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-2">
         <Label>Mood Emoji Set</Label>
-        <p className="text-sm text-muted-foreground mb-1">
+        <p className="text-sm text-muted-foreground mb-2">
           Choose your preferred style of mood icons
         </p>
         <Select
           value={settings.moodSet}
-          onValueChange={(val: MoodSetName) => updateSetting("moodSet", val)}
+          onValueChange={(val: MoodSetName) =>
+            handleUpdateSettings("moodSet", val)
+          }
+          disabled={isDemo}
         >
           <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Select emoji set">
-              {selectedSet ? (
-                <span className="inline-flex items-center gap-2">
-                  {selectedSet.name}
-                  <img
-                    src={selectedSet.moods[0].iconUrl}
-                    alt={`${selectedSet.name} example`}
-                    className="w-5 h-5"
-                  />
-                </span>
-              ) : null}
-            </SelectValue>
+            <SelectValue placeholder="Select emoji set" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -79,25 +88,29 @@ export default function MoodSettings() {
       </div>
 
       <div className="space-y-1">
-        <div className="flex flex-col gap-3">
-          <Label htmlFor="time-picker">Mood Check-in Time</Label>
-          <Select
-            value={settings.checkinTime}
-            onValueChange={(val) => updateSetting("checkinTime", val)}
-          >
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Select time" />
-            </SelectTrigger>
-            <SelectContent>
-              {TIME_OPTIONS.map((time) => (
-                <SelectItem key={time} value={time}>
-                  {time}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Label htmlFor="time-picker">Mood Check-in Time</Label>
+        <Select
+          value={settings.checkinTime}
+          onValueChange={(val) => handleUpdateSettings("checkinTime", val)}
+          disabled={isDemo}
+        >
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="Select time" />
+          </SelectTrigger>
+          <SelectContent>
+            {TIME_OPTIONS.map((time) => (
+              <SelectItem key={time} value={time}>
+                {time}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
+      {isDemo && (
+        <p className="text-xs text-muted-foreground my-3">
+          This settings are not editable in demo mode 💙
+        </p>
+      )}
     </div>
   );
 }

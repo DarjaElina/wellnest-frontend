@@ -21,7 +21,9 @@ describe("CreateEntryDialog", () => {
     );
 
     expect(await screen.findByText("Select a journal")).toBeDefined();
-    expect(await screen.findByText("Choose where to add the new entry")).toBeDefined();
+    expect(
+      await screen.findByText("Choose where to add the new entry"),
+    ).toBeDefined();
   });
 
   it("renders loading and error states", async () => {

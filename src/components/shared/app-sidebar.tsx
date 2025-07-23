@@ -62,6 +62,8 @@ export function AppSidebar() {
   const queryClient = useQueryClient();
   const { setOpenMobile } = useSidebar();
 
+  console.log(isDemo);
+
   const { data, isError, isLoading } = useQuery({
     queryKey: ["journals"],
     queryFn: getJournals,

@@ -157,7 +157,8 @@ export default function JournalView() {
                   className="w-full justify-start cursor-pointer"
                   variant="ghost"
                 >
-                  <Trash2 className="w-4 h-4 mr-2 text-destructive" /> {deleteMutation.isPending ? "Deleting..." : "Delete"}
+                  <Trash2 className="w-4 h-4 mr-2 text-destructive" />{" "}
+                  {deleteMutation.isPending ? "Deleting..." : "Delete"}
                   journal
                 </Button>
               </AlertDialogTrigger>

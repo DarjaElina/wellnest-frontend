@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSettings } from "@/context/settingsContext";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "@tanstack/react-query";
 import { getAffirmationsPreview } from "@/services/affirmation";
@@ -27,11 +26,26 @@ import type {
 } from "@/types/affirmation.types";
 import { useIsDemo } from "@/context/demoContext";
 import { demoSets } from "@/data/demo/affirmation";
+import type { UserSettings } from "@/types/settings.types";
+import { useUpdateRemoteSettings } from "@/hooks/useUpdateRemoteSettings";
+import { useSettings } from "@/context/settingsContext";
 
 export default function AffirmationSettings() {
-  const { settings, updateSetting } = useSettings();
-
   const isDemo = useIsDemo();
+  const updateRemoteSettings = useUpdateRemoteSettings();
+  const { settings, updateSettings } = useSettings();
+
+  const handleUpdateSettings = async (
+    key: keyof UserSettings,
+    value: unknown,
+  ) => {
+    const newSettings = { ...settings, [key]: value };
+    if (!isDemo) {
+      await updateRemoteSettings.mutateAsync(newSettings);
+    }
+
+    updateSettings(newSettings);
+  };
 
   const {
     data: affirmationSets,
@@ -56,20 +70,24 @@ export default function AffirmationSettings() {
   return (
     <div className="space-y-6 mt-6">
       <div className="space-y-1">
-        <Label>Affirmation Set</Label>
+        <Label className="mb-3">Affirmation Set</Label>
         <p className="text-sm text-muted-foreground mb-1">
           Choose your preferred affirmation set
         </p>
 
         <div className="flex items-center gap-2">
           <Select
-            value={settings.affirmationSet}
+            value={isDemo ? "Self-love" : settings.affirmationSet}
             onValueChange={(val: AffirmationCategory) =>
-              updateSetting("affirmationSet", val)
+              handleUpdateSettings("affirmationSet", val)
             }
+            disabled={isDemo}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select affirmation set" />
+              <SelectValue
+                className="mb-3"
+                placeholder="Select affirmation set"
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -99,12 +117,14 @@ export default function AffirmationSettings() {
               <div className="space-y-4 max-h-[400px] overflow-y-auto">
                 {setsToShow.map((set: AffirmationSetPreview) => (
                   <div key={set.category} className="border rounded p-3">
-                    <h4 className="font-semibold mb-1">{set.category}</h4>
+                    <h4 className="font-semibold mb-1">🌸 {set.category}</h4>
                     <ul className="list-disc list-inside text-sm text-muted-foreground">
                       {set.preview.length > 0 ? (
                         <ul className="list-disc list-inside text-sm text-muted-foreground">
                           {set.preview.map((a: string) => (
-                            <li key={a}>{a}</li>
+                            <li className="list-none" key={a}>
+                              {a}
+                            </li>
                           ))}
                         </ul>
                       ) : (
@@ -119,6 +139,11 @@ export default function AffirmationSettings() {
             </DialogContent>
           </Dialog>
         </div>
+        {isDemo && (
+          <p className="text-xs text-muted-foreground my-3">
+            This settings are not editable in demo mode 💙
+          </p>
+        )}
       </div>
     </div>
   );

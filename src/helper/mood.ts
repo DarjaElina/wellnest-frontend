@@ -57,9 +57,9 @@ export function transformMoodEntriesToChart(entries: MoodType[]) {
   const defaultWeek = getDefaultMoodWeekData();
 
   return defaultWeek.map((dayEntry) => {
-    const found = entries.find((entry) =>{ 
+    const found = entries.find((entry) => {
       if (entry.date) {
-        return isSameDay(parseISO(entry.date), parseISO(dayEntry.date))
+        return isSameDay(parseISO(entry.date), parseISO(dayEntry.date));
       }
     });
 
