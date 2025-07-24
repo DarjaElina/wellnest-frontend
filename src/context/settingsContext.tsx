@@ -21,9 +21,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [isBooting, setIsBooting] = useState(true);
   const isDemo = useIsDemo();
 
-  const {
-    data: remoteSettings
-  } = useQuery({
+  const { data: remoteSettings } = useQuery({
     queryKey: ["settings"],
     queryFn: getRemoteSettings,
     enabled: !isDemo,

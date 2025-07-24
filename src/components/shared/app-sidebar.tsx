@@ -99,7 +99,6 @@ export function AppSidebar() {
 
   const handleOpenDialog = () => {
     setDialogOpen(true);
-    setOpenMobile(false);
   };
 
   return (
@@ -154,23 +153,23 @@ export function AppSidebar() {
                     )}
 
                     <SidebarMenuSubItem>
-                        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                          <DialogTrigger asChild>
-                            <Button
-                              onClick={handleOpenDialog}
-                              variant="ghost"
-                              className="h-8 w-full justify-start text-sm px-2 cursor-pointer hover:bg-muted/30 transition"
-                            >
-                              <Plus className="h-4 w-4 mr-2" />
-                              Create Journal
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <NewJournalForm
-                              closeDialog={() => setDialogOpen(false)}
-                            />
-                          </DialogContent>
-                        </Dialog>
+                      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                        <DialogTrigger asChild>
+                          <Button
+                            onClick={handleOpenDialog}
+                            variant="ghost"
+                            className="h-8 w-full justify-start text-sm px-2 cursor-pointer hover:bg-muted/30 transition"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Create Journal
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <NewJournalForm
+                            closeDialog={() => setDialogOpen(false)}
+                          />
+                        </DialogContent>
+                      </Dialog>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>

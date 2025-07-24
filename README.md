@@ -5,9 +5,11 @@ Wellnest is a mindfulness and journaling web app, inspired by [Day One](https://
 This repository contains frontend part of the application.
 
 ### 🔗 Link to the backend repo
+
 You can check out the backend repo [here](https://github.com/DarjaElina/wellnest-backend)
 
 ### ✨ Features
+
 - Rich journaling experience using [TipTap](https://tiptap.dev/) editor
 - Mood tracking with daily check-ins
 - Daily affirmations from your preferred set
@@ -25,6 +27,7 @@ I originally started this project as a medical app for tracking symptoms and col
 I found a wonderful app called [Day One](https://dayoneapp.com/), which I used a lot for inspiration. While building this, I discovered some new tools and ideas — like how **indexed databases** work for offline-first apps.
 
 ### Tech Stack
+
 - **Core:** [TypeScript](https://www.typescriptlang.org/), [React](https://react.dev/), [Vite](https://vite.dev/)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
 - **Forms:** [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/)
@@ -42,29 +45,31 @@ I found a wonderful app called [Day One](https://dayoneapp.com/), which I used a
 ### 🖼️ Screenshots
 
 #### Dashboard
+
 <img src="screenshots/dashboard.png" alt="Dashboard" width="600"/>
 
 ---
 
 #### Daily Mood Check-in
+
 <img src="screenshots/mood-checkin.png" alt="Mood check in" width="600"/>
 
 ---
 
 #### Create Journal
+
 <img src="screenshots/create-journal.png" alt="Create Journal" width="600"/>
 
 ---
 
 #### Create Place
+
 <img src="screenshots/new-place-form.png" alt="Create Place" width="600"/>
 
 ---
 
 #### Entry Editor
+
 <img src="screenshots/entry.png" alt="Entry Editor" width="600"/>
 
 ### Thank you for checking out Wellnest 🌸💙
-
-
-

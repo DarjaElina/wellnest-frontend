@@ -109,7 +109,11 @@ export function NewJournalForm({ closeDialog }: { closeDialog: () => void }) {
             type="submit"
             disabled={newJournalMutation.isPending || isDemo}
           >
-            {newJournalMutation.isPending ? "Creating..." : isDemo ? "Create (demo)" : "Create"}
+            {newJournalMutation.isPending
+              ? "Creating..."
+              : isDemo
+                ? "Create (demo)"
+                : "Create"}
           </Button>
         </DialogFooter>
       </form>
