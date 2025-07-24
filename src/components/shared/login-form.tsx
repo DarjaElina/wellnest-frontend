@@ -35,11 +35,11 @@ export default function LoginForm() {
 
   const loginMutation = useMutation({
     mutationFn: login,
-    onSuccess: (response) => {
-      console.log("response from login mutation", response);
+    onSuccess: () => {
+      navigate("/dashboard");
     },
-    onError: (res) => {
-      console.log("error from login mutation", res);
+    onError: (error) => {
+      showErrorToast(error);
     },
   });
 
@@ -52,12 +52,7 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginInput) => {
     const { username, password } = data;
-    try {
-      await loginMutation.mutateAsync({ username, password });
-      navigate("/dashboard");
-    } catch (error) {
-      showErrorToast(error);
-    }
+    await loginMutation.mutateAsync({ username, password });
   };
 
   return (
