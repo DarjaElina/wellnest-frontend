@@ -21,6 +21,10 @@ You can check out the backend repo [here](https://github.com/DarjaElina/wellnest
 
 You can try the app [here](https://wellnest.delina.me/) ✨
 
+Feel free to use the demo mode without creating an account 🌸
+
+If you do choose to register, please notice the backend is deployed on Render and might take some time to start 😅
+
 ### 💡 About the Project
 
 I originally started this project as a medical app for tracking symptoms and collecting health data (you can still see that from the commit history). But as the app grew, I became more and more interested in creating something for mental health and mindfulness, so that’s how Wellnest turned into what it is now 😁
